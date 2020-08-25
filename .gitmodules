@@ -1,0 +1,3 @@
+[submodule "UVKEngine/UVKEngine/vendor/spdlog"]
+	path = UVKEngine/UVKEngine/vendor/spdlog
+	url = https://github.com/gabime/spdlog

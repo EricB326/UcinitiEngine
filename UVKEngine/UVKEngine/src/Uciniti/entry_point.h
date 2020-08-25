@@ -14,6 +14,13 @@ extern Uciniti::application* Uciniti::create_application();
 */
 int main(int argc, char** argv)
 {
+	// Initialise the logging system.
+	Uciniti::log::init();
+
+	UVK_CORE_WARN("Initialised log!");
+	int a = 5;
+	UVK_INFO("Hello log! Var={0}", a);
+
 	auto app = Uciniti::create_application();
 
 	app->run();

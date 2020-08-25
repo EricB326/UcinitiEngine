@@ -1,36 +1,43 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="Source Files">
-      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
-      <Extensions>cpp;c;cc;cxx;c++;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    <Filter Include="Uciniti">
+      <UniqueIdentifier>{5AAC6E81-C68B-ED1C-CFA3-78F33B02547E}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files">
-      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
-      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
-    </Filter>
-    <Filter Include="Resource Files">
-      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
-      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    <Filter Include="Uciniti\Events">
+      <UniqueIdentifier>{FEAE4FEF-EA7C-43F5-D310-B41BBF7D1F5A}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\Uciniti\core.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="src\Uciniti\Events\event.h">
+      <Filter>Uciniti\Events</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Uciniti\Events\key_event.h">
+      <Filter>Uciniti\Events</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Uciniti\Events\mouse_event.h">
+      <Filter>Uciniti\Events</Filter>
     </ClInclude>
     <ClInclude Include="src\Uciniti\application.h">
-      <Filter>Header Files</Filter>
+      <Filter>Uciniti</Filter>
     </ClInclude>
-    <ClInclude Include="src\uciniti.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="src\Uciniti\core.h">
+      <Filter>Uciniti</Filter>
     </ClInclude>
     <ClInclude Include="src\Uciniti\entry_point.h">
-      <Filter>Header Files</Filter>
+      <Filter>Uciniti</Filter>
     </ClInclude>
+    <ClInclude Include="src\Uciniti\log.h">
+      <Filter>Uciniti</Filter>
+    </ClInclude>
+    <ClInclude Include="src\uciniti.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Uciniti\application.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Uciniti</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Uciniti\log.cpp">
+      <Filter>Uciniti</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

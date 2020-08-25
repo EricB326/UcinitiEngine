@@ -5,6 +5,7 @@
 // Uciniti engine includes
 /***************************************************************/
 #include "Uciniti/application.h"
+#include "Uciniti/log.h"
 
 /***************************************************************/
 // Entry point include

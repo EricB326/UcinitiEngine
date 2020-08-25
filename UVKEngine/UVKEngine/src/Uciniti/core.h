@@ -16,4 +16,6 @@
 	#error Uciniti only supports Windows!
 #endif // UVK_PLATFORM_WINDOWS
 
+#define BIT(x) (1 << x)
+
 #endif // !CORE_H
