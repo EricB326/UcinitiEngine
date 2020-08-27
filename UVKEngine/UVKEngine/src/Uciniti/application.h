@@ -4,6 +4,7 @@
 /* Uciniti engine includes
 */
 #include "core.h"
+#include "Events/event.h"
 
 namespace Uciniti 
 {
@@ -28,7 +29,7 @@ namespace Uciniti
 		void run();
 	};
 
-	/* @brief
+	/* @brief To be defined in CLIENT.
 	*/
 	application* create_application();
 }

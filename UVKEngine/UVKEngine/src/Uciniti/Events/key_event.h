@@ -1,10 +1,6 @@
 #ifndef KEY_EVENT_H
 #define KEY_EVENT_H
 
-/* Standard includes
-*/
-#include <sstream>
-
 /* Uciniti engine includes
 */
 #include "event.h"

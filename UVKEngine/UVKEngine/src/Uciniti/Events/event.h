@@ -1,14 +1,9 @@
 #ifndef EVENT_H
 #define EVENT_H
 
-/* Standard includes
-*/
-#include <string>
-#include <functional>
-
 /* Uciniti engine includes
 */
-#include "../core.h"
+#include "Uciniti/core.h"
 
 namespace Uciniti
 {
@@ -72,7 +67,7 @@ namespace Uciniti
 
 		/* @brief Returns the name of the event with the ability to override.
 		*/
-		virtual std::string ToString() const { return get_name(); }
+		virtual std::string to_string() const { return get_name(); }
 
 		/* @brief Utility function to check if an event is within a given category.
 		   @param Category to check against.
@@ -92,22 +87,39 @@ namespace Uciniti
 		bool handled = false;
 	};
 
+	/* @brief The dispatcher is used as a way to run events based on their type.
+	*/
 	class event_dispatcher
 	{
+		/* @brief T can be any event type listed, this event function is created with an appropraite class ie,
+		*		 a window class may have an OnWindowResize event thats function would be used for this.
+		*/
 		template<typename T>
 		using event_fn = std::function<bool(T&)>;
 
 	public:
+		/***************************************************************/
+		// Public Functions
+		/***************************************************************/
+		/* @brief Constructs a dispatcher event instance with the reference of the event passed.
+		*/
 		event_dispatcher(event& a_event)
 			: _event(a_event)
 		{}
 
+		/* @brief Dispatch the event any number of times with the given event function.
+		*  @param Function event being passed in with any T event type.
+		*  @bool True if the function event ran, false if not.
+		*/
 		template<typename T>
 		bool dispatch(event_fn<T> a_func)
 		{
+			/* @brief If the event constucted event type matches the type of the
+					  event function, than the function can be ran.
+			*/
 			if (_event.get_event_type() == T::get_static_type())
 			{
-				_event.handled - func(*(T*)&_event);
+				_event.handled = func(*(T*)&_event);
 				returnt true;
 			}
 
@@ -115,8 +127,21 @@ namespace Uciniti
 		}
 
 	private:
+		/***************************************************************/
+		// Private Variables
+		/***************************************************************/
+		/* @brief The event passed through as reference, stored to check against.
+		*/
 		event& _event;
 	};
+
+	/* @brief Exists for the log library. Used to have ease of access when calling
+			  to_string() on any given event.
+	*/
+	inline std::ostream& operator<<(std::ostream& a_os, const event& a_e)
+	{
+		return a_os << a_e.to_string();
+	}
 }
 
 #endif // !EVENT_H

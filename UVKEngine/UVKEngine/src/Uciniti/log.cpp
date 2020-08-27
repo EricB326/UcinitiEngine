@@ -1,4 +1,9 @@
-/* Class header include*/
+/* Pre-comp header include
+*/
+#include "uvkpch.h"
+
+/* Class header include
+*/
 #include "log.h"
 
 /* Vendor includes

@@ -18,6 +18,9 @@ project "UVKEngine"
 	targetdir ("bin/" .. output_dir .. "/%{prj.name}")
 	objdir ("bin-int/" .. output_dir .. "/%{prj.name}")
 
+	pchheader "uvkpch.h"
+	pchsource "UVKEngine/src/uvkpch.cpp"
+
 	files
 	{
 		"%{prj.name}/src/**.h",
@@ -26,6 +29,7 @@ project "UVKEngine"
 
 	includedirs
 	{
+		"%{prj.name}/src",
 		"%{prj.name}/vendor/spdlog/include"
 	}
 

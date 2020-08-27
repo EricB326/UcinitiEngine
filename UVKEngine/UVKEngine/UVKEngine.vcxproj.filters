@@ -9,6 +9,9 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\Uciniti\Events\application_event.h">
+      <Filter>Uciniti\Events</Filter>
+    </ClInclude>
     <ClInclude Include="src\Uciniti\Events\event.h">
       <Filter>Uciniti\Events</Filter>
     </ClInclude>
@@ -31,6 +34,7 @@
       <Filter>Uciniti</Filter>
     </ClInclude>
     <ClInclude Include="src\uciniti.h" />
+    <ClInclude Include="src\uvkpch.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Uciniti\application.cpp">
@@ -39,5 +43,6 @@
     <ClCompile Include="src\Uciniti\log.cpp">
       <Filter>Uciniti</Filter>
     </ClCompile>
+    <ClCompile Include="src\uvkpch.cpp" />
   </ItemGroup>
 </Project>

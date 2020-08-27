@@ -1,13 +1,10 @@
 #ifndef LOG_H
 #define LOG_H
 
-/* Standard includes
-*/
-#include <memory>
-
 /* Vendor includes
 */
 #include "spdlog/spdlog.h"
+#include "spdlog/fmt/ostr.h"
 
 /* Uciniti engine includes
 */
