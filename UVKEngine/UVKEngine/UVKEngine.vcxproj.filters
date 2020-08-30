@@ -7,6 +7,12 @@
     <Filter Include="Uciniti\Events">
       <UniqueIdentifier>{FEAE4FEF-EA7C-43F5-D310-B41BBF7D1F5A}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Uciniti\Platform">
+      <UniqueIdentifier>{EE6D151E-DA66-3470-0399-19F5EFF0137C}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Uciniti\Platform\Windows">
+      <UniqueIdentifier>{2826F130-144B-40B1-3D96-2541291A3FCF}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Uciniti\Events\application_event.h">
@@ -21,6 +27,9 @@
     <ClInclude Include="src\Uciniti\Events\mouse_event.h">
       <Filter>Uciniti\Events</Filter>
     </ClInclude>
+    <ClInclude Include="src\Uciniti\Platform\Windows\Windows_window.h">
+      <Filter>Uciniti\Platform\Windows</Filter>
+    </ClInclude>
     <ClInclude Include="src\Uciniti\application.h">
       <Filter>Uciniti</Filter>
     </ClInclude>
@@ -33,10 +42,16 @@
     <ClInclude Include="src\Uciniti\log.h">
       <Filter>Uciniti</Filter>
     </ClInclude>
+    <ClInclude Include="src\Uciniti\window.h">
+      <Filter>Uciniti</Filter>
+    </ClInclude>
     <ClInclude Include="src\uciniti.h" />
     <ClInclude Include="src\uvkpch.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\Uciniti\Platform\Windows\Windows_window.cpp">
+      <Filter>Uciniti\Platform\Windows</Filter>
+    </ClCompile>
     <ClCompile Include="src\Uciniti\application.cpp">
       <Filter>Uciniti</Filter>
     </ClCompile>

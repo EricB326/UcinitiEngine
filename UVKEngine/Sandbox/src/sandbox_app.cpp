@@ -1,6 +1,7 @@
 /* Uciniti engine includes
 */
 #include <uciniti.h>
+#include <Uciniti/entry_point.h>
 
 /* @brief
 *  @inherit

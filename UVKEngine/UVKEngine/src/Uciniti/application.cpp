@@ -6,6 +6,10 @@
 */
 #include "application.h"
 
+/* Vendor includes
+*/
+#include "GLFW/glfw3.h"
+
 /* Uciniti engine includes
 */
 #include "Uciniti/Events/application_event.h"
@@ -15,6 +19,7 @@ namespace Uciniti
 {
 	application::application()
 	{
+		window_context = std::unique_ptr<window>(window::create());
 	}
 
 	application::~application()
@@ -23,13 +28,9 @@ namespace Uciniti
 
 	void application::run()
 	{
-		window_resize_event e(1280, 720);
-
-		if (e.is_in_category(event_category_application))
+		while (is_running)
 		{
-			UVK_TRACE(e);
+			window_context->on_update();
 		}
-
-		while (true);
 	}
 }

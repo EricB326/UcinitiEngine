@@ -16,6 +16,14 @@
 	#error Uciniti only supports Windows!
 #endif // UVK_PLATFORM_WINDOWS
 
+#ifdef UVK_ENABLE_ASSERTS
+	#define UVK_CORE_ASSERT(x, ...) { if (!(x)) { UVK_CORE_ERROR("Assertion Failed: {0}", __VA_ARGS__);  __debugbreak(); } }
+	#define UVK_ASSERT(x, ...) { if (!(x)) { UVK_ERROR("Assertion Failed: {0}", __VA_ARGS__);  __debugbreak(); } }
+#else
+	#define UVK_CORE_ASSERT(x, ...)
+	#define UVK_ASSERT(x, ...)
+#endif // UVK_ENABLE_ASSERTS
+
 #define BIT(x) (1 << x)
 
 #endif // !CORE_H

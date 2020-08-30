@@ -1,3 +1,6 @@
 [submodule "UVKEngine/UVKEngine/vendor/spdlog"]
 	path = UVKEngine/UVKEngine/vendor/spdlog
 	url = https://github.com/gabime/spdlog
+[submodule "UVKEngine/UVKEngine/vendor/GLFW"]
+	path = UVKEngine/UVKEngine/vendor/GLFW
+	url = https://github.com/EricB326/glfw

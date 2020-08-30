@@ -10,6 +10,12 @@ workspace "UVKEngine"
 
 output_dir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
 
+-- Include directories relative to root folder (solution directory)
+IncludeDir = {}
+IncludeDir["GLFW"] = "UVKEngine/vendor/GLFW/include"
+
+include "UVKEngine/vendor/GLFW"
+
 project "UVKEngine"
 	location "UVKEngine"
 	kind "SharedLib"
@@ -30,7 +36,20 @@ project "UVKEngine"
 	includedirs
 	{
 		"%{prj.name}/src",
-		"%{prj.name}/vendor/spdlog/include"
+		"%{prj.name}/vendor/spdlog/include",
+		"%{IncludeDir.GLFW}"
+	}
+
+	libdirs
+	{
+		"%{prj.name}/vendor/GLFW/bin/%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}/GLFW",
+		"%{prj.name}/vendor/Vulkan"
+	}
+	
+	links
+	{
+		"GLFW.lib",
+		"vulkan-1.lib"
 	}
 
 	filter "system:windows"

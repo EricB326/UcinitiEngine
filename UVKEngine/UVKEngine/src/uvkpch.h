@@ -13,6 +13,8 @@
 #include <unordered_map>
 #include <unordered_set>
 
+#include "Uciniti/log.h"
+
 
 #ifdef UVK_PLATFORM_WINDOWS
 	#include <Windows.h>

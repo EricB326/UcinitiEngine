@@ -24,7 +24,7 @@ int main(int argc, char** argv)
 	auto app = Uciniti::create_application();
 
 	app->run();
-
+	
 	delete app;
 	app = nullptr;
 

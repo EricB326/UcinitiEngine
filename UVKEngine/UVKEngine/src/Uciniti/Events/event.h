@@ -1,6 +1,10 @@
 #ifndef EVENT_H
 #define EVENT_H
 
+/* Pre-comp header include
+*/
+#include "uvkpch.h"
+
 /* Uciniti engine includes
 */
 #include "Uciniti/core.h"
