@@ -25,30 +25,30 @@ project "UVKEngine"
 	objdir ("bin-int/" .. output_dir .. "/%{prj.name}")
 
 	pchheader "uvkpch.h"
-	pchsource "UVKEngine/src/uvkpch.cpp"
+	pchsource "UVKEngine/Uciniti/uvkpch.cpp"
 
 	files
 	{
-		"%{prj.name}/src/**.h",
-		"%{prj.name}/src/**.cpp"
+		"%{prj.name}/Uciniti/**.h",
+		"%{prj.name}/Uciniti/**.cpp"
 	}
 
 	includedirs
 	{
-		"%{prj.name}/src",
+		"%{prj.name}/Uciniti",
 		"%{prj.name}/vendor/spdlog/include",
 		"%{IncludeDir.GLFW}"
 	}
 
 	libdirs
 	{
-		"%{prj.name}/vendor/GLFW/bin/%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}/GLFW",
+	--	"%{prj.name}/vendor/GLFW/bin/%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}/GLFW",
 		"%{prj.name}/vendor/Vulkan"
 	}
 	
 	links
 	{
-		"GLFW.lib",
+		"GLFW",
 		"vulkan-1.lib"
 	}
 
@@ -70,14 +70,17 @@ project "UVKEngine"
 
 	filter "configurations:Debug"
 		defines "UVK_DEBUG"
+		buildoptions "/MDd"
 		symbols "On"
 
 	filter "configurations:Release"
 		defines "UVK_RELEASE"
+		buildoptions "/MD"
 		optimize "On"
 
 	filter "configurations:Dist"
 		defines "UVK_DIST"
+		buildoptions "/MD"
 		optimize "On"
 
 project "Sandbox"
@@ -97,7 +100,7 @@ project "Sandbox"
 	includedirs
 	{
 		"UVKEngine/vendor/spdlog/include",
-		"UVKEngine/src"
+		"UVKEngine/Uciniti"
 	}
 
 	links
@@ -117,12 +120,15 @@ project "Sandbox"
 
 	filter "configurations:Debug"
 		defines "UVK_DEBUG"
+		buildoptions "/MDd"
 		symbols "On"
 
 	filter "configurations:Release"
 		defines "UVK_RELEASE"
+		buildoptions "/MD"
 		optimize "On"
 
 	filter "configurations:Dist"
 		defines "UVK_DIST"
+		buildoptions "/MD"
 		optimize "On"

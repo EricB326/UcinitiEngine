@@ -4,12 +4,13 @@
 /***************************************************************/
 // Uciniti engine includes
 /***************************************************************/
-#include "Uciniti/application.h"
-#include "Uciniti/log.h"
+#include "application.h"
+//#include "layer.h"
+#include "log.h"
 
 /***************************************************************/
 // Entry point include
 /***************************************************************/
-#include "Uciniti/entry_point.h"
+#include "entry_point.h"
 
 #endif // !UCINITI_H

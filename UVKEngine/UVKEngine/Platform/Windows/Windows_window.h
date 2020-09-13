@@ -7,7 +7,7 @@
 
 /* Uciniti engine includes
 */
-#include "Uciniti/window.h"
+#include "window.h"
 
 namespace Uciniti
 {

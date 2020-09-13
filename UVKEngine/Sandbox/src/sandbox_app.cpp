@@ -1,7 +1,25 @@
 /* Uciniti engine includes
 */
 #include <uciniti.h>
-#include <Uciniti/entry_point.h>
+
+class example_layer : public Uciniti::layer
+{
+public:
+	example_layer()
+		: layer("Example")
+	{
+	}
+
+	void on_update() override
+	{
+		UVK_INFO("example_layer::update");
+	}
+	
+	void on_event(Uciniti::event& a_event) override
+	{
+		UVK_INFO("{0}", a_event);
+	}
+};
 
 /* @brief
 *  @inherit
@@ -16,6 +34,7 @@ public:
 	*/
 	sandbox_app()
 	{
+		push_layer(new example_layer());
 	}
 
 	/* @brief

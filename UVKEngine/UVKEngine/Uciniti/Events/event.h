@@ -7,7 +7,7 @@
 
 /* Uciniti engine includes
 */
-#include "Uciniti/core.h"
+#include "core.h"
 
 namespace Uciniti
 {
@@ -82,6 +82,11 @@ namespace Uciniti
 			return get_category_flags() & a_category;
 		}
 
+		inline bool was_handled()
+		{
+			return handled;
+		}
+
 	protected:
 		/***************************************************************/
 		// Protected Variables
@@ -123,8 +128,8 @@ namespace Uciniti
 			*/
 			if (_event.get_event_type() == T::get_static_type())
 			{
-				_event.handled = func(*(T*)&_event);
-				returnt true;
+				_event.handled = a_func(static_cast<T&>(_event));
+				return true;
 			}
 
 			return false;

@@ -69,7 +69,7 @@ namespace Uciniti
 		/* @brief Override the base ToString() to now display which key code has been
 		*		  pressed, as well as the repeat count.
 		*/
-		std::string ToString() const override
+		std::string to_string() const override
 		{
 			std::stringstream ss;
 			ss << "key_pressed_event: " << key_code << " (" << repeat_count << " repeats)";
@@ -106,7 +106,7 @@ namespace Uciniti
 		/* @brief Override the base ToString() to now displace that a key release event
 				  has taken place.
 		*/
-		std::string ToString() const override
+		std::string to_string() const override
 		{
 			std::stringstream ss;
 			ss << "key_released_event: " << key_code;

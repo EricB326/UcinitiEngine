@@ -4,8 +4,10 @@
 /* Uciniti engine includes
 */
 #include "core.h"
-#include "Events/event.h"
 #include "window.h"
+#include "layer_stack.h"
+#include "Events/event.h"
+#include "Events/application_event.h"
 
 int main(int argc, char** argv);
 
@@ -31,9 +33,17 @@ namespace Uciniti
 		*/
 		void run();
 
+		void on_event(event& a_e);
+
+		void push_layer(layer* a_layer);
+		void push_overlay(layer* a_overlay);
+
 	private:
+		bool on_window_close(window_close_event& a_e);
+
 		std::unique_ptr<window> window_context;
 		bool is_running = true;
+		layer_stack app_layer_stack;
 	};
 
 	/* @brief To be defined in CLIENT.

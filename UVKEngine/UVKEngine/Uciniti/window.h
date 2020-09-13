@@ -7,8 +7,8 @@
 
 /* Uciniti engine includes
 */
-#include "Uciniti/core.h"
-#include "Uciniti/Events/event.h"
+#include "core.h"
+#include "Events/event.h"
 
 namespace Uciniti
 {
