@@ -8,9 +8,9 @@
 
 /* Uciniti engine includes
 */
-#include "Events/application_event.h"
-#include "Events/key_event.h"
-#include "Events/mouse_event.h"
+#include "Uciniti/Events/application_event.h"
+#include "Uciniti/Events/key_event.h"
+#include "Uciniti/Events/mouse_event.h"
 
 namespace Uciniti
 {

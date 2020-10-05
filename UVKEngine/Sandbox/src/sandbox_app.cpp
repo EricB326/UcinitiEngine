@@ -12,7 +12,7 @@ public:
 
 	void on_update() override
 	{
-		UVK_INFO("example_layer::update");
+		//UVK_INFO("example_layer::update");
 	}
 	
 	void on_event(Uciniti::event& a_event) override

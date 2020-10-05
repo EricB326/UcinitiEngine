@@ -43,8 +43,6 @@ namespace Uciniti
 		event_dispatcher dispatcher(a_e);
 		dispatcher.dispatch<window_close_event>(BIND_EVENT_FN(application::on_window_close));
 
-		UVK_CORE_TRACE("{0}", a_e);
-
 		for (auto it = app_layer_stack.end(); it != app_layer_stack.begin();)
 		{
 			(*--it)->on_event(a_e);

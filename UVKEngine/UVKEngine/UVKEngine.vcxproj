@@ -79,8 +79,8 @@
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>uvkpch.h</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
-      <PreprocessorDefinitions>UVK_PLATFORM_WINDOWS;UVK_BUILD_DLL;UVK_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>Uciniti;vendor\spdlog\include;vendor\GLFW\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;UVK_PLATFORM_WINDOWS;UVK_BUILD_DLL;UVK_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>src;vendor\spdlog\include;vendor\GLFW\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <Optimization>Disabled</Optimization>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
@@ -103,8 +103,8 @@
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>uvkpch.h</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
-      <PreprocessorDefinitions>UVK_PLATFORM_WINDOWS;UVK_BUILD_DLL;UVK_RELEASE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>Uciniti;vendor\spdlog\include;vendor\GLFW\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;UVK_PLATFORM_WINDOWS;UVK_BUILD_DLL;UVK_RELEASE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>src;vendor\spdlog\include;vendor\GLFW\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Full</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
@@ -131,8 +131,8 @@
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>uvkpch.h</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
-      <PreprocessorDefinitions>UVK_PLATFORM_WINDOWS;UVK_BUILD_DLL;UVK_DIST;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>Uciniti;vendor\spdlog\include;vendor\GLFW\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;UVK_PLATFORM_WINDOWS;UVK_BUILD_DLL;UVK_DIST;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>src;vendor\spdlog\include;vendor\GLFW\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Full</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
@@ -155,28 +155,28 @@
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="Platform\Windows\Windows_window.h" />
-    <ClInclude Include="Uciniti\Events\application_event.h" />
-    <ClInclude Include="Uciniti\Events\event.h" />
-    <ClInclude Include="Uciniti\Events\key_event.h" />
-    <ClInclude Include="Uciniti\Events\mouse_event.h" />
-    <ClInclude Include="Uciniti\application.h" />
-    <ClInclude Include="Uciniti\core.h" />
-    <ClInclude Include="Uciniti\entry_point.h" />
-    <ClInclude Include="Uciniti\layer.h" />
-    <ClInclude Include="Uciniti\layer_stack.h" />
-    <ClInclude Include="Uciniti\log.h" />
-    <ClInclude Include="Uciniti\uciniti.h" />
-    <ClInclude Include="Uciniti\uvkpch.h" />
-    <ClInclude Include="Uciniti\window.h" />
+    <ClInclude Include="src\Platform\Windows\Windows_window.h" />
+    <ClInclude Include="src\Uciniti\Core\application.h" />
+    <ClInclude Include="src\Uciniti\Core\core.h" />
+    <ClInclude Include="src\Uciniti\Core\entry_point.h" />
+    <ClInclude Include="src\Uciniti\Core\layer.h" />
+    <ClInclude Include="src\Uciniti\Core\layer_stack.h" />
+    <ClInclude Include="src\Uciniti\Core\log.h" />
+    <ClInclude Include="src\Uciniti\Core\window.h" />
+    <ClInclude Include="src\Uciniti\Events\application_event.h" />
+    <ClInclude Include="src\Uciniti\Events\event.h" />
+    <ClInclude Include="src\Uciniti\Events\key_event.h" />
+    <ClInclude Include="src\Uciniti\Events\mouse_event.h" />
+    <ClInclude Include="src\uciniti.h" />
+    <ClInclude Include="src\uvkpch.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Platform\Windows\Windows_window.cpp" />
-    <ClCompile Include="Uciniti\application.cpp" />
-    <ClCompile Include="Uciniti\layer.cpp" />
-    <ClCompile Include="Uciniti\layer_stack.cpp" />
-    <ClCompile Include="Uciniti\log.cpp" />
-    <ClCompile Include="Uciniti\uvkpch.cpp">
+    <ClCompile Include="src\Platform\Windows\Windows_window.cpp" />
+    <ClCompile Include="src\Uciniti\Core\application.cpp" />
+    <ClCompile Include="src\Uciniti\Core\layer.cpp" />
+    <ClCompile Include="src\Uciniti\Core\layer_stack.cpp" />
+    <ClCompile Include="src\Uciniti\Core\log.cpp" />
+    <ClCompile Include="src\uvkpch.cpp">
       <PrecompiledHeader>Create</PrecompiledHeader>
     </ClCompile>
   </ItemGroup>

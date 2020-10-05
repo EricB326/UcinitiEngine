@@ -1,40 +1,78 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="Events">
-      <UniqueIdentifier>{3A8963B1-262B-8E87-0FE6-A1DBFB2615D8}</UniqueIdentifier>
+    <Filter Include="Platform">
+      <UniqueIdentifier>{2AC788B4-1694-E3BF-3FAD-D1672BD9184E}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Platform\Windows">
+      <UniqueIdentifier>{64FBD71A-50F4-F66C-7926-DCF1657ED678}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Uciniti">
+      <UniqueIdentifier>{5AAC6E81-C68B-ED1C-CFA3-78F33B02547E}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Uciniti\Core">
+      <UniqueIdentifier>{F298E3A2-DEFB-7247-8781-ABFD73C33ECA}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Uciniti\Events">
+      <UniqueIdentifier>{FEAE4FEF-EA7C-43F5-D310-B41BBF7D1F5A}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Uciniti\Events\application_event.h">
-      <Filter>Events</Filter>
+    <ClInclude Include="src\Platform\Windows\Windows_window.h">
+      <Filter>Platform\Windows</Filter>
     </ClInclude>
-    <ClInclude Include="Uciniti\Events\event.h">
-      <Filter>Events</Filter>
+    <ClInclude Include="src\Uciniti\Core\application.h">
+      <Filter>Uciniti\Core</Filter>
     </ClInclude>
-    <ClInclude Include="Uciniti\Events\key_event.h">
-      <Filter>Events</Filter>
+    <ClInclude Include="src\Uciniti\Core\core.h">
+      <Filter>Uciniti\Core</Filter>
     </ClInclude>
-    <ClInclude Include="Uciniti\Events\mouse_event.h">
-      <Filter>Events</Filter>
+    <ClInclude Include="src\Uciniti\Core\entry_point.h">
+      <Filter>Uciniti\Core</Filter>
     </ClInclude>
-    <ClInclude Include="Uciniti\application.h" />
-    <ClInclude Include="Uciniti\core.h" />
-    <ClInclude Include="Uciniti\entry_point.h" />
-    <ClInclude Include="Uciniti\layer.h" />
-    <ClInclude Include="Uciniti\layer_stack.h" />
-    <ClInclude Include="Uciniti\log.h" />
-    <ClInclude Include="Uciniti\uciniti.h" />
-    <ClInclude Include="Uciniti\uvkpch.h" />
-    <ClInclude Include="Uciniti\window.h" />
-    <ClInclude Include="Platform\Windows\Windows_window.h" />
+    <ClInclude Include="src\Uciniti\Core\layer.h">
+      <Filter>Uciniti\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Uciniti\Core\layer_stack.h">
+      <Filter>Uciniti\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Uciniti\Core\log.h">
+      <Filter>Uciniti\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Uciniti\Core\window.h">
+      <Filter>Uciniti\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Uciniti\Events\application_event.h">
+      <Filter>Uciniti\Events</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Uciniti\Events\event.h">
+      <Filter>Uciniti\Events</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Uciniti\Events\key_event.h">
+      <Filter>Uciniti\Events</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Uciniti\Events\mouse_event.h">
+      <Filter>Uciniti\Events</Filter>
+    </ClInclude>
+    <ClInclude Include="src\uciniti.h" />
+    <ClInclude Include="src\uvkpch.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Uciniti\application.cpp" />
-    <ClCompile Include="Uciniti\layer.cpp" />
-    <ClCompile Include="Uciniti\layer_stack.cpp" />
-    <ClCompile Include="Uciniti\log.cpp" />
-    <ClCompile Include="Uciniti\uvkpch.cpp" />
-    <ClCompile Include="Platform\Windows\Windows_window.cpp" />
+    <ClCompile Include="src\Platform\Windows\Windows_window.cpp">
+      <Filter>Platform\Windows</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Uciniti\Core\application.cpp">
+      <Filter>Uciniti\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Uciniti\Core\layer.cpp">
+      <Filter>Uciniti\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Uciniti\Core\layer_stack.cpp">
+      <Filter>Uciniti\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Uciniti\Core\log.cpp">
+      <Filter>Uciniti\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="src\uvkpch.cpp" />
   </ItemGroup>
 </Project>

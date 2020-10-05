@@ -25,17 +25,22 @@ project "UVKEngine"
 	objdir ("bin-int/" .. output_dir .. "/%{prj.name}")
 
 	pchheader "uvkpch.h"
-	pchsource "UVKEngine/Uciniti/uvkpch.cpp"
+	pchsource "UVKEngine/src/uvkpch.cpp"
 
 	files
 	{
-		"%{prj.name}/Uciniti/**.h",
-		"%{prj.name}/Uciniti/**.cpp"
+		"%{prj.name}/src/**.h",
+		"%{prj.name}/src/**.cpp"
+	}
+	
+	defines
+	{
+		"_CRT_SECURE_NO_WARNINGS"
 	}
 
 	includedirs
 	{
-		"%{prj.name}/Uciniti",
+		"%{prj.name}/src",
 		"%{prj.name}/vendor/spdlog/include",
 		"%{IncludeDir.GLFW}"
 	}
@@ -100,7 +105,7 @@ project "Sandbox"
 	includedirs
 	{
 		"UVKEngine/vendor/spdlog/include",
-		"UVKEngine/Uciniti"
+		"UVKEngine/src"
 	}
 
 	links
