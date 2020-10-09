@@ -3,7 +3,7 @@
 
 /* Uciniti engine includes
 */
-#include "core.h"
+#include "base.h"
 #include "window.h"
 #include "layer_stack.h"
 #include "Uciniti/Events/event.h"
@@ -28,7 +28,7 @@ namespace Uciniti
 		/* @brief
 		*/
 		virtual ~application();
-
+		
 		/* @brief
 		*/
 		void run();
@@ -38,12 +38,17 @@ namespace Uciniti
 		void push_layer(layer* a_layer);
 		void push_overlay(layer* a_overlay);
 
+		inline static application& get() { return *instance; }
+		inline window& get_window() { return *window_context; }
+
 	private:
 		bool on_window_close(window_close_event& a_e);
 
 		std::unique_ptr<window> window_context;
 		bool is_running = true;
 		layer_stack app_layer_stack;
+
+		static application* instance;
 	};
 
 	/* @brief To be defined in CLIENT.

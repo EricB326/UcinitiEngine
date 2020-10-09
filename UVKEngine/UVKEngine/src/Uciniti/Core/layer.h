@@ -3,7 +3,7 @@
 
 /* Uciniti engine includes
 */
-#include "core.h"
+#include "base.h"
 #include "Uciniti/Events/event.h"
 
 namespace Uciniti

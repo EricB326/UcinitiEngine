@@ -8,7 +8,7 @@
 
 /* Uciniti engine includes
 */
-#include "core.h"
+#include "base.h"
 
 namespace Uciniti
 {

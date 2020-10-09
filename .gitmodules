@@ -4,3 +4,6 @@
 [submodule "UVKEngine/UVKEngine/vendor/GLFW"]
 	path = UVKEngine/UVKEngine/vendor/GLFW
 	url = https://github.com/EricB326/glfw
+[submodule "UVKEngine/UVKEngine/Vendor/ImGui"]
+	path = UVKEngine/UVKEngine/Vendor/ImGui
+	url = https://github.com/EricB326/imgui

@@ -57,6 +57,13 @@ namespace Uciniti
 
 		window_context = glfwCreateWindow((int)data.width, (int)data.height, data.title.c_str(), nullptr, nullptr);
 		glfwMakeContextCurrent(window_context);
+
+		// Init Vulkan here
+		uint32_t vk_extension_count = 0;
+		vkEnumerateInstanceExtensionProperties(nullptr, &vk_extension_count, nullptr);
+
+		UVK_CORE_INFO("Extension count {0}", vk_extension_count);
+
 		glfwSetWindowUserPointer(window_context, &data);
 		set_vsync(true);
 

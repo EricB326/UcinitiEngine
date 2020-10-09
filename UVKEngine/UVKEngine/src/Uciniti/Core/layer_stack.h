@@ -3,7 +3,7 @@
 
 /* Uciniti engine includes
 */
-#include "core.h"
+#include "base.h"
 #include "layer.h"
 
 /* Standard library includes

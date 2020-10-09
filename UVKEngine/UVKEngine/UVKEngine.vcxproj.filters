@@ -24,9 +24,6 @@
     <ClInclude Include="src\Uciniti\Core\application.h">
       <Filter>Uciniti\Core</Filter>
     </ClInclude>
-    <ClInclude Include="src\Uciniti\Core\core.h">
-      <Filter>Uciniti\Core</Filter>
-    </ClInclude>
     <ClInclude Include="src\Uciniti\Core\entry_point.h">
       <Filter>Uciniti\Core</Filter>
     </ClInclude>
@@ -56,6 +53,11 @@
     </ClInclude>
     <ClInclude Include="src\uciniti.h" />
     <ClInclude Include="src\uvkpch.h" />
+    <ClInclude Include="src\Uciniti\ImGui\ImGui_layer.h" />
+    <ClInclude Include="src\Platform\Vulkan\ImGui_Vulkan_renderer.h" />
+    <ClInclude Include="src\Uciniti\Core\base.h">
+      <Filter>Uciniti\Core</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Platform\Windows\Windows_window.cpp">
@@ -74,5 +76,7 @@
       <Filter>Uciniti\Core</Filter>
     </ClCompile>
     <ClCompile Include="src\uvkpch.cpp" />
+    <ClCompile Include="src\Uciniti\ImGui\ImGui_layer.cpp" />
+    <ClCompile Include="src\Platform\Vulkan\ImGui_Vulkan_renderer.cpp" />
   </ItemGroup>
 </Project>

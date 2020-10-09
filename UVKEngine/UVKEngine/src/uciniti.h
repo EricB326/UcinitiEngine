@@ -7,6 +7,7 @@
 #include "Uciniti/Core/application.h"
 //#include "layer.h"
 #include "Uciniti/Core/log.h"
+#include "Uciniti/ImGui/ImGui_layer.h"
 
 /***************************************************************/
 // Entry point include

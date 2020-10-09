@@ -7,7 +7,7 @@
 
 /* Uciniti engine includes
 */
-#include "core.h"
+#include "base.h"
 #include "Uciniti/Events/event.h"
 
 namespace Uciniti
@@ -47,8 +47,8 @@ namespace Uciniti
 
 		virtual bool is_vsync() const = 0;
 
-		/* @brief As this interface is indepentant, this create function has to be
-				  implemeted per platform.
+		/* @brief As this interface is independent, this create function has to be
+				  implemented per platform.
 		*/
 		static window* create(const window_properties& a_props = window_properties());
 	};

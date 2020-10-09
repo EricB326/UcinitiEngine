@@ -18,8 +18,13 @@ namespace Uciniti
 {
 	#define BIND_EVENT_FN(x) std::bind(&x, this, std::placeholders::_1)
 
+	application* application::instance = nullptr;
+
 	application::application()
 	{
+		UVK_CORE_ASSERT(!instance, "Application already exists!");
+		instance = this;
+
 		window_context = std::unique_ptr<window>(window::create());
 		window_context->set_event_callback(BIND_EVENT_FN(application::on_event));
 	}
@@ -31,11 +36,14 @@ namespace Uciniti
 	void application::push_layer(layer* a_layer)
 	{
 		app_layer_stack.push_layer(a_layer);
+		a_layer->on_attach();
 	}
 
 	void application::push_overlay(layer* a_overlay)
 	{
 		app_layer_stack.push_overlay(a_overlay);
+		a_overlay->on_attach();
+		window::create();
 	}
 
 	void application::on_event(event& a_e)
