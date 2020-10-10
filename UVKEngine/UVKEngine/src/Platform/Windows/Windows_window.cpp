@@ -42,11 +42,11 @@ namespace Uciniti
 		data.width = a_props.width;
 		data.height = a_props.height;
 
-		UVK_CORE_INFO("Creating window {0} ({1}, {2})", data.title, data.width, data.height);
+		UVK_CORE_INFO("Creating window {0} ({1}, {2}).", data.title, data.width, data.height);
 
 		if (!GLFW_initialised)
 		{
-			// TODO: glfwTerminate on system shutdown.
+			// #TODO: glfwTerminate on system shutdown.
 			int success = glfwInit();
 			UVK_CORE_ASSERT(success, "Failed to intialise GLFW!");
 
@@ -58,14 +58,14 @@ namespace Uciniti
 		window_context = glfwCreateWindow((int)data.width, (int)data.height, data.title.c_str(), nullptr, nullptr);
 		glfwMakeContextCurrent(window_context);
 
-		// Init Vulkan here
-		uint32_t vk_extension_count = 0;
-		vkEnumerateInstanceExtensionProperties(nullptr, &vk_extension_count, nullptr);
+		// Init rendering API context
+		glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
+		vulkan_api_context = new vulkan_context(window_context);
+		vulkan_api_context->create();
 
-		UVK_CORE_INFO("Extension count {0}", vk_extension_count);
-
+		glfwMaximizeWindow(window_context);
 		glfwSetWindowUserPointer(window_context, &data);
-		set_vsync(true);
+		//set_vsync(true);
 
 		// Set GLFW callbacks.
 		glfwSetWindowSizeCallback(window_context, [](GLFWwindow* a_window, int a_width, int a_height)
@@ -148,10 +148,14 @@ namespace Uciniti
 			mouse_moved_event new_event((float)a_x_pos, (float)a_y_pos);
 			data.event_callback(new_event);
 		});
+		
 	}
 
 	void Windows_window::shutdown()
 	{
+		delete vulkan_api_context;
+		vulkan_api_context = nullptr;
+
 		glfwDestroyWindow(window_context);
 	}
 

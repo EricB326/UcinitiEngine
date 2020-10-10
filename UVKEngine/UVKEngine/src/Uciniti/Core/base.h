@@ -1,6 +1,8 @@
 #ifndef BASE_H
 #define BASE_H
 
+#include <memory>
+
 /* @brief If the platform is Windows, and the project is the engines build,
 		  then the dll should be exported. Otherwise it is a different project
 		  and thus the dll should be imported.
@@ -16,6 +18,8 @@
 	#error Uciniti only supports Windows!
 #endif // UVK_PLATFORM_WINDOWS
 
+#define UVK_ENABLE_ASSERTS
+
 #ifdef UVK_ENABLE_ASSERTS
 	#define UVK_CORE_ASSERT(x, ...) { if (!(x)) { UVK_CORE_ERROR("Assertion Failed: {0}", __VA_ARGS__);  __debugbreak(); } }
 	#define UVK_ASSERT(x, ...) { if (!(x)) { UVK_ERROR("Assertion Failed: {0}", __VA_ARGS__);  __debugbreak(); } }
@@ -25,5 +29,20 @@
 #endif // UVK_ENABLE_ASSERTS
 
 #define BIT(x) (1 << x)
+
+// Pointer wrappers
+namespace Uciniti
+{
+	template<typename T>
+	using scope = std::unique_ptr<T>;
+	template<typename T, typename ... Args>
+	constexpr scope<T> create_scope(Args&& ... args)
+	{
+		return std::make_unique<T>(std::forward<Args>(args)...);
+	}
+
+	using byte = uint8_t;
+}
+
 
 #endif // !BASE_H

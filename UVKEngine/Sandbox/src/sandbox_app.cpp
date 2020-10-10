@@ -2,22 +2,33 @@
 */
 #include <uciniti.h>
 
-class example_layer : public Uciniti::layer
+class sandbox_layer : public Uciniti::layer
 {
 public:
-	example_layer()
-		: layer("Example")
+	sandbox_layer()
 	{
 	}
 
-	void on_update() override
+	virtual ~sandbox_layer()
+	{
+	}
+
+	virtual void on_attach() override
+	{
+	}
+
+	virtual void on_detach() override
+	{
+	}
+
+	virtual void on_update() override
 	{
 		//UVK_INFO("example_layer::update");
 	}
-	
-	void on_event(Uciniti::event& a_event) override
+
+	virtual void on_event(Uciniti::event& a_event) override
 	{
-		UVK_INFO("{0}", a_event);
+		//UVK_INFO("{0}", a_event);
 	}
 };
 
@@ -34,8 +45,7 @@ public:
 	*/
 	sandbox_app()
 	{
-		push_layer(new example_layer());
-		//push_overlay(new Uciniti::ImGui_layer);
+		push_layer(new sandbox_layer());
 	}
 
 	/* @brief

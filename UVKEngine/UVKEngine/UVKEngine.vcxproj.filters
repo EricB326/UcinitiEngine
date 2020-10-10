@@ -4,6 +4,9 @@
     <Filter Include="Platform">
       <UniqueIdentifier>{2AC788B4-1694-E3BF-3FAD-D1672BD9184E}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Platform\Vulkan">
+      <UniqueIdentifier>{6AE1DE2D-D66C-4CF2-DF7D-CFE64B88A8F2}</UniqueIdentifier>
+    </Filter>
     <Filter Include="Platform\Windows">
       <UniqueIdentifier>{64FBD71A-50F4-F66C-7926-DCF1657ED678}</UniqueIdentifier>
     </Filter>
@@ -16,12 +19,27 @@
     <Filter Include="Uciniti\Events">
       <UniqueIdentifier>{FEAE4FEF-EA7C-43F5-D310-B41BBF7D1F5A}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Uciniti\ImGui">
+      <UniqueIdentifier>{047DC1FF-703D-3D36-3978-86B3A5F78112}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Uciniti\Renderer">
+      <UniqueIdentifier>{4075F2F8-2C6E-114B-55A0-F6CF41F8F056}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\Platform\Vulkan\ImGui_Vulkan_renderer.h">
+      <Filter>Platform\Vulkan</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Platform\Vulkan\vulkan_context.h">
+      <Filter>Platform\Vulkan</Filter>
+    </ClInclude>
     <ClInclude Include="src\Platform\Windows\Windows_window.h">
       <Filter>Platform\Windows</Filter>
     </ClInclude>
     <ClInclude Include="src\Uciniti\Core\application.h">
+      <Filter>Uciniti\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Uciniti\Core\base.h">
       <Filter>Uciniti\Core</Filter>
     </ClInclude>
     <ClInclude Include="src\Uciniti\Core\entry_point.h">
@@ -51,15 +69,26 @@
     <ClInclude Include="src\Uciniti\Events\mouse_event.h">
       <Filter>Uciniti\Events</Filter>
     </ClInclude>
+    <ClInclude Include="src\Uciniti\ImGui\ImGui_layer.h">
+      <Filter>Uciniti\ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Uciniti\Renderer\renderer_context.h">
+      <Filter>Uciniti\Renderer</Filter>
+    </ClInclude>
     <ClInclude Include="src\uciniti.h" />
     <ClInclude Include="src\uvkpch.h" />
-    <ClInclude Include="src\Uciniti\ImGui\ImGui_layer.h" />
-    <ClInclude Include="src\Platform\Vulkan\ImGui_Vulkan_renderer.h" />
-    <ClInclude Include="src\Uciniti\Core\base.h">
-      <Filter>Uciniti\Core</Filter>
-    </ClInclude>
+    <ClInclude Include="src\Platform\Vulkan\vulkan_create_info_base.h" />
+    <ClInclude Include="src\Platform\Vulkan\vulkan_base.h" />
+    <ClInclude Include="src\Platform\Vulkan\vulkan_devices.h" />
+    <ClInclude Include="src\Platform\Vulkan\vulkan_validation.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\Platform\Vulkan\ImGui_Vulkan_renderer.cpp">
+      <Filter>Platform\Vulkan</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Platform\Vulkan\vulkan_context.cpp">
+      <Filter>Platform\Vulkan</Filter>
+    </ClCompile>
     <ClCompile Include="src\Platform\Windows\Windows_window.cpp">
       <Filter>Platform\Windows</Filter>
     </ClCompile>
@@ -75,8 +104,11 @@
     <ClCompile Include="src\Uciniti\Core\log.cpp">
       <Filter>Uciniti\Core</Filter>
     </ClCompile>
+    <ClCompile Include="src\Uciniti\ImGui\ImGui_layer.cpp">
+      <Filter>Uciniti\ImGui</Filter>
+    </ClCompile>
     <ClCompile Include="src\uvkpch.cpp" />
-    <ClCompile Include="src\Uciniti\ImGui\ImGui_layer.cpp" />
-    <ClCompile Include="src\Platform\Vulkan\ImGui_Vulkan_renderer.cpp" />
+    <ClCompile Include="src\Platform\Vulkan\vulkan_devices.cpp" />
+    <ClCompile Include="src\Platform\Vulkan\vulkan_validation.cpp" />
   </ItemGroup>
 </Project>

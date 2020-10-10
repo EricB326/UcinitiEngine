@@ -9,6 +9,7 @@
 /* Uciniti engine includes
 */
 #include "Uciniti/Core/window.h"
+#include "Platform/Vulkan/vulkan_context.h"
 
 namespace Uciniti
 {
@@ -60,10 +61,12 @@ namespace Uciniti
 
 			event_callback_fn event_callback;
 		};
-
+		
 		/* @brief Creation of the window data struct.
 		*/
 		window_data data;
+
+		vulkan_context* vulkan_api_context;
 	};
 }
 

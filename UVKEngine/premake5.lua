@@ -13,7 +13,11 @@ output_dir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
 -- Include directories relative to root folder (solution directory)
 IncludeDir = {}
 IncludeDir["GLFW"] = "UVKEngine/vendor/GLFW/include"
+IncludeDir["Vulkan"] = "UVKEngine/vendor/Vulkan/include"
 IncludeDir["ImGui"] = "UVKEngine/vendor/ImGui"
+
+LibraryDir = {}
+LibraryDir["Vulkan"] = "vendor/Vulkan/lib/vulkan-1.lib"
 
 include "UVKEngine/vendor/GLFW"
 include "UVKEngine/vendor/ImGui"
@@ -45,15 +49,15 @@ project "UVKEngine"
 		"%{prj.name}/src",
 		"%{prj.name}/vendor/spdlog/include",
 		"%{IncludeDir.GLFW}",
-		"%{IncludeDir.ImGui}",
-		"$(VULKAN_SDK)/include"
+		"%{IncludeDir.Vulkan}",
+		"%{IncludeDir.ImGui}"
 	}
 
 	links
 	{
 		"GLFW",
-		"ImGui",
-		"$(VULKAN_SDK)/lib/vulkan-1.lib"
+		"%{LibraryDir.Vulkan}",
+		"ImGui"
 	}
 
 	filter "system:windows"
