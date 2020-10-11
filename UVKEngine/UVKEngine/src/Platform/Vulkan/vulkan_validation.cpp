@@ -18,7 +18,7 @@ namespace Uciniti
 
 	void vulkan_validation::populate_debug_messenger_create_info(VkDebugUtilsMessengerCreateInfoEXT& a_debug_create_info)
 	{
-		a_debug_create_info.messageSeverity = VK_DEBUG_UTILS_MESSAGE_SEVERITY_VERBOSE_BIT_EXT | VK_DEBUG_UTILS_MESSAGE_SEVERITY_WARNING_BIT_EXT | VK_DEBUG_UTILS_MESSAGE_SEVERITY_ERROR_BIT_EXT;
+		a_debug_create_info.messageSeverity = /*VK_DEBUG_UTILS_MESSAGE_SEVERITY_VERBOSE_BIT_EXT |*/ VK_DEBUG_UTILS_MESSAGE_SEVERITY_WARNING_BIT_EXT | VK_DEBUG_UTILS_MESSAGE_SEVERITY_ERROR_BIT_EXT;
 		a_debug_create_info.messageType = VK_DEBUG_UTILS_MESSAGE_TYPE_GENERAL_BIT_EXT | VK_DEBUG_UTILS_MESSAGE_TYPE_VALIDATION_BIT_EXT | VK_DEBUG_UTILS_MESSAGE_TYPE_PERFORMANCE_BIT_EXT;
 		a_debug_create_info.pfnUserCallback = &debug_callback;
 	}
@@ -100,9 +100,9 @@ namespace Uciniti
 	{
 		switch (a_message_severity)
 		{
-		case VK_DEBUG_UTILS_MESSAGE_SEVERITY_VERBOSE_BIT_EXT:
-			//UVK_CORE_INFO("{0}", a_callback_data->pMessage);
-			break;
+		//case VK_DEBUG_UTILS_MESSAGE_SEVERITY_VERBOSE_BIT_EXT:
+		//	UVK_CORE_INFO("{0}", a_callback_data->pMessage);
+		//	break;
 		case VK_DEBUG_UTILS_MESSAGE_SEVERITY_WARNING_BIT_EXT:
 			printf("\n");
 			UVK_CORE_WARN("{0}", a_callback_data->pMessage);

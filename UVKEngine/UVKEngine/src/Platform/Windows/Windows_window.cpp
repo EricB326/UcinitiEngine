@@ -54,16 +54,17 @@ namespace Uciniti
 
 			GLFW_initialised = true;
 		}
+		glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
 
 		window_context = glfwCreateWindow((int)data.width, (int)data.height, data.title.c_str(), nullptr, nullptr);
-		glfwMakeContextCurrent(window_context);
+		//glfwMakeContextCurrent(window_context);
+
 
 		// Init rendering API context
-		glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
 		vulkan_api_context = new vulkan_context(window_context);
 		vulkan_api_context->create();
 
-		glfwMaximizeWindow(window_context);
+		//glfwMaximizeWindow(window_context);
 		glfwSetWindowUserPointer(window_context, &data);
 		//set_vsync(true);
 

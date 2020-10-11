@@ -16,15 +16,17 @@ namespace Uciniti
 
 	void vulkan_context::create()
 	{
-		printf("\n");
-		UVK_CORE_INFO("Vulkan instance initialisation...");
-
 		UVK_CORE_ASSERT(glfwVulkanSupported(), "GLFW must support Vulkan!");
 
 		if (enable_validation_layers)
 			UVK_CORE_ASSERT(validation_handle->check_validation_layer_support(), "Validation layers requested, but not available!");
 	
 		create_instance();
+
+		select_physical_device();
+		create_logical_device();
+
+		create_swap_chain();
 	}
 
 	void vulkan_context::swap_buffers()
@@ -34,6 +36,9 @@ namespace Uciniti
 
 	void vulkan_context::create_instance()
 	{
+		printf("\n");
+		UVK_CORE_INFO("Vulkan instance initialisation...");
+
 		// Initialise information about the application.
 		VkApplicationInfo application_info(vk_base_application_info);
 		application_info.pApplicationName = "Uciniti";
@@ -52,7 +57,6 @@ namespace Uciniti
 			}
 		}
 
-		//UVK_CORE_ASSERT(instance_extension_support(instance_extensions), "No support for instance extensions!");
 		instance_extension_support(instance_extensions);
 
 		// Initialise information about the instance.
@@ -78,17 +82,35 @@ namespace Uciniti
 		}
 
 		VK_CHECK_RESULT(vkCreateInstance(&instance_info, nullptr, &vulkan_instance));
+		UVK_CORE_INFO("Vulkan instance created successfully!");
 
 		// Create the validation layers debug callbacks.
 		if (enable_validation_layers)
 			validation_handle->create();
 	}
 
-	void vulkan_context::create_physical_device()
+	void vulkan_context::select_physical_device()
 	{
-		physical_device = create_scope<vulkan_physical_device>();
+		physical_device = vulkan_physical_device::select();
+	}
 
-		logical_device = create_scope<vulkan_logical_device>();
+	void vulkan_context::create_logical_device()
+	{
+		VkPhysicalDeviceFeatures device_features = {};
+		device_features.samplerAnisotropy = VK_TRUE;
+
+		logical_device = vulkan_logical_device::create(physical_device, device_features);
+	}
+
+	void vulkan_context::create_allocator()
+	{
+		//allocator = vulkan_allocator(logical_device, "Default");
+	}
+
+	void vulkan_context::create_swap_chain()
+	{
+		//swap_chain = new vulkan_swap_chain(window_handle, logical_device);
+		swap_chain.create(window_handle, vulkan_instance, logical_device);
 	}
 
 	std::vector<const char*> vulkan_context::get_instance_extensions()
@@ -144,11 +166,16 @@ namespace Uciniti
 			}
 		}
 
+		UVK_CORE_TRACE("All extensions successfully found.");
 		return true;
 	}
 
 	void vulkan_context::shutdown()
 	{
+		swap_chain.shutdown();
+
+		logical_device->shutdown();
+
 		validation_handle.reset(nullptr);
 
 		vkDestroyInstance(vulkan_instance, nullptr);

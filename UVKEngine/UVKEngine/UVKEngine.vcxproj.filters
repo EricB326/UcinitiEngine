@@ -81,6 +81,8 @@
     <ClInclude Include="src\Platform\Vulkan\vulkan_base.h" />
     <ClInclude Include="src\Platform\Vulkan\vulkan_devices.h" />
     <ClInclude Include="src\Platform\Vulkan\vulkan_validation.h" />
+    <ClInclude Include="src\Platform\Vulkan\vulkan_allocator.h" />
+    <ClInclude Include="src\Platform\Vulkan\vulkan_swap_chain.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Platform\Vulkan\ImGui_Vulkan_renderer.cpp">
@@ -110,5 +112,7 @@
     <ClCompile Include="src\uvkpch.cpp" />
     <ClCompile Include="src\Platform\Vulkan\vulkan_devices.cpp" />
     <ClCompile Include="src\Platform\Vulkan\vulkan_validation.cpp" />
+    <ClCompile Include="src\Platform\Vulkan\vulkan_allocator.cpp" />
+    <ClCompile Include="src\Platform\Vulkan\vulkan_swap_chain.cpp" />
   </ItemGroup>
 </Project>
