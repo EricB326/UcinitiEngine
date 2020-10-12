@@ -14,6 +14,7 @@ namespace Uciniti
 	struct queue_family_indices
 	{
 		std::optional<uint32_t> graphics_family;     // Location of the Graphics Queue Family.
+		std::optional<uint32_t> present_family;		 // Location of the Present Queue Family.
 		std::optional<uint32_t> compute_family;		 // Location of the Compute Queue Family.
 		std::optional<uint32_t> transfer_family;     // Location of the Transfer Queue Family.
 
@@ -22,17 +23,17 @@ namespace Uciniti
 		*/
 		bool is_valid()
 		{
-			return graphics_family.has_value() && compute_family.has_value() && transfer_family.has_value();
+			return graphics_family.has_value() && present_family.has_value() && compute_family.has_value() && transfer_family.has_value();
 		}
 	};
 
 	class vulkan_physical_device
 	{
 	public:
-		vulkan_physical_device();
+		vulkan_physical_device(const VkSurfaceKHR& a_surface);
 		~vulkan_physical_device();
 
-		static ref<vulkan_physical_device> select();
+		static ref<vulkan_physical_device> select(const VkSurfaceKHR& a_surface);
 
 		bool is_extension_supported(const std::string& a_extension_name);
 
@@ -41,6 +42,8 @@ namespace Uciniti
 		const uint32_t get_memory_type_index(uint32_t a_type_bits, VkMemoryPropertyFlags a_properties) const;
 
 	private:
+		VkSurfaceKHR surface;
+
 		VkPhysicalDevice physical_device;
 		VkPhysicalDeviceProperties physical_device_properties;
 		VkPhysicalDeviceFeatures physical_device_features;
@@ -78,6 +81,7 @@ namespace Uciniti
 		bool enable_debug_markers;
 
 		VkQueue graphics_queue;
+		VkQueue present_queue;
 
 		std::vector<VkDeviceQueueCreateInfo> create_queue_infos();
 		void create_queue_handles();

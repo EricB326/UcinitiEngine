@@ -39,6 +39,7 @@ namespace Uciniti
 		vulkan_swap_chain swap_chain;
 
 		void create_instance();
+		void create_surface();
 		void select_physical_device();
 		void create_logical_device();
 		void create_allocator();

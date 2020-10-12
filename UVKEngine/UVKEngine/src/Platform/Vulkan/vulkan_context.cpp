@@ -23,6 +23,8 @@ namespace Uciniti
 	
 		create_instance();
 
+		create_surface();
+
 		select_physical_device();
 		create_logical_device();
 
@@ -89,9 +91,14 @@ namespace Uciniti
 			validation_handle->create();
 	}
 
+	void vulkan_context::create_surface()
+	{
+		swap_chain.create_surface(window_handle, vulkan_instance);
+	}
+
 	void vulkan_context::select_physical_device()
 	{
-		physical_device = vulkan_physical_device::select();
+		physical_device = vulkan_physical_device::select(swap_chain.get_surface());
 	}
 
 	void vulkan_context::create_logical_device()
@@ -110,7 +117,8 @@ namespace Uciniti
 	void vulkan_context::create_swap_chain()
 	{
 		//swap_chain = new vulkan_swap_chain(window_handle, logical_device);
-		swap_chain.create(window_handle, vulkan_instance, logical_device);
+		//swap_chain.create(window_handle, vulkan_instance, logical_device);
+		swap_chain.create_swap_chain(logical_device);
 	}
 
 	std::vector<const char*> vulkan_context::get_instance_extensions()

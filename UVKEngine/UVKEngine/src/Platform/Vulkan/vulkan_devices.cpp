@@ -10,8 +10,8 @@ namespace Uciniti
 	// Vulkan Physical Device
 	// =================================================================
 
-	vulkan_physical_device::vulkan_physical_device()
-		: physical_device(VK_NULL_HANDLE)
+	vulkan_physical_device::vulkan_physical_device(const VkSurfaceKHR& a_surface)
+		: physical_device(VK_NULL_HANDLE), surface(a_surface)
 	{
 		printf("\n");
 		UVK_CORE_INFO("Vulkan physical device initialisation...");
@@ -45,9 +45,9 @@ namespace Uciniti
 
 	}
 
-	ref<vulkan_physical_device> vulkan_physical_device::select()
+	ref<vulkan_physical_device> vulkan_physical_device::select(const VkSurfaceKHR& a_surface)
 	{
-		return create_ref<vulkan_physical_device>();
+		return create_ref<vulkan_physical_device>(a_surface);
 	}
 
 	bool vulkan_physical_device::is_extension_supported(const std::string& a_extension_name)
@@ -165,7 +165,18 @@ namespace Uciniti
 						UVK_CORE_TRACE("\tTransfer queue family with index '{0}'", index);
 					}
 				}
+
+				// Check if the queue family supports presentation.
+				VkBool32 present_support = false;
+				vkGetPhysicalDeviceSurfaceSupportKHR(physical_device, index, surface, &present_support);
+
+				if (present_support)
+				{
+					indices.present_family = index;
+					UVK_CORE_TRACE("\tPresentation queue family with index '{0}'", index);
+				}
 			}
+			index++;
 		}
 
 		// Do a second loop to try and populate queue family indices with dedicated queues.
@@ -246,8 +257,10 @@ namespace Uciniti
 		// Physical device extensions the logical devices should used.
 		std::vector<const char*> device_extension = {};
 
-		// If the device will be used for presenting to a display via a swapchain we need to request the swapchain extension.
+		// The device will be used for presenting to a display via a swapchain we need to request the swapchain extension.
 		device_extension.push_back(VK_KHR_SWAPCHAIN_EXTENSION_NAME);
+		if (!physical_device->is_extension_supported(VK_KHR_SWAPCHAIN_EXTENSION_NAME))
+			UVK_CORE_ASSERT(false, "Cannot run program without swap chain support!");
 
 		// Enable the debug marker extension if it is present (likely meaning a debugging tool is present).
 		if (physical_device->is_extension_supported(VK_EXT_DEBUG_MARKER_EXTENSION_NAME))
@@ -295,6 +308,20 @@ namespace Uciniti
 			UVK_CORE_TRACE("\tGraphics queue family created.");
 		}
 
+		// Present queue creation.
+		if (indices.present_family.has_value())
+		{
+			if (indices.present_family.value() != indices.graphics_family.value())
+			{
+				VkDeviceQueueCreateInfo queue_info(vk_base_device_queue_create_info);
+				queue_info.queueFamilyIndex = indices.present_family.value();
+				queue_info.queueCount = 1;
+				queue_info.pQueuePriorities = &default_queue_priority;
+				queue_create_infos.push_back(queue_info);
+				UVK_CORE_TRACE("\tPresentation queue family created.");
+			}
+		}
+
 		// Dedicated compute queue creation.
 		if (indices.compute_family.has_value())
 		{
@@ -325,6 +352,8 @@ namespace Uciniti
 			}
 		}
 
+		UVK_CORE_TRACE("\tPresentation queue family created.");
+
 		return queue_create_infos;
 	}
 
@@ -334,6 +363,9 @@ namespace Uciniti
 
 		vkGetDeviceQueue(logical_device, physical_device->get_queue_family_indices().graphics_family.value(), 0, &graphics_queue);
 		UVK_CORE_TRACE("\tGraphic queue handle found.");
+
+		vkGetDeviceQueue(logical_device, physical_device->get_queue_family_indices().present_family.value(), 0, &present_queue);
+		UVK_CORE_TRACE("\tPresentation queue handle found.");
 	}
 
 	void vulkan_logical_device::create_command_pool()
