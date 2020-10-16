@@ -6,8 +6,8 @@
 #include "base.h"
 #include "window.h"
 #include "layer_stack.h"
-#include "Uciniti/Events/event.h"
-#include "Uciniti/Events/application_event.h"
+#include "Uciniti/Core/Events/event.h"
+#include "Uciniti/Core/Events/application_event.h"
 
 int main(int argc, char** argv);
 

@@ -83,8 +83,7 @@
       <AdditionalIncludeDirectories>src;vendor\spdlog\include;vendor\GLFW\include;vendor\Vulkan\include;vendor\ImGui;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <Optimization>Disabled</Optimization>
-      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
-      <AdditionalOptions>/MDd %(AdditionalOptions)</AdditionalOptions>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
@@ -109,8 +108,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <MinimalRebuild>false</MinimalRebuild>
       <StringPooling>true</StringPooling>
-      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
-      <AdditionalOptions>/MD %(AdditionalOptions)</AdditionalOptions>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
@@ -136,8 +134,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <MinimalRebuild>false</MinimalRebuild>
       <StringPooling>true</StringPooling>
-      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
-      <AdditionalOptions>/MD %(AdditionalOptions)</AdditionalOptions>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
@@ -152,47 +149,54 @@
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="src\Platform\Vulkan\vulkan_create_info_base.h" />
-    <ClInclude Include="src\Platform\Vulkan\ImGui_Vulkan_renderer.h" />
-    <ClInclude Include="src\Platform\Vulkan\vulkan_context.h" />
-    <ClInclude Include="src\Platform\Vulkan\vulkan_base.h" />
-    <ClInclude Include="src\Platform\Windows\Windows_window.h" />
+    <ClInclude Include="src\Uciniti\Core\Events\application_event.h" />
+    <ClInclude Include="src\Uciniti\Core\Events\event.h" />
+    <ClInclude Include="src\Uciniti\Core\Events\key_event.h" />
+    <ClInclude Include="src\Uciniti\Core\Events\mouse_event.h" />
     <ClInclude Include="src\Uciniti\Core\application.h" />
     <ClInclude Include="src\Uciniti\Core\base.h" />
     <ClInclude Include="src\Uciniti\Core\entry_point.h" />
+    <ClInclude Include="src\Uciniti\Core\input.h" />
+    <ClInclude Include="src\Uciniti\Core\key_codes.h" />
     <ClInclude Include="src\Uciniti\Core\layer.h" />
     <ClInclude Include="src\Uciniti\Core\layer_stack.h" />
     <ClInclude Include="src\Uciniti\Core\log.h" />
     <ClInclude Include="src\Uciniti\Core\window.h" />
-    <ClInclude Include="src\Uciniti\Events\application_event.h" />
-    <ClInclude Include="src\Uciniti\Events\event.h" />
-    <ClInclude Include="src\Uciniti\Events\key_event.h" />
-    <ClInclude Include="src\Uciniti\Events\mouse_event.h" />
     <ClInclude Include="src\Uciniti\ImGui\ImGui_layer.h" />
+    <ClInclude Include="src\Uciniti\Platform\Vulkan\ImGui_Vulkan_renderer.h" />
+    <ClInclude Include="src\Uciniti\Platform\Vulkan\vulkan_allocator.h" />
+    <ClInclude Include="src\Uciniti\Platform\Vulkan\vulkan_base.h" />
+    <ClInclude Include="src\Uciniti\Platform\Vulkan\vulkan_context.h" />
+    <ClInclude Include="src\Uciniti\Platform\Vulkan\vulkan_create_info_base.h" />
+    <ClInclude Include="src\Uciniti\Platform\Vulkan\vulkan_devices.h" />
+    <ClInclude Include="src\Uciniti\Platform\Vulkan\vulkan_pipeline.h" />
+    <ClInclude Include="src\Uciniti\Platform\Vulkan\vulkan_shader.h" />
+    <ClInclude Include="src\Uciniti\Platform\Vulkan\vulkan_swap_chain.h" />
+    <ClInclude Include="src\Uciniti\Platform\Vulkan\vulkan_validation.h" />
+    <ClInclude Include="src\Uciniti\Platform\Windows\Windows_window.h" />
     <ClInclude Include="src\Uciniti\Renderer\renderer_context.h" />
     <ClInclude Include="src\uciniti.h" />
     <ClInclude Include="src\uvkpch.h" />
-    <ClInclude Include="src\Platform\Vulkan\vulkan_devices.h" />
-    <ClInclude Include="src\Platform\Vulkan\vulkan_validation.h" />
-    <ClInclude Include="src\Platform\Vulkan\vulkan_allocator.h" />
-    <ClInclude Include="src\Platform\Vulkan\vulkan_swap_chain.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\Platform\Vulkan\ImGui_Vulkan_renderer.cpp" />
-    <ClCompile Include="src\Platform\Vulkan\vulkan_context.cpp" />
-    <ClCompile Include="src\Platform\Windows\Windows_window.cpp" />
     <ClCompile Include="src\Uciniti\Core\application.cpp" />
     <ClCompile Include="src\Uciniti\Core\layer.cpp" />
     <ClCompile Include="src\Uciniti\Core\layer_stack.cpp" />
     <ClCompile Include="src\Uciniti\Core\log.cpp" />
     <ClCompile Include="src\Uciniti\ImGui\ImGui_layer.cpp" />
+    <ClCompile Include="src\Uciniti\Platform\Vulkan\ImGui_Vulkan_renderer.cpp" />
+    <ClCompile Include="src\Uciniti\Platform\Vulkan\vulkan_allocator.cpp" />
+    <ClCompile Include="src\Uciniti\Platform\Vulkan\vulkan_context.cpp" />
+    <ClCompile Include="src\Uciniti\Platform\Vulkan\vulkan_devices.cpp" />
+    <ClCompile Include="src\Uciniti\Platform\Vulkan\vulkan_pipeline.cpp" />
+    <ClCompile Include="src\Uciniti\Platform\Vulkan\vulkan_shader.cpp" />
+    <ClCompile Include="src\Uciniti\Platform\Vulkan\vulkan_swap_chain.cpp" />
+    <ClCompile Include="src\Uciniti\Platform\Vulkan\vulkan_validation.cpp" />
+    <ClCompile Include="src\Uciniti\Platform\Windows\Windows_window.cpp" />
+    <ClCompile Include="src\Uciniti\Platform\Windows\windows_input.cpp" />
     <ClCompile Include="src\uvkpch.cpp">
       <PrecompiledHeader>Create</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="src\Platform\Vulkan\vulkan_devices.cpp" />
-    <ClCompile Include="src\Platform\Vulkan\vulkan_validation.cpp" />
-    <ClCompile Include="src\Platform\Vulkan\vulkan_allocator.cpp" />
-    <ClCompile Include="src\Platform\Vulkan\vulkan_swap_chain.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="vendor\GLFW\GLFW.vcxproj">

@@ -50,6 +50,7 @@ namespace Uciniti
 		VkSurfaceFormatKHR select_optimal_surface_format();
 		VkPresentModeKHR select_best_present_mode();
 		VkExtent2D select_swap_chain_extents(const VkSurfaceCapabilitiesKHR& a_surface_capabilities);
+		void create_image_views(uint32_t image_count, VkSurfaceFormatKHR& surface_format);
 	};
 }
 

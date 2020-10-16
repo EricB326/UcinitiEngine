@@ -26,6 +26,7 @@ project "UVKEngine"
 	location "UVKEngine"
 	kind "SharedLib"
 	language "C++"
+	staticruntime "off"
 
 	targetdir ("bin/" .. output_dir .. "/%{prj.name}")
 	objdir ("bin-int/" .. output_dir .. "/%{prj.name}")
@@ -62,7 +63,6 @@ project "UVKEngine"
 
 	filter "system:windows"
 		cppdialect "C++17"
-		staticruntime "On"
 		systemversion "latest"
 
 		defines
@@ -78,24 +78,25 @@ project "UVKEngine"
 
 	filter "configurations:Debug"
 		defines "UVK_DEBUG"
-		buildoptions "/MDd"
+		runtime "Debug"
 		symbols "On"
 
 	filter "configurations:Release"
 		defines "UVK_RELEASE"
-		buildoptions "/MD"
+		runtime "Release"
 		optimize "On"
 
 	filter "configurations:Dist"
 		defines "UVK_DIST"
-		buildoptions "/MD"
+		runtime "Release"
 		optimize "On"
 
 project "Sandbox"
 	location "Sandbox"
 	kind "ConsoleApp"
 	language "C++"
-
+	staticruntime "off"
+	
 	targetdir ("bin/" .. output_dir .. "/%{prj.name}")
 	objdir ("bin-int/" .. output_dir .. "/%{prj.name}")
 
@@ -118,7 +119,6 @@ project "Sandbox"
 
 	filter "system:windows"
 		cppdialect "C++17"
-		staticruntime "On"
 		systemversion "latest"
 
 		defines
@@ -128,15 +128,15 @@ project "Sandbox"
 
 	filter "configurations:Debug"
 		defines "UVK_DEBUG"
-		buildoptions "/MDd"
+		runtime "Debug"
 		symbols "On"
 
 	filter "configurations:Release"
 		defines "UVK_RELEASE"
-		buildoptions "/MD"
+		runtime "Release"
 		optimize "On"
 
 	filter "configurations:Dist"
 		defines "UVK_DIST"
-		buildoptions "/MD"
+		runtime "Release"
 		optimize "On"

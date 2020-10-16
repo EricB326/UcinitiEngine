@@ -14,7 +14,7 @@ namespace Uciniti
 
 		printf("\n");
 		UVK_CORE_INFO("Vulkan surface initialisation...");
-		/* What the glfwCreateWindowSurface() does behind the scenes (windows):
+		/* What the glfwCreateWindowSurface() does behind the scenes (Windows OS):
 
 			  VkWin32SurfaceCreateInfoKHR createInfo{};
 			  createInfo.sType = VK_STRUCTURE_TYPE_WIN32_SURFACE_CREATE_INFO_KHR;
@@ -147,37 +147,8 @@ namespace Uciniti
 		}
 
 		// Get swap chain images.
-		vkGetSwapchainImagesKHR(logical_device->get_logical_device(), swap_chain, &image_count, nullptr);
-		swap_chain_images.resize(image_count);
-		vkGetSwapchainImagesKHR(logical_device->get_logical_device(), swap_chain, &image_count, swap_chain_images.data());
+		create_image_views(image_count, surface_format);
 
-		// Get the swap chain buffers containing the image and image view.
-		swap_chain_buffer.resize(image_count);
-		for (uint32_t i = 0; i < image_count; i++)
-		{
-			VkImageViewCreateInfo image_view_create_info(vk_base_image_view_create_info);
-			image_view_create_info.format = surface_format.format;
-			image_view_create_info.components =
-			{
-				VK_COMPONENT_SWIZZLE_R,
-				VK_COMPONENT_SWIZZLE_G,
-				VK_COMPONENT_SWIZZLE_B,
-				VK_COMPONENT_SWIZZLE_A
-			};
-
-			image_view_create_info.subresourceRange.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
-			image_view_create_info.subresourceRange.baseMipLevel = 0;
-			image_view_create_info.subresourceRange.levelCount = 1;
-			image_view_create_info.subresourceRange.baseArrayLayer = 0;
-			image_view_create_info.subresourceRange.layerCount = 1;
-			image_view_create_info.viewType = VK_IMAGE_VIEW_TYPE_2D; // Type of image (1D, 2D, 3D, Cube, etc).
-			//image_view_create_info.flags = 0;
-
-			swap_chain_buffer[i].image = swap_chain_images[i];
-			image_view_create_info.image = swap_chain_buffer[i].image;
-
-			VK_CHECK_RESULT(vkCreateImageView(logical_device->get_logical_device(), &image_view_create_info, nullptr, &swap_chain_buffer[i].image_view));
-		}
 	}
 
 	void vulkan_swap_chain::shutdown()
@@ -292,6 +263,41 @@ namespace Uciniti
 			new_extents.height = std::max(a_surface_capabilities.minImageExtent.height, std::min(a_surface_capabilities.maxImageExtent.height, new_extents.height));
 
 			return new_extents;
+		}
+	}
+
+	void vulkan_swap_chain::create_image_views(uint32_t image_count, VkSurfaceFormatKHR& surface_format)
+	{
+		vkGetSwapchainImagesKHR(logical_device->get_logical_device(), swap_chain, &image_count, nullptr);
+		swap_chain_images.resize(image_count);
+		vkGetSwapchainImagesKHR(logical_device->get_logical_device(), swap_chain, &image_count, swap_chain_images.data());
+
+		// Get the swap chain buffers containing the image and image view.
+		swap_chain_buffer.resize(image_count);
+		for (uint32_t i = 0; i < image_count; i++)
+		{
+			VkImageViewCreateInfo image_view_create_info(vk_base_image_view_create_info);
+			image_view_create_info.format = surface_format.format;
+			image_view_create_info.components =
+			{
+				VK_COMPONENT_SWIZZLE_R,
+				VK_COMPONENT_SWIZZLE_G,
+				VK_COMPONENT_SWIZZLE_B,
+				VK_COMPONENT_SWIZZLE_A
+			};
+
+			image_view_create_info.subresourceRange.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
+			image_view_create_info.subresourceRange.baseMipLevel = 0;
+			image_view_create_info.subresourceRange.levelCount = 1;
+			image_view_create_info.subresourceRange.baseArrayLayer = 0;
+			image_view_create_info.subresourceRange.layerCount = 1;
+			image_view_create_info.viewType = VK_IMAGE_VIEW_TYPE_2D; // Type of image (1D, 2D, 3D, Cube, etc).
+			//image_view_create_info.flags = 0;
+
+			swap_chain_buffer[i].image = swap_chain_images[i];
+			image_view_create_info.image = swap_chain_buffer[i].image;
+
+			VK_CHECK_RESULT(vkCreateImageView(logical_device->get_logical_device(), &image_view_create_info, nullptr, &swap_chain_buffer[i].image_view));
 		}
 	}
 

@@ -2,16 +2,24 @@
 #define UCINITI_H
 
 /***************************************************************/
-// Uciniti engine includes
+// Uciniti engine core includes
 /***************************************************************/
+// -- Universal --
 #include "Uciniti/Core/application.h"
-//#include "layer.h"
 #include "Uciniti/Core/log.h"
-#include "Uciniti/ImGui/ImGui_layer.h"
+#include "Uciniti/Core/input.h"
+#include "Uciniti/Core/entry_point.h"
+
+// -- Events --
+#include "Uciniti/Core/Events/event.h"
+#include "Uciniti/Core/Events/application_event.h"
+#include "Uciniti/Core/Events/key_event.h"
+#include "Uciniti/Core/Events/mouse_event.h"
+
+// -- Math --
 
 /***************************************************************/
-// Entry point include
+//Uciniti engine renderer includes
 /***************************************************************/
-#include "Uciniti/Core/entry_point.h"
 
 #endif // !UCINITI_H

@@ -9,7 +9,7 @@
 /* Uciniti engine includes
 */
 #include "Uciniti/Core/window.h"
-#include "Platform/Vulkan/vulkan_context.h"
+#include "Uciniti/Platform/Vulkan/vulkan_context.h"
 
 namespace Uciniti
 {
@@ -33,6 +33,8 @@ namespace Uciniti
 		inline void set_event_callback(const event_callback_fn& a_callback) override { data.event_callback = a_callback; }
 		void set_vsync(bool a_enabled) override;
 		bool is_vsync() const override;
+
+		inline virtual void* get_native_window() const override { return window_context; }
 
 	private:
 		/***************************************************************/
