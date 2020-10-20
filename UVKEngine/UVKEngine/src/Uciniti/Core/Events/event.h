@@ -123,7 +123,7 @@ namespace Uciniti
 		template<typename T>
 		bool dispatch(event_fn<T> a_func)
 		{
-			/* @brief If the event constucted event type matches the type of the
+			/* @brief If the event constructed event type matches the type of the
 					  event function, than the function can be ran.
 			*/
 			if (_event.get_event_type() == T::get_static_type())

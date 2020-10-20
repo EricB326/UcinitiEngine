@@ -13,10 +13,22 @@ output_dir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
 -- Include directories relative to root folder (solution directory)
 IncludeDir = {}
 IncludeDir["GLFW"] = "UVKEngine/vendor/GLFW/include"
-IncludeDir["Vulkan"] = "UVKEngine/vendor/Vulkan/include"
 IncludeDir["ImGui"] = "UVKEngine/vendor/ImGui"
+IncludeDir["glm"] = "UVKEngine/vendor/glm"
+IncludeDir["shaderc"] = "UVKEngine/vendor/shaderc/include"
+IncludeDir["Vulkan"] = "UVKEngine/vendor/Vulkan/include"
 
 LibraryDir = {}
+LibraryDir["shaderc"] = "vendor/shaderc/lib/shaderc.lib"
+LibraryDir["shaderc_util"] = "vendor/shaderc/lib/shaderc_util.lib"
+LibraryDir["glslang"] = "vendor/glslang/lib/debug/glslangd.lib"
+LibraryDir["glslang_MachineIndependent"] = "vendor/glslang/lib/debug/MachineIndependentd.lib"
+LibraryDir["glslang_SPIRV"] = "vendor/glslang/lib/debug/SPIRVd.lib"
+LibraryDir["glslang_OGLCompiler"] = "vendor/glslang/lib/debug/OGLCompilerd.lib"
+LibraryDir["glslang_OSDependent"] = "vendor/glslang/lib/debug/OSDependentd.lib"
+LibraryDir["glslang_GenericCodeGen"] = "vendor/glslang/lib/debug/GenericCodeGend.lib"
+LibraryDir["SPIRV_Tools"] = "vendor/SPIRV-Tools/lib/debug/SPIRV-Tools.lib"
+LibraryDir["SPIRV_Tools_opt"] = "vendor/SPIRV-Tools/lib/debug/SPIRV-Tools-opt.lib"
 LibraryDir["Vulkan"] = "vendor/Vulkan/lib/vulkan-1.lib"
 
 include "UVKEngine/vendor/GLFW"
@@ -24,9 +36,11 @@ include "UVKEngine/vendor/ImGui"
 
 project "UVKEngine"
 	location "UVKEngine"
-	kind "SharedLib"
+	kind "StaticLib"
 	language "C++"
-	staticruntime "off"
+	cppdialect "C++17"
+	staticruntime "on"
+	
 
 	targetdir ("bin/" .. output_dir .. "/%{prj.name}")
 	objdir ("bin-int/" .. output_dir .. "/%{prj.name}")
@@ -37,65 +51,76 @@ project "UVKEngine"
 	files
 	{
 		"%{prj.name}/src/**.h",
-		"%{prj.name}/src/**.cpp"
+		"%{prj.name}/src/**.cpp",
+		"%{prj.name}/vender/glm/glm/**.hpp",
+		"%{prj.name}/vender/glm/glm/**.inl"
 	}
 	
 	defines
 	{
 		"_CRT_SECURE_NO_WARNINGS"
 	}
-
+	
 	includedirs
 	{
 		"%{prj.name}/src",
 		"%{prj.name}/vendor/spdlog/include",
 		"%{IncludeDir.GLFW}",
 		"%{IncludeDir.Vulkan}",
-		"%{IncludeDir.ImGui}"
+		"%{IncludeDir.ImGui}",
+		"%{IncludeDir.glm}",
+		"%{IncludeDir.shaderc}"
 	}
 
 	links
 	{
 		"GLFW",
+		"ImGui",
 		"%{LibraryDir.Vulkan}",
-		"ImGui"
+		
+		"%{LibraryDir.shaderc}",
+		"%{LibraryDir.shaderc_util}",
+		"%{LibraryDir.glslang}",
+		"%{LibraryDir.glslang_MachineIndependent}",
+		"%{LibraryDir.glslang_SPIRV}",
+		"%{LibraryDir.glslang_OGLCompiler}",
+		"%{LibraryDir.glslang_OSDependent}",
+		"%{LibraryDir.glslang_GenericCodeGen}",
+		"%{LibraryDir.SPIRV_Tools}",
+		"%{LibraryDir.SPIRV_Tools_opt}"
 	}
 
 	filter "system:windows"
-		cppdialect "C++17"
 		systemversion "latest"
 
 		defines
 		{
 			"UVK_PLATFORM_WINDOWS",
-			"UVK_BUILD_DLL"
-		}
-
-		postbuildcommands
-		{
-			("{COPY} %{cfg.buildtarget.relpath} ../bin/" .. output_dir .. "/Sandbox")
+			"UVK_BUILD_DLL",
+			"GLFW_INCLUDE_NONE"
 		}
 
 	filter "configurations:Debug"
 		defines "UVK_DEBUG"
 		runtime "Debug"
-		symbols "On"
+		symbols "on"
 
 	filter "configurations:Release"
 		defines "UVK_RELEASE"
 		runtime "Release"
-		optimize "On"
+		optimize "on"
 
 	filter "configurations:Dist"
 		defines "UVK_DIST"
 		runtime "Release"
-		optimize "On"
+		optimize "on"
 
 project "Sandbox"
 	location "Sandbox"
 	kind "ConsoleApp"
 	language "C++"
-	staticruntime "off"
+	cppdialect "C++17"
+	staticruntime "on"
 	
 	targetdir ("bin/" .. output_dir .. "/%{prj.name}")
 	objdir ("bin-int/" .. output_dir .. "/%{prj.name}")
@@ -109,7 +134,9 @@ project "Sandbox"
 	includedirs
 	{
 		"UVKEngine/vendor/spdlog/include",
-		"UVKEngine/src"
+		"UVKEngine/src",
+		"UVKEngine/vendor",
+		"%{IncludeDir.glm}"
 	}
 
 	links
@@ -118,7 +145,6 @@ project "Sandbox"
 	}
 
 	filter "system:windows"
-		cppdialect "C++17"
 		systemversion "latest"
 
 		defines
@@ -129,14 +155,14 @@ project "Sandbox"
 	filter "configurations:Debug"
 		defines "UVK_DEBUG"
 		runtime "Debug"
-		symbols "On"
+		symbols "on"
 
 	filter "configurations:Release"
 		defines "UVK_RELEASE"
 		runtime "Release"
-		optimize "On"
+		optimize "on"
 
 	filter "configurations:Dist"
 		defines "UVK_DIST"
 		runtime "Release"
-		optimize "On"
+		optimize "on"

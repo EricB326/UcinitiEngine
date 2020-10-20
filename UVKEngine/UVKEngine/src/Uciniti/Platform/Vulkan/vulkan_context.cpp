@@ -1,12 +1,14 @@
 #include "uvkpch.h"
 #include "vulkan_context.h"
 
+#include "GLFW/glfw3.h"
+
 namespace Uciniti
 {
 	vulkan_context::vulkan_context(GLFWwindow* a_window_handle)
 		: window_handle(a_window_handle), validation_handle(new vulkan_validation())
 	{
-
+		UVK_CORE_ASSERT(window_handle, "Window handle is null!");
 	}
 
 	vulkan_context::~vulkan_context()
@@ -17,6 +19,8 @@ namespace Uciniti
 	void vulkan_context::create()
 	{
 		UVK_CORE_ASSERT(glfwVulkanSupported(), "GLFW must support Vulkan!");
+
+		//glfwMakeContextCurrent(window_handle);
 
 		if (enable_validation_layers)
 			UVK_CORE_ASSERT(validation_handle->check_validation_layer_support(), "Validation layers requested, but not available!");
@@ -29,11 +33,13 @@ namespace Uciniti
 		create_logical_device();
 
 		create_swap_chain();
+		vulkan_shader new_shader = vulkan_shader("assets/shaders/vulkan_triangle.glsl");
+		UVK_CORE_TRACE("Shader made.");
 	}
 
 	void vulkan_context::swap_buffers()
 	{
-
+		//glfwSwapBuffers(window_handle);
 	}
 
 	void vulkan_context::create_instance()

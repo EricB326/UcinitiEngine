@@ -1,28 +1,34 @@
 #ifndef VULKAN_CONTEXT_H
 #define VULKAN_CONTEXT_H
 
-#include "GLFW/glfw3.h"
-
 #include "Uciniti/Core/base.h"
+#include "Uciniti/Renderer/renderer.h"
 #include "vulkan_base.h" 
 #include "vulkan_validation.h"
 #include "vulkan_devices.h"
 #include "vulkan_allocator.h"
 #include "vulkan_swap_chain.h"
+#include "vulkan_shader.h"
+
+struct GLFWwindow;
 
 namespace Uciniti
 {
-	class vulkan_context
+	class vulkan_context : public renderer_context
 	{
 	public:
 		vulkan_context(GLFWwindow* a_window_handle);
 		virtual ~vulkan_context();
 
-		void create();
-		void swap_buffers();
+		virtual void create() override;
+		virtual void swap_buffers() override;
+
+		//static ref<vulkan_logical_device> get_logical_device() { return logical_device; }
 
 		static VkInstance get_instance() { return vulkan_instance; }
-
+		//static ref<vulkan_context> get() { return ref<vulkan_context>(renderer::get_context()); }
+		//static ref<vulkan_logical_device> get_current_device() { return get()->get_logical_device(); }
+	
 	private:
 		GLFWwindow* window_handle;
 

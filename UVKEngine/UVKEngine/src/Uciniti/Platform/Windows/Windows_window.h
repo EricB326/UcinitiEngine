@@ -9,7 +9,7 @@
 /* Uciniti engine includes
 */
 #include "Uciniti/Core/window.h"
-#include "Uciniti/Platform/Vulkan/vulkan_context.h"
+#include "Uciniti/Renderer/renderer_context.h"
 
 namespace Uciniti
 {
@@ -29,12 +29,14 @@ namespace Uciniti
 
 		inline uint16_t get_width() const override { return data.width; }
 		inline uint16_t get_height() const override { return data.height; }
+		//virtual ref<renderer_context> get_render_context() const override { return render_context; }
 
 		inline void set_event_callback(const event_callback_fn& a_callback) override { data.event_callback = a_callback; }
 		void set_vsync(bool a_enabled) override;
 		bool is_vsync() const override;
 
 		inline virtual void* get_native_window() const override { return window_context; }
+
 
 	private:
 		/***************************************************************/
@@ -53,6 +55,9 @@ namespace Uciniti
 		*/
 		GLFWwindow* window_context;
 
+		//ref<renderer_context> render_context;
+		renderer_context* render_context;
+
 		/* @brief Stores the data that may be requested by GLFW event callbacks.
 		*/
 		struct window_data
@@ -67,8 +72,6 @@ namespace Uciniti
 		/* @brief Creation of the window data struct.
 		*/
 		window_data data;
-
-		vulkan_context* vulkan_api_context;
 	};
 }
 

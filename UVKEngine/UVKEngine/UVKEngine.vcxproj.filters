@@ -51,6 +51,9 @@
     <ClInclude Include="src\Uciniti\Core\input.h">
       <Filter>Uciniti\Core</Filter>
     </ClInclude>
+    <ClInclude Include="src\Uciniti\Core\key_codes.h">
+      <Filter>Uciniti\Core</Filter>
+    </ClInclude>
     <ClInclude Include="src\Uciniti\Core\layer.h">
       <Filter>Uciniti\Core</Filter>
     </ClInclude>
@@ -99,12 +102,17 @@
     <ClInclude Include="src\Uciniti\Platform\Windows\Windows_window.h">
       <Filter>Uciniti\Platform\Windows</Filter>
     </ClInclude>
+    <ClInclude Include="src\Uciniti\Renderer\renderer.h">
+      <Filter>Uciniti\Renderer</Filter>
+    </ClInclude>
     <ClInclude Include="src\Uciniti\Renderer\renderer_context.h">
+      <Filter>Uciniti\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Uciniti\Renderer\shader.h">
       <Filter>Uciniti\Renderer</Filter>
     </ClInclude>
     <ClInclude Include="src\uciniti.h" />
     <ClInclude Include="src\uvkpch.h" />
-    <ClInclude Include="src\Uciniti\Core\key_codes.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Uciniti\Core\application.cpp">
@@ -151,6 +159,9 @@
     </ClCompile>
     <ClCompile Include="src\Uciniti\Platform\Windows\windows_input.cpp">
       <Filter>Uciniti\Platform\Windows</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Uciniti\Renderer\shader.cpp">
+      <Filter>Uciniti\Renderer</Filter>
     </ClCompile>
     <ClCompile Include="src\uvkpch.cpp" />
   </ItemGroup>

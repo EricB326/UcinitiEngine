@@ -23,19 +23,19 @@
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
-    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <CharacterSet>Unicode</CharacterSet>
     <PlatformToolset>v142</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
-    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <CharacterSet>Unicode</CharacterSet>
     <PlatformToolset>v142</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Dist|x64'" Label="Configuration">
-    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <CharacterSet>Unicode</CharacterSet>
     <PlatformToolset>v142</PlatformToolset>
@@ -54,99 +54,90 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <LinkIncremental>true</LinkIncremental>
     <OutDir>..\bin\Debug-windows-x86_64\UVKEngine\</OutDir>
     <IntDir>..\bin-int\Debug-windows-x86_64\UVKEngine\</IntDir>
     <TargetName>UVKEngine</TargetName>
-    <TargetExt>.dll</TargetExt>
+    <TargetExt>.lib</TargetExt>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <LinkIncremental>false</LinkIncremental>
     <OutDir>..\bin\Release-windows-x86_64\UVKEngine\</OutDir>
     <IntDir>..\bin-int\Release-windows-x86_64\UVKEngine\</IntDir>
     <TargetName>UVKEngine</TargetName>
-    <TargetExt>.dll</TargetExt>
+    <TargetExt>.lib</TargetExt>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Dist|x64'">
-    <LinkIncremental>false</LinkIncremental>
     <OutDir>..\bin\Dist-windows-x86_64\UVKEngine\</OutDir>
     <IntDir>..\bin-int\Dist-windows-x86_64\UVKEngine\</IntDir>
     <TargetName>UVKEngine</TargetName>
-    <TargetExt>.dll</TargetExt>
+    <TargetExt>.lib</TargetExt>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>uvkpch.h</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
-      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;UVK_PLATFORM_WINDOWS;UVK_BUILD_DLL;UVK_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>src;vendor\spdlog\include;vendor\GLFW\include;vendor\Vulkan\include;vendor\ImGui;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;UVK_PLATFORM_WINDOWS;UVK_BUILD_DLL;GLFW_INCLUDE_NONE;UVK_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>src;vendor\spdlog\include;vendor\GLFW\include;vendor\Vulkan\include;vendor\ImGui;vendor\glm;vendor\shaderc\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <Optimization>Disabled</Optimization>
-      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
       <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>vendor\Vulkan\lib\vulkan-1.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <ImportLibrary>..\bin\Debug-windows-x86_64\UVKEngine\UVKEngine.lib</ImportLibrary>
     </Link>
-    <PostBuildEvent>
-      <Command>IF EXIST ..\bin\Debug-windows-x86_64\UVKEngine\UVKEngine.dll\ (xcopy /Q /E /Y /I ..\bin\Debug-windows-x86_64\UVKEngine\UVKEngine.dll ..\bin\Debug-windows-x86_64\Sandbox &gt; nul) ELSE (xcopy /Q /Y /I ..\bin\Debug-windows-x86_64\UVKEngine\UVKEngine.dll ..\bin\Debug-windows-x86_64\Sandbox &gt; nul)</Command>
-    </PostBuildEvent>
+    <Lib>
+      <AdditionalDependencies>vendor\Vulkan\lib\vulkan-1.lib;vendor\shaderc\lib\shaderc.lib;vendor\shaderc\lib\shaderc_util.lib;vendor\glslang\lib\debug\glslangd.lib;vendor\glslang\lib\debug\MachineIndependentd.lib;vendor\glslang\lib\debug\SPIRVd.lib;vendor\glslang\lib\debug\OGLCompilerd.lib;vendor\glslang\lib\debug\OSDependentd.lib;vendor\glslang\lib\debug\GenericCodeGend.lib;vendor\SPIRV-Tools\lib\debug\SPIRV-Tools.lib;vendor\SPIRV-Tools\lib\debug\SPIRV-Tools-opt.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>uvkpch.h</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
-      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;UVK_PLATFORM_WINDOWS;UVK_BUILD_DLL;UVK_RELEASE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>src;vendor\spdlog\include;vendor\GLFW\include;vendor\Vulkan\include;vendor\ImGui;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;UVK_PLATFORM_WINDOWS;UVK_BUILD_DLL;GLFW_INCLUDE_NONE;UVK_RELEASE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>src;vendor\spdlog\include;vendor\GLFW\include;vendor\Vulkan\include;vendor\ImGui;vendor\glm;vendor\shaderc\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Full</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <MinimalRebuild>false</MinimalRebuild>
       <StringPooling>true</StringPooling>
-      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalDependencies>vendor\Vulkan\lib\vulkan-1.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <ImportLibrary>..\bin\Release-windows-x86_64\UVKEngine\UVKEngine.lib</ImportLibrary>
     </Link>
-    <PostBuildEvent>
-      <Command>IF EXIST ..\bin\Release-windows-x86_64\UVKEngine\UVKEngine.dll\ (xcopy /Q /E /Y /I ..\bin\Release-windows-x86_64\UVKEngine\UVKEngine.dll ..\bin\Release-windows-x86_64\Sandbox &gt; nul) ELSE (xcopy /Q /Y /I ..\bin\Release-windows-x86_64\UVKEngine\UVKEngine.dll ..\bin\Release-windows-x86_64\Sandbox &gt; nul)</Command>
-    </PostBuildEvent>
+    <Lib>
+      <AdditionalDependencies>vendor\Vulkan\lib\vulkan-1.lib;vendor\shaderc\lib\shaderc.lib;vendor\shaderc\lib\shaderc_util.lib;vendor\glslang\lib\debug\glslangd.lib;vendor\glslang\lib\debug\MachineIndependentd.lib;vendor\glslang\lib\debug\SPIRVd.lib;vendor\glslang\lib\debug\OGLCompilerd.lib;vendor\glslang\lib\debug\OSDependentd.lib;vendor\glslang\lib\debug\GenericCodeGend.lib;vendor\SPIRV-Tools\lib\debug\SPIRV-Tools.lib;vendor\SPIRV-Tools\lib\debug\SPIRV-Tools-opt.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Dist|x64'">
     <ClCompile>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>uvkpch.h</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
-      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;UVK_PLATFORM_WINDOWS;UVK_BUILD_DLL;UVK_DIST;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>src;vendor\spdlog\include;vendor\GLFW\include;vendor\Vulkan\include;vendor\ImGui;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;UVK_PLATFORM_WINDOWS;UVK_BUILD_DLL;GLFW_INCLUDE_NONE;UVK_DIST;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>src;vendor\spdlog\include;vendor\GLFW\include;vendor\Vulkan\include;vendor\ImGui;vendor\glm;vendor\shaderc\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Full</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <MinimalRebuild>false</MinimalRebuild>
       <StringPooling>true</StringPooling>
-      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalDependencies>vendor\Vulkan\lib\vulkan-1.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <ImportLibrary>..\bin\Dist-windows-x86_64\UVKEngine\UVKEngine.lib</ImportLibrary>
     </Link>
-    <PostBuildEvent>
-      <Command>IF EXIST ..\bin\Dist-windows-x86_64\UVKEngine\UVKEngine.dll\ (xcopy /Q /E /Y /I ..\bin\Dist-windows-x86_64\UVKEngine\UVKEngine.dll ..\bin\Dist-windows-x86_64\Sandbox &gt; nul) ELSE (xcopy /Q /Y /I ..\bin\Dist-windows-x86_64\UVKEngine\UVKEngine.dll ..\bin\Dist-windows-x86_64\Sandbox &gt; nul)</Command>
-    </PostBuildEvent>
+    <Lib>
+      <AdditionalDependencies>vendor\Vulkan\lib\vulkan-1.lib;vendor\shaderc\lib\shaderc.lib;vendor\shaderc\lib\shaderc_util.lib;vendor\glslang\lib\debug\glslangd.lib;vendor\glslang\lib\debug\MachineIndependentd.lib;vendor\glslang\lib\debug\SPIRVd.lib;vendor\glslang\lib\debug\OGLCompilerd.lib;vendor\glslang\lib\debug\OSDependentd.lib;vendor\glslang\lib\debug\GenericCodeGend.lib;vendor\SPIRV-Tools\lib\debug\SPIRV-Tools.lib;vendor\SPIRV-Tools\lib\debug\SPIRV-Tools-opt.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="src\Uciniti\Core\Events\application_event.h" />
@@ -174,7 +165,9 @@
     <ClInclude Include="src\Uciniti\Platform\Vulkan\vulkan_swap_chain.h" />
     <ClInclude Include="src\Uciniti\Platform\Vulkan\vulkan_validation.h" />
     <ClInclude Include="src\Uciniti\Platform\Windows\Windows_window.h" />
+    <ClInclude Include="src\Uciniti\Renderer\renderer.h" />
     <ClInclude Include="src\Uciniti\Renderer\renderer_context.h" />
+    <ClInclude Include="src\Uciniti\Renderer\shader.h" />
     <ClInclude Include="src\uciniti.h" />
     <ClInclude Include="src\uvkpch.h" />
   </ItemGroup>
@@ -194,6 +187,7 @@
     <ClCompile Include="src\Uciniti\Platform\Vulkan\vulkan_validation.cpp" />
     <ClCompile Include="src\Uciniti\Platform\Windows\Windows_window.cpp" />
     <ClCompile Include="src\Uciniti\Platform\Windows\windows_input.cpp" />
+    <ClCompile Include="src\Uciniti\Renderer\shader.cpp" />
     <ClCompile Include="src\uvkpch.cpp">
       <PrecompiledHeader>Create</PrecompiledHeader>
     </ClCompile>

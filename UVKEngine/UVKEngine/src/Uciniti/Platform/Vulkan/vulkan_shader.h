@@ -1,65 +1,47 @@
 #ifndef VULKAN_SHADER_H
 #define VULKAN_SHADER_H
 
+#include "Uciniti/Renderer/shader.h"
 #include "vulkan_base.h"
 
 namespace Uciniti
 {
-	class vulkan_shader
+	class vulkan_shader : public shader
 	{
 	public:
 		/***************************************************************/
 		// Public Functions
 		/***************************************************************/
-		vulkan_shader() {}
-
 		/* @brief Constructs the variables to passed in data.
 		*/
-		vulkan_shader(const VkDevice& a_logical_device_handle, const char* a_file_path);
+		vulkan_shader(const std::string& a_filepath);
 
 		/* @brief Destroys any memory created or created Vulkan functions.
 		*/
 		~vulkan_shader();
 
-		/* @brief There is no copy constructor. If the compiler would otherwise
-				  generate a copy call, it will instead fail.
-		*/
-		vulkan_shader(const vulkan_shader& a_other) = delete;
-
-		/* @brief There is no assignment allowed.
-		*/
-		vulkan_shader& operator=(const vulkan_shader& a_other) = delete;
-
-		/* @brief Using file i/o, read the SPIR-V shader files in binary.
-				  Once all the data is read and stored, create the
-				  shader module.
-		*/
-		void read_shader_from_file(const std::string& a_filepath);
-
-
-		/* @brief Gets the shader code stored after loading a shader.
-		   @return Vector of char with the shader code by reference.
-		*/
-		inline const std::string& get_shader_code() const { return shader_code; }
-
-		/* @brief Gets the shader module handle.
-		   @return VkShaderModule with the shader module handle by reference.
-		*/
-		const VkShaderModule& get_shader_module_handle() const;
+		virtual void bind() override {}
+		virtual void unbind() override {}
+		void reload() override;
 
 	private:
 		/***************************************************************/
 		// Private Variables
 		/***************************************************************/
-		/* @brief The loaded code from the .spv file.
-		*/
-		std::string shader_code;
+		std::string filepath;
 
+		std::unordered_map<VkShaderStageFlagBits, std::string> shader_source;
 
-		/* @brief Creates a shader module and stores the handle. Created
-				  using the stored shader code.
-		*/
-		void create_shader_module();
+		std::vector<VkPipelineShaderStageCreateInfo> shader_stages;
+
+		VkShaderStageFlagBits shader_type_from_string(const std::string& a_type);
+
+		std::unordered_map<VkShaderStageFlagBits, std::string> pre_process(const std::string& a_shader_source);
+	
+		void compile_to_spirv(std::array<std::vector<uint32_t>, 2>& a_binary_storage);
+	
+		void create_vertex_shader_module(VkPipelineShaderStageCreateInfo& a_shader_stage, const std::vector<uint32_t>& a_shader_data);
+		void create_fragment_shader_module(VkPipelineShaderStageCreateInfo& a_shader_stage, const std::vector<uint32_t>& a_shader_data);
 	};
 }
 

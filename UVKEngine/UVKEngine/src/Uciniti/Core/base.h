@@ -9,14 +9,16 @@
 		  Else the platform is not Windows and thus the engine will not run.
 */
 #ifdef UVK_PLATFORM_WINDOWS
-	#ifdef UVK_BUILD_DLL
-		#define UCINITI_API _declspec(dllexport)
+	#if UVK_DYNAMIC_LINK
+		#ifdef UVK_BUILD_DLL
+			#define UCINITI_API _declspec(dllexport)
+		#else
+			#define UCINITI_API _declspec(dllimport)
+		#endif // !UVK_BUILD_DLL
 	#else
-		#define UCINITI_API _declspec(dllimport)
-	#endif
-#else
-	#error Uciniti only supports Windows!
-#endif // UVK_PLATFORM_WINDOWS
+		#define UCINITI_API
+	#endif // !UVK_DYNAMIC_LINK
+#endif // !UVK_PLATFORM_WINDOWS
 
 #ifdef UVK_DEBUG
 	#define UVK_ENABLE_ASSERTS

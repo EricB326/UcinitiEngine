@@ -49,6 +49,9 @@ namespace Uciniti
 		*/
 		virtual void* get_native_window() const = 0;
 
+		//virtual ref<renderer_context> get_render_context() const = 0;
+
+
 		/* @brief As this interface is independent, this create function has to be
 				  implemented per platform.
 		*/

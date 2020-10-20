@@ -6,7 +6,6 @@
 #include "Windows_window.h"
 #include "Uciniti/Core/application.h"
 
-
 namespace Uciniti
 {
 	bool input::is_key_pressed(key_code a_keycode)

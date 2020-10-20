@@ -23,9 +23,8 @@ public:
 
 	virtual void on_update() override
 	{
-		//UVK_INFO("example_layer::update");
-		//if (Uciniti::input::is_key_pressed(Uciniti::key_code::tab))
-		//	UVK_TRACE("Tab key is pressed!");
+		if (Uciniti::input::is_key_pressed(Uciniti::key_code::tab))
+			UVK_TRACE("Tab key is pressed!");
 
 		//if (Uciniti::input::is_mouse_button_pressed(UVK_MOUSE_BUTTON_LEFT))
 		//	UVK_TRACE("Left click!");

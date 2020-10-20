@@ -11,6 +11,7 @@
 #include "Uciniti/Core/Events/application_event.h"
 #include "Uciniti/Core/Events/key_event.h"
 #include "Uciniti/Core/Events/mouse_event.h"
+#include "Uciniti/Platform/Vulkan/vulkan_context.h"
 
 namespace Uciniti
 {
@@ -57,14 +58,11 @@ namespace Uciniti
 		glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
 
 		window_context = glfwCreateWindow((int)data.width, (int)data.height, data.title.c_str(), nullptr, nullptr);
-		//glfwMakeContextCurrent(window_context);
+		
+		// Create rendering API context.
+		render_context = new vulkan_context(window_context);
+		render_context->create();
 
-
-		// Init rendering API context
-		vulkan_api_context = new vulkan_context(window_context);
-		vulkan_api_context->create();
-
-		//glfwMaximizeWindow(window_context);
 		glfwSetWindowUserPointer(window_context, &data);
 		//set_vsync(true);
 
@@ -154,8 +152,8 @@ namespace Uciniti
 
 	void Windows_window::shutdown()
 	{
-		delete vulkan_api_context;
-		vulkan_api_context = nullptr;
+		//delete render_context;
+		//render_context = nullptr;
 
 		glfwDestroyWindow(window_context);
 	}
@@ -163,7 +161,7 @@ namespace Uciniti
 	void Windows_window::on_update()
 	{
 		glfwPollEvents();
-		glfwSwapBuffers(window_context);
+		//render_context->swap_buffers();
 	}
 
 	void Windows_window::set_vsync(bool a_enabled)
