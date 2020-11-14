@@ -13,6 +13,9 @@
 /* Uciniti engine includes
 */
 #include "log.h"
+#include "Uciniti/Renderer/renderer.h"
+#include "Uciniti/Platform/Vulkan/vulkan_test_layer.h"
+#include "Uciniti/Platform/Vulkan/vulkan_renderer.h"
 
 namespace Uciniti
 {
@@ -25,8 +28,14 @@ namespace Uciniti
 		UVK_CORE_ASSERT(!instance, "Application already exists!");
 		instance = this;
 
-		window_context = std::unique_ptr<window>(window::create());
+		window_context = scope_ptr<window>(window::create());
 		window_context->set_event_callback(BIND_EVENT_FN(application::on_event));
+
+		renderer::init();
+		vulkan_renderer::init();
+		renderer::wait_and_render();
+
+		//push_layer(new vulkan_test_layer());
 	}
 
 	application::~application()
@@ -63,8 +72,17 @@ namespace Uciniti
 	{
 		while (is_running)
 		{
+			// #TODO: Currently tied the class to glfw. Should be platform specific instead (linux::get_time()).
+			float time = (float)glfwGetTime();
+			time_step this_time_step = time - last_frame_time;
+			last_frame_time = time;
+
 			for (layer* this_layer : app_layer_stack)
-				this_layer->on_update();
+				this_layer->on_update(this_time_step);
+
+			window_context->get_render_context()->begin_frame();
+			vulkan_renderer::draw();
+			window_context->swap_buffers();
 
 			window_context->on_update();
 		}

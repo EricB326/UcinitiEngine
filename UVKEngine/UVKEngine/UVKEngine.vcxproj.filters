@@ -1,168 +1,268 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="Uciniti">
-      <UniqueIdentifier>{5AAC6E81-C68B-ED1C-CFA3-78F33B02547E}</UniqueIdentifier>
+    <Filter Include="src">
+      <UniqueIdentifier>{2DAB880B-99B4-887C-2230-9F7C8E38947C}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Uciniti\Core">
-      <UniqueIdentifier>{F298E3A2-DEFB-7247-8781-ABFD73C33ECA}</UniqueIdentifier>
+    <Filter Include="src\Uciniti">
+      <UniqueIdentifier>{71ACA88A-DD61-2180-6656-1B57D20A1884}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Uciniti\Core\Events">
-      <UniqueIdentifier>{9680995D-02E2-766B-8B4F-BD1DF7AFAD2A}</UniqueIdentifier>
+    <Filter Include="src\Uciniti\Core">
+      <UniqueIdentifier>{693F04B6-5538-2308-7E6A-088D6AC20214}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Uciniti\ImGui">
-      <UniqueIdentifier>{047DC1FF-703D-3D36-3978-86B3A5F78112}</UniqueIdentifier>
+    <Filter Include="src\Uciniti\Core\Events">
+      <UniqueIdentifier>{2D5B5D2F-9992-A5C6-A29C-09EA0E53CCBF}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Uciniti\Platform">
-      <UniqueIdentifier>{EE6D151E-DA66-3470-0399-19F5EFF0137C}</UniqueIdentifier>
+    <Filter Include="src\Uciniti\ImGui">
+      <UniqueIdentifier>{5BF2F676-C708-F50C-1080-802E7CD5C594}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Uciniti\Platform\Vulkan">
-      <UniqueIdentifier>{AEC35B74-1AFB-A30B-2305-082F8FBBCA04}</UniqueIdentifier>
+    <Filter Include="src\Uciniti\Platform">
+      <UniqueIdentifier>{E5778285-D106-0C4F-7A25-204A66931CF5}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Uciniti\Platform\Windows">
-      <UniqueIdentifier>{2826F130-144B-40B1-3D96-2541291A3FCF}</UniqueIdentifier>
+    <Filter Include="src\Uciniti\Platform\Vulkan">
+      <UniqueIdentifier>{C51129E3-311F-57C9-BA05-53B426122380}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Uciniti\Renderer">
-      <UniqueIdentifier>{4075F2F8-2C6E-114B-55A0-F6CF41F8F056}</UniqueIdentifier>
+    <Filter Include="src\Uciniti\Platform\Windows">
+      <UniqueIdentifier>{1F376879-0BF2-5725-B4A9-D06FA043A2B5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\Uciniti\Renderer">
+      <UniqueIdentifier>{377F5F60-230E-E929-CC2C-FD24B89AF9CF}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="vendor">
+      <UniqueIdentifier>{B3738122-9F15-ACF8-88D0-BF4C74113349}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="vendor\stb_image">
+      <UniqueIdentifier>{0DA0BA59-F998-D9AB-22CB-BE300E23B9B7}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Uciniti\Core\Events\application_event.h">
-      <Filter>Uciniti\Core\Events</Filter>
+      <Filter>src\Uciniti\Core\Events</Filter>
     </ClInclude>
     <ClInclude Include="src\Uciniti\Core\Events\event.h">
-      <Filter>Uciniti\Core\Events</Filter>
+      <Filter>src\Uciniti\Core\Events</Filter>
     </ClInclude>
     <ClInclude Include="src\Uciniti\Core\Events\key_event.h">
-      <Filter>Uciniti\Core\Events</Filter>
+      <Filter>src\Uciniti\Core\Events</Filter>
     </ClInclude>
     <ClInclude Include="src\Uciniti\Core\Events\mouse_event.h">
-      <Filter>Uciniti\Core\Events</Filter>
+      <Filter>src\Uciniti\Core\Events</Filter>
     </ClInclude>
     <ClInclude Include="src\Uciniti\Core\application.h">
-      <Filter>Uciniti\Core</Filter>
+      <Filter>src\Uciniti\Core</Filter>
     </ClInclude>
     <ClInclude Include="src\Uciniti\Core\base.h">
-      <Filter>Uciniti\Core</Filter>
+      <Filter>src\Uciniti\Core</Filter>
     </ClInclude>
     <ClInclude Include="src\Uciniti\Core\entry_point.h">
-      <Filter>Uciniti\Core</Filter>
+      <Filter>src\Uciniti\Core</Filter>
     </ClInclude>
     <ClInclude Include="src\Uciniti\Core\input.h">
-      <Filter>Uciniti\Core</Filter>
+      <Filter>src\Uciniti\Core</Filter>
     </ClInclude>
     <ClInclude Include="src\Uciniti\Core\key_codes.h">
-      <Filter>Uciniti\Core</Filter>
+      <Filter>src\Uciniti\Core</Filter>
     </ClInclude>
     <ClInclude Include="src\Uciniti\Core\layer.h">
-      <Filter>Uciniti\Core</Filter>
+      <Filter>src\Uciniti\Core</Filter>
     </ClInclude>
     <ClInclude Include="src\Uciniti\Core\layer_stack.h">
-      <Filter>Uciniti\Core</Filter>
+      <Filter>src\Uciniti\Core</Filter>
     </ClInclude>
     <ClInclude Include="src\Uciniti\Core\log.h">
-      <Filter>Uciniti\Core</Filter>
+      <Filter>src\Uciniti\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Uciniti\Core\time_step.h">
+      <Filter>src\Uciniti\Core</Filter>
     </ClInclude>
     <ClInclude Include="src\Uciniti\Core\window.h">
-      <Filter>Uciniti\Core</Filter>
+      <Filter>src\Uciniti\Core</Filter>
     </ClInclude>
     <ClInclude Include="src\Uciniti\ImGui\ImGui_layer.h">
-      <Filter>Uciniti\ImGui</Filter>
+      <Filter>src\Uciniti\ImGui</Filter>
     </ClInclude>
     <ClInclude Include="src\Uciniti\Platform\Vulkan\ImGui_Vulkan_renderer.h">
-      <Filter>Uciniti\Platform\Vulkan</Filter>
+      <Filter>src\Uciniti\Platform\Vulkan</Filter>
     </ClInclude>
     <ClInclude Include="src\Uciniti\Platform\Vulkan\vulkan_allocator.h">
-      <Filter>Uciniti\Platform\Vulkan</Filter>
+      <Filter>src\Uciniti\Platform\Vulkan</Filter>
     </ClInclude>
     <ClInclude Include="src\Uciniti\Platform\Vulkan\vulkan_base.h">
-      <Filter>Uciniti\Platform\Vulkan</Filter>
+      <Filter>src\Uciniti\Platform\Vulkan</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Uciniti\Platform\Vulkan\vulkan_buffer.h">
+      <Filter>src\Uciniti\Platform\Vulkan</Filter>
     </ClInclude>
     <ClInclude Include="src\Uciniti\Platform\Vulkan\vulkan_context.h">
-      <Filter>Uciniti\Platform\Vulkan</Filter>
+      <Filter>src\Uciniti\Platform\Vulkan</Filter>
     </ClInclude>
     <ClInclude Include="src\Uciniti\Platform\Vulkan\vulkan_create_info_base.h">
-      <Filter>Uciniti\Platform\Vulkan</Filter>
+      <Filter>src\Uciniti\Platform\Vulkan</Filter>
     </ClInclude>
     <ClInclude Include="src\Uciniti\Platform\Vulkan\vulkan_devices.h">
-      <Filter>Uciniti\Platform\Vulkan</Filter>
+      <Filter>src\Uciniti\Platform\Vulkan</Filter>
     </ClInclude>
     <ClInclude Include="src\Uciniti\Platform\Vulkan\vulkan_pipeline.h">
-      <Filter>Uciniti\Platform\Vulkan</Filter>
+      <Filter>src\Uciniti\Platform\Vulkan</Filter>
     </ClInclude>
     <ClInclude Include="src\Uciniti\Platform\Vulkan\vulkan_shader.h">
-      <Filter>Uciniti\Platform\Vulkan</Filter>
+      <Filter>src\Uciniti\Platform\Vulkan</Filter>
     </ClInclude>
     <ClInclude Include="src\Uciniti\Platform\Vulkan\vulkan_swap_chain.h">
-      <Filter>Uciniti\Platform\Vulkan</Filter>
+      <Filter>src\Uciniti\Platform\Vulkan</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Uciniti\Platform\Vulkan\vulkan_texture.h">
+      <Filter>src\Uciniti\Platform\Vulkan</Filter>
     </ClInclude>
     <ClInclude Include="src\Uciniti\Platform\Vulkan\vulkan_validation.h">
-      <Filter>Uciniti\Platform\Vulkan</Filter>
+      <Filter>src\Uciniti\Platform\Vulkan</Filter>
     </ClInclude>
     <ClInclude Include="src\Uciniti\Platform\Windows\Windows_window.h">
-      <Filter>Uciniti\Platform\Windows</Filter>
+      <Filter>src\Uciniti\Platform\Windows</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Uciniti\Renderer\base_camera.h">
+      <Filter>src\Uciniti\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Uciniti\Renderer\buffer.h">
+      <Filter>src\Uciniti\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Uciniti\Renderer\camera.h">
+      <Filter>src\Uciniti\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Uciniti\Renderer\render_command.h">
+      <Filter>src\Uciniti\Renderer</Filter>
     </ClInclude>
     <ClInclude Include="src\Uciniti\Renderer\renderer.h">
-      <Filter>Uciniti\Renderer</Filter>
+      <Filter>src\Uciniti\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Uciniti\Renderer\renderer_api.h">
+      <Filter>src\Uciniti\Renderer</Filter>
     </ClInclude>
     <ClInclude Include="src\Uciniti\Renderer\renderer_context.h">
-      <Filter>Uciniti\Renderer</Filter>
+      <Filter>src\Uciniti\Renderer</Filter>
     </ClInclude>
     <ClInclude Include="src\Uciniti\Renderer\shader.h">
-      <Filter>Uciniti\Renderer</Filter>
+      <Filter>src\Uciniti\Renderer</Filter>
     </ClInclude>
-    <ClInclude Include="src\uciniti.h" />
-    <ClInclude Include="src\uvkpch.h" />
+    <ClInclude Include="src\Uciniti\Renderer\texture.h">
+      <Filter>src\Uciniti\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="src\uciniti.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\uvkpch.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="vendor\stb_image\stb_image.h">
+      <Filter>vendor\stb_image</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Uciniti\Renderer\framebuffer.h">
+      <Filter>src\Uciniti\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Uciniti\Platform\Vulkan\vulkan_framebuffer.h">
+      <Filter>src\Uciniti\Platform\Vulkan</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Uciniti\Platform\Vulkan\vulkan_renderer.h" />
+    <ClInclude Include="src\Uciniti\Renderer\pipeline.h" />
+    <ClInclude Include="src\Uciniti\Renderer\render_pass.h" />
+    <ClInclude Include="src\Uciniti\Platform\Vulkan\vulkan_render_pass.h" />
+    <ClInclude Include="src\Uciniti\Platform\Vulkan\vulkan_test_layer.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Uciniti\Core\application.cpp">
-      <Filter>Uciniti\Core</Filter>
+      <Filter>src\Uciniti\Core</Filter>
     </ClCompile>
     <ClCompile Include="src\Uciniti\Core\layer.cpp">
-      <Filter>Uciniti\Core</Filter>
+      <Filter>src\Uciniti\Core</Filter>
     </ClCompile>
     <ClCompile Include="src\Uciniti\Core\layer_stack.cpp">
-      <Filter>Uciniti\Core</Filter>
+      <Filter>src\Uciniti\Core</Filter>
     </ClCompile>
     <ClCompile Include="src\Uciniti\Core\log.cpp">
-      <Filter>Uciniti\Core</Filter>
+      <Filter>src\Uciniti\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Uciniti\Core\time_step.cpp">
+      <Filter>src\Uciniti\Core</Filter>
     </ClCompile>
     <ClCompile Include="src\Uciniti\ImGui\ImGui_layer.cpp">
-      <Filter>Uciniti\ImGui</Filter>
+      <Filter>src\Uciniti\ImGui</Filter>
     </ClCompile>
     <ClCompile Include="src\Uciniti\Platform\Vulkan\ImGui_Vulkan_renderer.cpp">
-      <Filter>Uciniti\Platform\Vulkan</Filter>
+      <Filter>src\Uciniti\Platform\Vulkan</Filter>
     </ClCompile>
     <ClCompile Include="src\Uciniti\Platform\Vulkan\vulkan_allocator.cpp">
-      <Filter>Uciniti\Platform\Vulkan</Filter>
+      <Filter>src\Uciniti\Platform\Vulkan</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Uciniti\Platform\Vulkan\vulkan_buffer.cpp">
+      <Filter>src\Uciniti\Platform\Vulkan</Filter>
     </ClCompile>
     <ClCompile Include="src\Uciniti\Platform\Vulkan\vulkan_context.cpp">
-      <Filter>Uciniti\Platform\Vulkan</Filter>
+      <Filter>src\Uciniti\Platform\Vulkan</Filter>
     </ClCompile>
     <ClCompile Include="src\Uciniti\Platform\Vulkan\vulkan_devices.cpp">
-      <Filter>Uciniti\Platform\Vulkan</Filter>
+      <Filter>src\Uciniti\Platform\Vulkan</Filter>
     </ClCompile>
     <ClCompile Include="src\Uciniti\Platform\Vulkan\vulkan_pipeline.cpp">
-      <Filter>Uciniti\Platform\Vulkan</Filter>
+      <Filter>src\Uciniti\Platform\Vulkan</Filter>
     </ClCompile>
     <ClCompile Include="src\Uciniti\Platform\Vulkan\vulkan_shader.cpp">
-      <Filter>Uciniti\Platform\Vulkan</Filter>
+      <Filter>src\Uciniti\Platform\Vulkan</Filter>
     </ClCompile>
     <ClCompile Include="src\Uciniti\Platform\Vulkan\vulkan_swap_chain.cpp">
-      <Filter>Uciniti\Platform\Vulkan</Filter>
+      <Filter>src\Uciniti\Platform\Vulkan</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Uciniti\Platform\Vulkan\vulkan_texture.cpp">
+      <Filter>src\Uciniti\Platform\Vulkan</Filter>
     </ClCompile>
     <ClCompile Include="src\Uciniti\Platform\Vulkan\vulkan_validation.cpp">
-      <Filter>Uciniti\Platform\Vulkan</Filter>
+      <Filter>src\Uciniti\Platform\Vulkan</Filter>
     </ClCompile>
     <ClCompile Include="src\Uciniti\Platform\Windows\Windows_window.cpp">
-      <Filter>Uciniti\Platform\Windows</Filter>
+      <Filter>src\Uciniti\Platform\Windows</Filter>
     </ClCompile>
     <ClCompile Include="src\Uciniti\Platform\Windows\windows_input.cpp">
-      <Filter>Uciniti\Platform\Windows</Filter>
+      <Filter>src\Uciniti\Platform\Windows</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Uciniti\Renderer\base_camera.cpp">
+      <Filter>src\Uciniti\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Uciniti\Renderer\buffer.cpp">
+      <Filter>src\Uciniti\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Uciniti\Renderer\camera.cpp">
+      <Filter>src\Uciniti\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Uciniti\Renderer\render_command.cpp">
+      <Filter>src\Uciniti\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Uciniti\Renderer\renderer.cpp">
+      <Filter>src\Uciniti\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Uciniti\Renderer\renderer_context.cpp">
+      <Filter>src\Uciniti\Renderer</Filter>
     </ClCompile>
     <ClCompile Include="src\Uciniti\Renderer\shader.cpp">
-      <Filter>Uciniti\Renderer</Filter>
+      <Filter>src\Uciniti\Renderer</Filter>
     </ClCompile>
-    <ClCompile Include="src\uvkpch.cpp" />
+    <ClCompile Include="src\Uciniti\Renderer\texture.cpp">
+      <Filter>src\Uciniti\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="src\uvkpch.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="vendor\stb_image\stb_image.cpp">
+      <Filter>vendor\stb_image</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Uciniti\Renderer\framebuffer.cpp">
+      <Filter>src\Uciniti\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Uciniti\Platform\Vulkan\vulkan_framebuffer.cpp">
+      <Filter>src\Uciniti\Platform\Vulkan</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Uciniti\Platform\Vulkan\vulkan_renderer.cpp" />
+    <ClCompile Include="src\Uciniti\Renderer\pipeline.cpp" />
+    <ClCompile Include="src\Uciniti\Renderer\render_pass.cpp" />
+    <ClCompile Include="src\Uciniti\Platform\Vulkan\vulkan_render_pass.cpp" />
+    <ClCompile Include="src\Uciniti\Platform\Vulkan\vulkan_test_layer.cpp" />
   </ItemGroup>
 </Project>

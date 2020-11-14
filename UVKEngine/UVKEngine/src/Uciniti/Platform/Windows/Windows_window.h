@@ -27,9 +27,12 @@ namespace Uciniti
 		*/
 		void on_update() override;
 
+		void swap_buffers() override;
+
 		inline uint16_t get_width() const override { return data.width; }
 		inline uint16_t get_height() const override { return data.height; }
-		//virtual ref<renderer_context> get_render_context() const override { return render_context; }
+		virtual ref_ptr<renderer_context> get_render_context() const override { return render_context; }
+		//virtual renderer_context* get_render_context() const override { return render_context; }
 
 		inline void set_event_callback(const event_callback_fn& a_callback) override { data.event_callback = a_callback; }
 		void set_vsync(bool a_enabled) override;
@@ -55,8 +58,8 @@ namespace Uciniti
 		*/
 		GLFWwindow* window_context;
 
-		//ref<renderer_context> render_context;
-		renderer_context* render_context;
+		ref_ptr<renderer_context> render_context;
+		//renderer_context* render_context;
 
 		/* @brief Stores the data that may be requested by GLFW event callbacks.
 		*/

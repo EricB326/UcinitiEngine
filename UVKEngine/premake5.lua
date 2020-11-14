@@ -17,6 +17,7 @@ IncludeDir["ImGui"] = "UVKEngine/vendor/ImGui"
 IncludeDir["glm"] = "UVKEngine/vendor/glm"
 IncludeDir["shaderc"] = "UVKEngine/vendor/shaderc/include"
 IncludeDir["Vulkan"] = "UVKEngine/vendor/Vulkan/include"
+IncludeDir["stb_image"] = "UVKEngine/vendor/stb_image"
 
 LibraryDir = {}
 LibraryDir["shaderc"] = "vendor/shaderc/lib/shaderc.lib"
@@ -52,6 +53,8 @@ project "UVKEngine"
 	{
 		"%{prj.name}/src/**.h",
 		"%{prj.name}/src/**.cpp",
+		"%{prj.name}/vendor/stb_image/**.h",
+		"%{prj.name}/vendor/stb_image/**.cpp",
 		"%{prj.name}/vender/glm/glm/**.hpp",
 		"%{prj.name}/vender/glm/glm/**.inl"
 	}
@@ -69,7 +72,8 @@ project "UVKEngine"
 		"%{IncludeDir.Vulkan}",
 		"%{IncludeDir.ImGui}",
 		"%{IncludeDir.glm}",
-		"%{IncludeDir.shaderc}"
+		"%{IncludeDir.shaderc}",
+		"%{IncludeDir.stb_image}"
 	}
 
 	links

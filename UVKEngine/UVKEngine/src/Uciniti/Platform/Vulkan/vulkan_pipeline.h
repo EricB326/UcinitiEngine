@@ -3,6 +3,7 @@
 
 #include "vulkan_base.h"
 
+#include "Uciniti/Renderer/pipeline.h"
 
 namespace Uciniti
 {
@@ -28,16 +29,37 @@ namespace Uciniti
 		VkPipelineLayoutCreateInfo pipeline_layout_info;
 	};
 
-	class vulkan_pipeline
+	class vulkan_pipeline : public pipeline
 	{
 	public:
-		vulkan_pipeline();
-		~vulkan_pipeline();
+		vulkan_pipeline(const pipeline_spec& a_spec);
+		virtual ~vulkan_pipeline();
 
-		void create_pipeline();
+		virtual void init() override;
+
+		const VkPipeline get_graphics_pipeline() const { return graphics_pipeline; }
+		const VkPipelineLayout get_pipeline_layout() const { return pipeline_layout_handle; }
+
+		virtual pipeline_spec& get_specification() override { return spec; }
+		virtual const pipeline_spec& get_specification() const { return spec; }
 
 	private:
-	
+		pipeline_spec spec;
+
+		/* @brief Handle of the pipeline layout created.
+		*/
+		VkPipelineLayout pipeline_layout_handle;
+		VkPipeline graphics_pipeline;
+
+		pipeline_info pipeline_data;
+
+		VkViewport viewport;
+		VkRect2D scissor;
+
+		// #TODO: Remove this function. The pipeline should be dynamic and probably receive its data,
+		//		  from the vulkan_renderer.cpp pre-draw command. Should be dynamic for the viewport,
+		//		  and scissor states minimum. For now, temporary for the minimal viable product.
+		void prepare_pipeline();
 	};
 }
 

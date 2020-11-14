@@ -21,23 +21,20 @@ public:
 	{
 	}
 
-	virtual void on_update() override
+	virtual void on_update(Uciniti::time_step a_time_step) override
 	{
+		UVK_INFO("Delta time: {0}s ({1}ms)", a_time_step.get_seconds(), a_time_step.get_milliseconds());
+
 		if (Uciniti::input::is_key_pressed(Uciniti::key_code::tab))
 			UVK_TRACE("Tab key is pressed!");
-
-		//if (Uciniti::input::is_mouse_button_pressed(UVK_MOUSE_BUTTON_LEFT))
-		//	UVK_TRACE("Left click!");
 	}
 
 	virtual void on_event(Uciniti::event& a_event) override
 	{
-		//if (a_event.get_event_type() == Uciniti::event_type::key_pressed)
-		//{
-		//	Uciniti::key_pressed_event& e = (Uciniti::key_pressed_event&)a_event;
-		//	UVK_TRACE("{0}", (char)e.get_key_code());
-		//}
 	}
+
+private:
+
 };
 
 /* @brief

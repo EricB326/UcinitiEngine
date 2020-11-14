@@ -45,9 +45,9 @@ namespace Uciniti
 
 	}
 
-	ref<vulkan_physical_device> vulkan_physical_device::select(const VkSurfaceKHR& a_surface)
+	vulkan_physical_device* vulkan_physical_device::select(const VkSurfaceKHR& a_surface)
 	{
-		return create_ref<vulkan_physical_device>(a_surface);
+		return new vulkan_physical_device(a_surface);
 	}
 
 	bool vulkan_physical_device::is_extension_supported(const std::string& a_extension_name)
@@ -237,7 +237,7 @@ namespace Uciniti
 	// Vulkan Logical Device
 	// =================================================================
 
-	vulkan_logical_device::vulkan_logical_device(const ref<vulkan_physical_device>& a_physical_device, const VkPhysicalDeviceFeatures& a_physical_device_features)
+	vulkan_logical_device::vulkan_logical_device(vulkan_physical_device* a_physical_device, const VkPhysicalDeviceFeatures& a_physical_device_features)
 		: logical_device(VK_NULL_HANDLE), physical_device(a_physical_device), enable_debug_markers(false), enabled_features(a_physical_device_features)
 	{
 		printf("\n");
@@ -259,6 +259,7 @@ namespace Uciniti
 
 		// The device will be used for presenting to a display via a swapchain we need to request the swapchain extension.
 		device_extension.push_back(VK_KHR_SWAPCHAIN_EXTENSION_NAME);
+
 		if (!physical_device->is_extension_supported(VK_KHR_SWAPCHAIN_EXTENSION_NAME))
 			UVK_CORE_ASSERT(false, "Cannot run program without swap chain support!");
 
@@ -283,9 +284,9 @@ namespace Uciniti
 		UVK_CORE_INFO("Vulkan logical device created successfully!");
 	}
 
-	scope<vulkan_logical_device> vulkan_logical_device::create(const ref<vulkan_physical_device>& a_physical_device, const VkPhysicalDeviceFeatures& a_physical_device_features)
+	vulkan_logical_device* vulkan_logical_device::create(vulkan_physical_device* a_physical_device, const VkPhysicalDeviceFeatures& a_physical_device_features)
 	{
-		return create_scope<vulkan_logical_device>(a_physical_device, a_physical_device_features);
+		return new vulkan_logical_device(a_physical_device, a_physical_device_features);
 	}
 
 	std::vector<VkDeviceQueueCreateInfo> vulkan_logical_device::create_queue_infos()

@@ -5,7 +5,7 @@
 namespace Uciniti
 {
 
-	vulkan_allocator::vulkan_allocator(const scope<vulkan_logical_device>& a_logical_device, const std::string& a_tag)
+	vulkan_allocator::vulkan_allocator(const scope_ptr<vulkan_logical_device>& a_logical_device, const std::string& a_tag)
 		: logical_device(a_logical_device.get()), tag(a_tag)
 	{
 

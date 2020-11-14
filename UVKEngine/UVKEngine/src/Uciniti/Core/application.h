@@ -4,8 +4,10 @@
 /* Uciniti engine includes
 */
 #include "base.h"
+#include "Uciniti/Core/time_step.h"
 #include "window.h"
 #include "layer_stack.h"
+
 #include "Uciniti/Core/Events/event.h"
 #include "Uciniti/Core/Events/application_event.h"
 
@@ -48,10 +50,12 @@ namespace Uciniti
 		bool is_running = true;
 		layer_stack app_layer_stack;
 
+		float last_frame_time = 0.0f;
+
 		static application* instance;
 	};
 
-	/* @brief To be defined in CLIENT.
+	/* @brief To be defined by CLIENT.
 	*/
 	application* create_application();
 }

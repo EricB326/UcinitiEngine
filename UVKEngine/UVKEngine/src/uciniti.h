@@ -9,6 +9,7 @@
 #include "Uciniti/Core/log.h"
 #include "Uciniti/Core/input.h"
 #include "Uciniti/Core/entry_point.h"
+#include "Uciniti/Core/time_step.h"
 
 // -- Events --
 #include "Uciniti/Core/Events/event.h"
@@ -21,5 +22,10 @@
 /***************************************************************/
 //Uciniti engine renderer includes
 /***************************************************************/
+// -- Base --
+
+// -- Resources --
+
+// -- Vulkan --
 
 #endif // !UCINITI_H

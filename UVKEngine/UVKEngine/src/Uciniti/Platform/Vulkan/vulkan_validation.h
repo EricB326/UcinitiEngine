@@ -1,4 +1,4 @@
- #ifndef VULKAN_VALIDATION_H
+#ifndef VULKAN_VALIDATION_H
 #define VULKAN_VALIDATION_H
 
 #include "vulkan_base.h"

@@ -70,11 +70,11 @@ constexpr static VkImageViewCreateInfo vk_base_image_view_create_info
 	0
 };
 
-constexpr static VkAttachmentDescription vk_base_attachment_desciprtion
+constexpr static VkAttachmentDescription vk_base_attachment_description
 {
-	0,								  // Attachment desciption flags.
+	0,								  // Attachment description flags.
 	VK_FORMAT_UNDEFINED,			  // Format to use for attachment.
-	VK_SAMPLE_COUNT_1_BIT,			  // Number of samples to write for multisampling.
+	VK_SAMPLE_COUNT_1_BIT,			  // Number of samples to write for multi sampling.
 	VK_ATTACHMENT_LOAD_OP_CLEAR,	  // Describes what to do with attachment before rendering.
 	VK_ATTACHMENT_STORE_OP_STORE,	  // Describes what to do with attachment after rendering.
 	VK_ATTACHMENT_LOAD_OP_DONT_CARE,  // Describes what to do with stencil before rendering.
@@ -146,7 +146,7 @@ constexpr static VkPipelineRasterizationStateCreateInfo vk_base_pipeline_rasteri
 	VK_FALSE,
 	VK_POLYGON_MODE_FILL,
 	VK_CULL_MODE_BACK_BIT,
-	VK_FRONT_FACE_COUNTER_CLOCKWISE,
+	VK_FRONT_FACE_CLOCKWISE,
 	VK_FALSE
 };
 
@@ -257,6 +257,12 @@ constexpr static VkFenceCreateInfo vk_base_fence_create_info
 	VK_STRUCTURE_TYPE_FENCE_CREATE_INFO,
 	nullptr,
 	VK_FENCE_CREATE_SIGNALED_BIT
+};
+
+constexpr static VkPresentInfoKHR vk_base_present_info
+{
+	VK_STRUCTURE_TYPE_PRESENT_INFO_KHR,
+	nullptr
 };
 
 constexpr static VkBufferCreateInfo vk_base_buffer_create_info

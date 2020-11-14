@@ -9,14 +9,14 @@ namespace Uciniti
 		: window_handle(a_window_handle), validation_handle(new vulkan_validation())
 	{
 		UVK_CORE_ASSERT(window_handle, "Window handle is null!");
-	}
+	}	
 
 	vulkan_context::~vulkan_context()
 	{
 		shutdown();
 	}
 
-	void vulkan_context::create()
+	void vulkan_context::init()
 	{
 		UVK_CORE_ASSERT(glfwVulkanSupported(), "GLFW must support Vulkan!");
 
@@ -33,13 +33,16 @@ namespace Uciniti
 		create_logical_device();
 
 		create_swap_chain();
-		vulkan_shader new_shader = vulkan_shader("assets/shaders/vulkan_triangle.glsl");
-		UVK_CORE_TRACE("Shader made.");
+	}
+
+	void vulkan_context::begin_frame()
+	{
+		swap_chain.begin_frame();
 	}
 
 	void vulkan_context::swap_buffers()
 	{
-		//glfwSwapBuffers(window_handle);
+		swap_chain.present();
 	}
 
 	void vulkan_context::create_instance()

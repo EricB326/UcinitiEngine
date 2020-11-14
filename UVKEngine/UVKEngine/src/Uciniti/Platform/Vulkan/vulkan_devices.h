@@ -33,7 +33,7 @@ namespace Uciniti
 		vulkan_physical_device(const VkSurfaceKHR& a_surface);
 		~vulkan_physical_device();
 
-		static ref<vulkan_physical_device> select(const VkSurfaceKHR& a_surface);
+		static vulkan_physical_device* select(const VkSurfaceKHR& a_surface);
 
 		bool is_extension_supported(const std::string& a_extension_name);
 
@@ -61,12 +61,12 @@ namespace Uciniti
 	class vulkan_logical_device
 	{
 	public:
-		vulkan_logical_device(const ref<vulkan_physical_device>& a_physical_device, const VkPhysicalDeviceFeatures& a_physical_device_features);
+		vulkan_logical_device(vulkan_physical_device* a_physical_device, const VkPhysicalDeviceFeatures& a_physical_device_features);
 
-		static scope<vulkan_logical_device> create(const ref<vulkan_physical_device>& a_physical_device, const VkPhysicalDeviceFeatures& a_physical_device_features);
+		static vulkan_logical_device* create(vulkan_physical_device* a_physical_device, const VkPhysicalDeviceFeatures& a_physical_device_features);
 
 		const VkDevice& get_logical_device() const { return logical_device; }
-		const ref<vulkan_physical_device>& get_physical_device_ref() const { return physical_device; }
+		const vulkan_physical_device* get_physical_device_ref() const { return physical_device; }
 
 		const VkQueue& get_graphics_queue_handle() const { return graphics_queue; }
 
@@ -74,7 +74,7 @@ namespace Uciniti
 
 	private:
 		VkDevice logical_device;
-		ref<vulkan_physical_device> physical_device;
+		vulkan_physical_device* physical_device;
 		VkCommandPool command_pool;
 
 		VkPhysicalDeviceFeatures enabled_features;

@@ -18,16 +18,28 @@ namespace Uciniti
 	{
 	public:
 		vulkan_context(GLFWwindow* a_window_handle);
+
+		/* @brief There is no copy constructor. If the compiler would otherwise
+		  generate a copy call, it will instead fail.
+		*/
+		vulkan_context(const vulkan_context& a_other) = delete;
+
+		/* @brief There is no assignment allowed.
+		*/
+		vulkan_context& operator=(const vulkan_context& a_other) = delete;
+
 		virtual ~vulkan_context();
 
-		virtual void create() override;
+
+		virtual void init() override;
+		virtual void begin_frame() override;
 		virtual void swap_buffers() override;
 
-		//static ref<vulkan_logical_device> get_logical_device() { return logical_device; }
+		vulkan_logical_device* get_logical_device() { return logical_device; }
+		vulkan_swap_chain& get_swap_chain() { return swap_chain; }
 
 		static VkInstance get_instance() { return vulkan_instance; }
-		//static ref<vulkan_context> get() { return ref<vulkan_context>(renderer::get_context()); }
-		//static ref<vulkan_logical_device> get_current_device() { return get()->get_logical_device(); }
+		static ref_ptr<vulkan_context> get() { return (std::static_pointer_cast<vulkan_context>(renderer::get_context())); }
 	
 	private:
 		GLFWwindow* window_handle;
@@ -38,8 +50,10 @@ namespace Uciniti
 		//vulkan_allocator allocator;
 
 		// Devices.
-		ref<vulkan_physical_device> physical_device;
-		ref<vulkan_logical_device> logical_device;
+		//ref<vulkan_physical_device> physical_device;
+		//ref<vulkan_logical_device> logical_device;
+		vulkan_physical_device* physical_device;
+		vulkan_logical_device* logical_device;
 
 		// Swap chain.
 		vulkan_swap_chain swap_chain;

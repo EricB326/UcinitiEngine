@@ -66,7 +66,7 @@ namespace Uciniti
 	{
 	}
 
-	void ImGui_layer::on_update()
+	void ImGui_layer::on_update(time_step a_time_step)
 	{
 	}
 

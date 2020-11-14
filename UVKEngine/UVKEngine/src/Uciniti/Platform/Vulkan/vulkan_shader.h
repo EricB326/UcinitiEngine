@@ -24,11 +24,16 @@ namespace Uciniti
 		virtual void unbind() override {}
 		void reload() override;
 
+		virtual const std::string& get_name() const override { return _name; }
+
+		const std::vector<VkPipelineShaderStageCreateInfo> get_shader_stages() const { return shader_stages; }
+
 	private:
 		/***************************************************************/
 		// Private Variables
 		/***************************************************************/
 		std::string filepath;
+		std::string _name;
 
 		std::unordered_map<VkShaderStageFlagBits, std::string> shader_source;
 
@@ -42,6 +47,8 @@ namespace Uciniti
 	
 		void create_vertex_shader_module(VkPipelineShaderStageCreateInfo& a_shader_stage, const std::vector<uint32_t>& a_shader_data);
 		void create_fragment_shader_module(VkPipelineShaderStageCreateInfo& a_shader_stage, const std::vector<uint32_t>& a_shader_data);
+	
+		void retrieve_shader_name();
 	};
 }
 

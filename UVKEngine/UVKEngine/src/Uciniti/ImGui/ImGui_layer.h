@@ -4,6 +4,7 @@
 /* Uciniti engine includes
 */
 #include "Uciniti/Core/layer.h"
+#include "Uciniti/Core/time_step.h"
 
 namespace Uciniti
 {
@@ -15,7 +16,7 @@ namespace Uciniti
 
 		void on_attach() override;
 		void on_detach() override;
-		void on_update() override;
+		void on_update(time_step a_time_step) override;
 		void on_event(event& a_event) override;
 
 	private:

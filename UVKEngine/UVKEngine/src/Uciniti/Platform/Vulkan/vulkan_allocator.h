@@ -10,14 +10,14 @@ namespace Uciniti
 	{
 	public:
 		vulkan_allocator() = default;
-		vulkan_allocator(const scope<vulkan_logical_device>& a_logical_device, const std::string& a_tag = "");
+		vulkan_allocator(const scope_ptr<vulkan_logical_device>& a_logical_device, const std::string& a_tag = "");
 		~vulkan_allocator();
 
 		void allocate_memory(VkMemoryRequirements a_requirements, VkDeviceMemory a_dest, VkMemoryPropertyFlags a_flags);
 
 
 	private:
-		scope<vulkan_logical_device> logical_device;
+		scope_ptr<vulkan_logical_device> logical_device;
 		std::string tag;
 
 	};

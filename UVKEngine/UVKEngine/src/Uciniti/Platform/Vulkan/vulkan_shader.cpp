@@ -22,7 +22,7 @@ namespace Uciniti
 	void vulkan_shader::reload()
 	{
 		// Only vertex and fragment shaders are supported for the time being.
-		std::string source = create(filepath);
+		std::string source = read_from_file(filepath);
 
 		// Pre-process the shader source to determine what is the vertex and what is the fragment shader.
 		shader_source = pre_process(source);
@@ -35,8 +35,11 @@ namespace Uciniti
 		compile_to_spirv(shader_data);
 
 		// Shader modules creation.
-		//create_vertex_shader_module(shader_stages[0], shader_data[0]);
-		//create_fragment_shader_module(shader_stages[1], shader_data[1]);
+		create_vertex_shader_module(shader_stages[0], shader_data[0]);
+		create_fragment_shader_module(shader_stages[1], shader_data[1]);
+
+		// Grab the shaders name.
+		retrieve_shader_name();
 	}
 
 	VkShaderStageFlagBits vulkan_shader::shader_type_from_string(const std::string& a_type)
@@ -61,14 +64,14 @@ namespace Uciniti
 		// Whilst we are not at the end of the source file, attempt to locate the shader stage.
 		while (token_pos != std::string::npos)
 		{
-			// Search the source for the first character that matches.
+			// Search the source for the first instance of a new line or character return.
 			size_t eol = a_shader_source.find_first_of("\r\n", token_pos);
 			UVK_CORE_ASSERT(eol != std::string::npos, "Syntax error");
 
 			// See what stage of the shader it is by going to the first point after the stage token.
 			size_t begin = token_pos + stage_token_length + 1;
 			std::string stage_type = a_shader_source.substr(begin, eol - begin);
-			UVK_CORE_ASSERT(stage_type == "vertex" || stage_type == "fragment" || stage_type == "pixel" || stage_type == "compute", "Invalid shader stage specified!");
+			UVK_CORE_ASSERT(shader_type_from_string(stage_type), "Invalid shader stage specified!");
 
 			// Find the beginning of the next line.
 			size_t next_line_pos = a_shader_source.find_first_not_of("\r\n", eol);
@@ -86,6 +89,8 @@ namespace Uciniti
 
 	void vulkan_shader::compile_to_spirv(std::array<std::vector<uint32_t>, 2>& a_binary_storage)
 	{
+		// #TODO: I should probably put this into a for each loop. Looping over each shader stage available.
+
 		// Vertex shader stage.
 		// If there is no binary (spir-v) stored, compile it for the stage.
 		if (a_binary_storage[0].size() == 0)
@@ -135,7 +140,7 @@ namespace Uciniti
 			auto& shader_stage_source = shader_source.at(VK_SHADER_STAGE_FRAGMENT_BIT);
 
 			// Compile the shader stage and verify all went well.
-			shaderc::SpvCompilationResult compiled_stage = compiler.CompileGlslToSpv(shader_stage_source, shaderc_vertex_shader, filepath.c_str(), options);
+			shaderc::SpvCompilationResult compiled_stage = compiler.CompileGlslToSpv(shader_stage_source, shaderc_fragment_shader, filepath.c_str(), options);
 			if (compiled_stage.GetCompilationStatus() != shaderc_compilation_status_success)
 			{
 				UVK_CORE_ERROR(compiled_stage.GetErrorMessage());
@@ -147,42 +152,56 @@ namespace Uciniti
 		}
 	}
 
-	//void vulkan_shader::create_vertex_shader_module(VkPipelineShaderStageCreateInfo& a_shader_stage, const std::vector<uint32_t>& a_shader_data)
-	//{
-	//	VkDevice device = vulkan_context::get_logical_device().get()->get_logical_device();
-	//	UVK_CORE_ASSERT(a_shader_data.size(), "Invalid shader data!");
-	//
-	//	// Create a new shader module.
-	//	VkShaderModuleCreateInfo module_create_info(vk_base_shader_module_create_info);
-	//	module_create_info.codeSize = a_shader_data.size() * sizeof(uint32_t);
-	//	module_create_info.pCode = a_shader_data.data();
-	//
-	//	VkShaderModule shader_module;
-	//	VK_CHECK_RESULT(vkCreateShaderModule(device, &module_create_info, nullptr, &shader_module));
-	//
-	//	a_shader_stage = vk_base_pipeline_shader_stage_create_info;
-	//	a_shader_stage.stage = VK_SHADER_STAGE_VERTEX_BIT;
-	//	a_shader_stage.module = shader_module;
-	//	a_shader_stage.pName = "main";
-	//}
-	//
-	//void vulkan_shader::create_fragment_shader_module(VkPipelineShaderStageCreateInfo& a_shader_stage, const std::vector<uint32_t>& a_shader_data)
-	//{
-	//	VkDevice device = vulkan_context::get_logical_device().get()->get_logical_device();
-	//	UVK_CORE_ASSERT(a_shader_data.size(), "Invalid shader data!");
-	//
-	//	// Create a new shader module.
-	//	VkShaderModuleCreateInfo module_create_info(vk_base_shader_module_create_info);
-	//	module_create_info.codeSize = a_shader_data.size() * sizeof(uint32_t);
-	//	module_create_info.pCode = a_shader_data.data();
-	//
-	//	VkShaderModule shader_module;
-	//	VK_CHECK_RESULT(vkCreateShaderModule(device, &module_create_info, nullptr, &shader_module));
-	//
-	//	a_shader_stage = vk_base_pipeline_shader_stage_create_info;
-	//	a_shader_stage.stage = VK_SHADER_STAGE_FRAGMENT_BIT;
-	//	a_shader_stage.module = shader_module;
-	//	a_shader_stage.pName = "main";
-	//}
+	void vulkan_shader::create_vertex_shader_module(VkPipelineShaderStageCreateInfo& a_shader_stage, const std::vector<uint32_t>& a_shader_data)
+	{
+		VkDevice device = vulkan_context::get()->get_logical_device()->get_logical_device();
+		UVK_CORE_ASSERT(a_shader_data.size(), "Invalid shader data!");
+	
+		// Create a new shader module.
+		VkShaderModuleCreateInfo module_create_info(vk_base_shader_module_create_info);
+		module_create_info.codeSize = a_shader_data.size() * sizeof(uint32_t);
+		module_create_info.pCode = reinterpret_cast<const uint32_t*>(a_shader_data.data());
+	
+		VkShaderModule shader_module;
+		VK_CHECK_RESULT(vkCreateShaderModule(device, &module_create_info, nullptr, &shader_module));
+	
+		a_shader_stage = vk_base_pipeline_shader_stage_create_info;
+		a_shader_stage.stage = VK_SHADER_STAGE_VERTEX_BIT;
+		a_shader_stage.module = shader_module;
+		a_shader_stage.pName = "main";
+	}
+	
+	void vulkan_shader::create_fragment_shader_module(VkPipelineShaderStageCreateInfo& a_shader_stage, const std::vector<uint32_t>& a_shader_data)
+	{
+		VkDevice device = vulkan_context::get()->get_logical_device()->get_logical_device();
+		UVK_CORE_ASSERT(a_shader_data.size(), "Invalid shader data!");
+	
+		// Create a new shader module.
+		VkShaderModuleCreateInfo module_create_info(vk_base_shader_module_create_info);
+		module_create_info.codeSize = a_shader_data.size() * sizeof(uint32_t);
+		module_create_info.pCode = reinterpret_cast<const uint32_t*>(a_shader_data.data());
+	
+		VkShaderModule shader_module;
+		VK_CHECK_RESULT(vkCreateShaderModule(device, &module_create_info, nullptr, &shader_module));
+	
+		a_shader_stage = vk_base_pipeline_shader_stage_create_info;
+		a_shader_stage.stage = VK_SHADER_STAGE_FRAGMENT_BIT;
+		a_shader_stage.module = shader_module;
+		a_shader_stage.pName = "main";
+	}
+
+	void vulkan_shader::retrieve_shader_name()
+	{
+		// Example of how this should work. If the shaders filepath is as follower:
+		//		"assets/shaders/PBR.glsl"	   or		"assets\shaders\PBR.glsl"	
+		// This code should find the final '/' or '\' character prior the actual file name and drop the filepath.
+		// It should then find the last '.' after the '/' or '\' in order to drop the file extension.
+		int final_slash = filepath.find_last_of("/\\");
+		final_slash = (final_slash == std::string::npos) ? 0 : final_slash + 1;
+		int final_period = filepath.rfind('.');
+		int count = (final_period == std::string::npos) ? filepath.size() - final_slash : final_period - final_slash;
+
+		_name = filepath.substr(final_slash, count);
+	}
 
 }

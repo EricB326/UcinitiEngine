@@ -10,6 +10,8 @@
 #include "base.h"
 #include "Uciniti/Core/Events/event.h"
 
+#include "Uciniti/Renderer/renderer_context.h"
+
 namespace Uciniti
 {
 	/* @brief */
@@ -36,6 +38,7 @@ namespace Uciniti
 		virtual ~window() {}
 
 		virtual void on_update() = 0;
+		virtual void swap_buffers() = 0;
 
 		virtual uint16_t get_width() const = 0;
 		virtual uint16_t get_height() const = 0;
@@ -49,8 +52,8 @@ namespace Uciniti
 		*/
 		virtual void* get_native_window() const = 0;
 
-		//virtual ref<renderer_context> get_render_context() const = 0;
-
+		virtual ref_ptr<renderer_context> get_render_context() const = 0;
+		//virtual renderer_context* get_render_context() const = 0;
 
 		/* @brief As this interface is independent, this create function has to be
 				  implemented per platform.
