@@ -86,6 +86,8 @@ namespace Uciniti
 
 			window_context->on_update();
 		}
+
+		shutdown();
 	}
 
 	bool application::on_window_close(window_close_event& a_e)
@@ -93,4 +95,11 @@ namespace Uciniti
 		is_running = false;
 		return true;
 	}
+
+	void application::shutdown()
+	{
+		vulkan_renderer::shutdown();
+		//window_context->~window();
+	}
+
 }

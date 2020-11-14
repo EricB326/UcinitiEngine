@@ -23,7 +23,7 @@ namespace Uciniti
 
 		virtual void init() = 0;
 
-		static ref_ptr<pipeline> create(const pipeline_spec& a_spec);
+		static pipeline* create(const pipeline_spec& a_spec);
 
 	};
 }

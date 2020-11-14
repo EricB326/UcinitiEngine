@@ -36,6 +36,7 @@ namespace Uciniti
 		virtual ~vulkan_pipeline();
 
 		virtual void init() override;
+		void shutdown();
 
 		const VkPipeline get_graphics_pipeline() const { return graphics_pipeline; }
 		const VkPipelineLayout get_pipeline_layout() const { return pipeline_layout_handle; }

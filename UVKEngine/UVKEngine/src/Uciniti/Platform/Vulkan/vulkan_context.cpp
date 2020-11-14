@@ -193,7 +193,8 @@ namespace Uciniti
 
 		logical_device->shutdown();
 
-		validation_handle.reset(nullptr);
+		if (enable_validation_layers)
+			validation_handle.reset(nullptr);
 
 		vkDestroyInstance(vulkan_instance, nullptr);
 	}

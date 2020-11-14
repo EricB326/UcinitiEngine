@@ -11,20 +11,21 @@
 
 namespace Uciniti
 {
-	static ref_ptr<framebuffer> s_framebuffer;
-	static ref_ptr<pipeline> mesh_pipeline;
+	//static ref_ptr<framebuffer> s_framebuffer;
+	static pipeline* mesh_pipeline;
 
 	void vulkan_renderer::init()
 	{
+		// #TODO: Framebuffer and render passes aren't setup here properly yet. Currently just in the swap chain.
 		// Mesh pipeline setup.
 		framebuffer_spec spec;
-		s_framebuffer = framebuffer::create(spec);
+		//s_framebuffer = framebuffer::create(spec);
 
 		pipeline_spec pipeline_specification;
 		pipeline_specification._shader = renderer::get_shader_library()->get("vulkan_triangle");
-		
+
 		render_pass_spec render_pass_specification;
-		render_pass_specification.target_framebuffer = s_framebuffer;
+		//render_pass_specification.target_framebuffer = s_framebuffer;
 		pipeline_specification._render_pass = render_pass::create(render_pass_specification);
 
 		mesh_pipeline = pipeline::create(pipeline_specification);
@@ -35,7 +36,8 @@ namespace Uciniti
 		//renderer::submit([=]()
 		{
 			ref_ptr<vulkan_context> context = vulkan_context::get();
-			ref_ptr<vulkan_pipeline> draw_pipeline = std::static_pointer_cast<vulkan_pipeline>(mesh_pipeline);
+			vulkan_pipeline* draw_pipeline = (vulkan_pipeline*)mesh_pipeline;
+
 			vulkan_swap_chain& swap_chain = context->get_swap_chain();
 
 			VkCommandBufferBeginInfo cmd_buf_info(vk_base_command_buffer_begin_info);
@@ -76,6 +78,12 @@ namespace Uciniti
 			
 
 		}//);
+	}
+
+	void vulkan_renderer::shutdown()
+	{
+		delete mesh_pipeline;
+		mesh_pipeline = nullptr;
 	}
 
 	void vulkan_renderer::composite_render_pass(VkCommandBufferInheritanceInfo& a_inheritance_info)

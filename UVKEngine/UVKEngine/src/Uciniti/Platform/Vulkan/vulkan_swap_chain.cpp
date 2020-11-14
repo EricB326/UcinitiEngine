@@ -208,6 +208,16 @@ namespace Uciniti
 
 	void vulkan_swap_chain::shutdown()
 	{
+		vkDestroySemaphore(logical_device->get_logical_device(), _semaphores.render_complete, nullptr);
+		vkDestroySemaphore(logical_device->get_logical_device(), _semaphores.present_complete, nullptr);
+
+		for (size_t i = 0; i < image_count; i++)
+		{
+			vkDestroyFence(logical_device->get_logical_device(), _wait_fences[i], nullptr);
+		}
+
+		vkDestroyCommandPool(logical_device->get_logical_device(), command_pool, nullptr);
+
 		for (VkFramebuffer& this_framebuffer : framebuffers)
 		{
 			vkDestroyFramebuffer(logical_device->get_logical_device(), this_framebuffer, nullptr);

@@ -46,6 +46,8 @@ namespace Uciniti
 	private:
 		bool on_window_close(window_close_event& a_e);
 
+		void shutdown();
+
 		std::unique_ptr<window> window_context;
 		bool is_running = true;
 		layer_stack app_layer_stack;

@@ -30,6 +30,7 @@ namespace Uciniti
 	vulkan_pipeline::~vulkan_pipeline()
 	{
 		// #TODO: Delete pipeline.
+		shutdown();
 	}	
 
 	void vulkan_pipeline::init()
@@ -68,6 +69,17 @@ namespace Uciniti
 		// Create graphics pipeline.
 		VK_CHECK_RESULT(vkCreateGraphicsPipelines(logical_device, VK_NULL_HANDLE, 1, &pipeline_create_info, nullptr, &graphics_pipeline));
 
+		vkDestroyShaderModule(logical_device, shader_stages[0].module, nullptr);
+		vkDestroyShaderModule(logical_device, shader_stages[1].module, nullptr);
+
+	}
+
+	void vulkan_pipeline::shutdown()
+	{
+		VkDevice logical_device = vulkan_context::get()->get_logical_device()->get_logical_device();
+
+		vkDestroyPipeline(logical_device, graphics_pipeline, nullptr);
+		vkDestroyPipelineLayout(logical_device, pipeline_layout_handle, nullptr);
 	}
 
 	void vulkan_pipeline::prepare_pipeline()

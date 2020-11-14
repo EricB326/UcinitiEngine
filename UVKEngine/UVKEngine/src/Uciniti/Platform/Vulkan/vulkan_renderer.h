@@ -11,6 +11,7 @@ namespace Uciniti
 
 		static void init();
 		static void draw();
+		static void shutdown();
 
 	private:
 		void composite_render_pass(VkCommandBufferInheritanceInfo& a_inheritance_info);
