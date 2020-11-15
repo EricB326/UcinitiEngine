@@ -1,13 +1,16 @@
 # Uciniti Vulkan Game Engine
 
 ## About
-Uciniti (Učiniti - meaning render/make/fulfill) is a simple, in development, interactive application and rendering engine. The engine is in early stages of development and plenty more is to come.
+Uciniti (Učiniti - meaning render/make/fulfil) is a simple, in development, interactive application and rendering engine. The engine is in the early stages of development with plenty more is to come.
 
 ## Building Uciniti
-Uciniti is built using Visual Studio 2019, using x64 architecture. I would recommened building with the same target as the engine is untest in other envionrments. The engine is also currently on built for Windows systems.
+Uciniti is built using Visual Studio 2019, x64 architecture. I recommend building with the same target, as the engine is untested in other environments. The engine is also currently on built for Windows systems.
 
-Using your favourite git tool, simply start bt cloning the repository with `git clone --recursive https://github.com/EricB326/UcinitiVK2.git`
-If you require cloning just the submodules, use the following `git submodule update --init`
+Using your favourite git tool, simply start by cloning the repository with: 
+      `git clone --recursive https://github.com/EricB326/UcinitiVK2.git`
+      
+If you require cloning just the submodules, use the following: 
+      `git submodule update --init`
 
 ## Short Term Goals
 *Note: Uciniti is constantly evolving, because of this the most up-to-date and reliable location to see what is being worked on is over on the road map location at: *
