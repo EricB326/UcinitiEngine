@@ -134,7 +134,11 @@ constexpr static VkPipelineViewportStateCreateInfo vk_base_pipeline_viewport_sta
 {
 	VK_STRUCTURE_TYPE_PIPELINE_VIEWPORT_STATE_CREATE_INFO,
 	nullptr,
-	0
+	0,
+	0,
+	VK_NULL_HANDLE,
+	0,
+	VK_NULL_HANDLE
 };
 
 constexpr static VkPipelineRasterizationStateCreateInfo vk_base_pipeline_rasterization_state_info

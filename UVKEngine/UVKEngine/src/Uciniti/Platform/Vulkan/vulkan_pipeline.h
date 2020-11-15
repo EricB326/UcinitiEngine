@@ -54,8 +54,7 @@ namespace Uciniti
 
 		pipeline_info pipeline_data;
 
-		VkViewport viewport;
-		VkRect2D scissor;
+		std::vector<VkDynamicState> dynamic_states;
 
 		// #TODO: Remove this function. The pipeline should be dynamic and probably receive its data,
 		//		  from the vulkan_renderer.cpp pre-draw command. Should be dynamic for the viewport,

@@ -44,6 +44,7 @@ namespace Uciniti
 		inline window& get_window() { return *window_context; }
 
 	private:
+		bool on_window_resize(window_resize_event& a_e);
 		bool on_window_close(window_close_event& a_e);
 
 		void shutdown();
@@ -51,7 +52,9 @@ namespace Uciniti
 		std::unique_ptr<window> window_context;
 		bool is_running = true;
 		layer_stack app_layer_stack;
+		bool _is_minimized = false;
 
+		time_step _time_step;
 		float last_frame_time = 0.0f;
 
 		static application* instance;

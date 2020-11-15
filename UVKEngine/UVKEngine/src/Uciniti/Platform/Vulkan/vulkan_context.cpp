@@ -125,9 +125,9 @@ namespace Uciniti
 
 	void vulkan_context::create_swap_chain()
 	{
-		//swap_chain = new vulkan_swap_chain(window_handle, logical_device);
-		//swap_chain.create(window_handle, vulkan_instance, logical_device);
-		swap_chain.create_swap_chain(logical_device);
+		// #TODO: Passing the magic numbers is horrible. Change it to get the size from the window.
+		// Also, fix passing through the logical device. Should be able to get that without needing to pass an argument.
+		swap_chain.create_swap_chain(logical_device, 1280, 720);
 	}
 
 	std::vector<const char*> vulkan_context::get_instance_extensions()

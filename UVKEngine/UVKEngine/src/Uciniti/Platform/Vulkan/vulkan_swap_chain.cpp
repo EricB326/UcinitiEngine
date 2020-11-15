@@ -27,13 +27,13 @@ namespace Uciniti
 		UVK_CORE_INFO("Vulkan surface created successfully!");
 	}
 
-	void vulkan_swap_chain::create_swap_chain(const vulkan_logical_device* a_logical_device)
+	void vulkan_swap_chain::create_swap_chain(const vulkan_logical_device* a_logical_device, const uint32_t& a_width, const uint32_t& a_height)
 	{
 		printf("\n");
 		UVK_CORE_INFO("Vulkan swap chain initialisation...");
 		logical_device = a_logical_device;
 
-		VkSwapchainKHR old_swap_chain = VK_NULL_HANDLE;
+		VkSwapchainKHR old_swap_chain = swap_chain;
 
 		// Get the surface capabilities.
 		VkSurfaceCapabilitiesKHR surface_capabilities;
@@ -46,6 +46,8 @@ namespace Uciniti
 		VkPresentModeKHR present_mode = select_best_present_mode();
 		UVK_CORE_TRACE("\tUsing presentation mode '{0}'", present_mode);
 
+		width = a_width;
+		height = a_height;
 		VkExtent2D swap_chain_extents = select_swap_chain_extents(surface_capabilities);
 		UVK_CORE_TRACE("\tSwap chain extents '{0}:{1}'", swap_chain_extents.width, swap_chain_extents.height);
 
@@ -131,7 +133,7 @@ namespace Uciniti
 		}
 
 		// If old swap chain been destroyed and this one replaces it, then link old one to quickly hand over responsibilities.
-		swap_chain_create_info.oldSwapchain = VK_NULL_HANDLE;
+		swap_chain_create_info.oldSwapchain = old_swap_chain;
 
 		VK_CHECK_RESULT(vkCreateSwapchainKHR(logical_device->get_logical_device(), &swap_chain_create_info, nullptr, &swap_chain));
 		UVK_CORE_INFO("Vulkan swap chain created successfully!");
@@ -140,10 +142,7 @@ namespace Uciniti
 		// This also cleans up all the presentable images.
 		if (old_swap_chain != VK_NULL_HANDLE)
 		{
-			for (uint32_t i = 0; i < image_count; i++)
-			{
-				vkDestroyImageView(logical_device->get_logical_device(), swap_chain_buffer[i].image_view, nullptr);
-			}
+			destroy_old_swap_chain();
 			vkDestroySwapchainKHR(logical_device->get_logical_device(), old_swap_chain, nullptr);
 		}
 
@@ -194,8 +193,8 @@ namespace Uciniti
 		{
 			if (result == VK_ERROR_OUT_OF_DATE_KHR)
 			{
-				// Handle the surface no longer being compatible with the surface.
-				// It will need to be recreated.
+				on_resize(width, height);
+				return;
 			}
 			else
 			{
@@ -206,29 +205,19 @@ namespace Uciniti
 		VK_CHECK_RESULT(vkWaitForFences(logical_device->get_logical_device(), 1, &_wait_fences[_current_buffer_index], VK_TRUE, DEFAULT_FENCE_TIMEOUT));
 	}
 
+	void vulkan_swap_chain::on_resize(const uint32_t& a_width, const uint32_t& a_height)
+	{
+		vkDeviceWaitIdle(logical_device->get_logical_device());
+
+		// Create the new swap chain
+		create_swap_chain(logical_device, a_width, a_height);
+		
+		vkDeviceWaitIdle(logical_device->get_logical_device());
+	}
+
 	void vulkan_swap_chain::shutdown()
 	{
-		vkDestroySemaphore(logical_device->get_logical_device(), _semaphores.render_complete, nullptr);
-		vkDestroySemaphore(logical_device->get_logical_device(), _semaphores.present_complete, nullptr);
-
-		for (size_t i = 0; i < image_count; i++)
-		{
-			vkDestroyFence(logical_device->get_logical_device(), _wait_fences[i], nullptr);
-		}
-
-		vkDestroyCommandPool(logical_device->get_logical_device(), command_pool, nullptr);
-
-		for (VkFramebuffer& this_framebuffer : framebuffers)
-		{
-			vkDestroyFramebuffer(logical_device->get_logical_device(), this_framebuffer, nullptr);
-		}
-
-		vkDestroyRenderPass(logical_device->get_logical_device(), _render_pass, nullptr);
-
-		for (swap_chain_image_buffer& this_image : swap_chain_buffer)
-		{
-			vkDestroyImageView(logical_device->get_logical_device(), this_image.image_view, nullptr);
-		}
+		destroy_old_swap_chain();
 
 		vkDestroySwapchainKHR(logical_device->get_logical_device(), swap_chain, nullptr);
 
@@ -340,22 +329,9 @@ namespace Uciniti
 		// If current extent is at the special value 0xFFFFFFFF, then extent can vary. Otherwise, it is size of the window.
 		if (a_surface_capabilities.currentExtent.width == (uint32_t)-1)
 		{
-			// If the value can vary, need to set manually.
-			// Get window size.
-			int temp_width, temp_height;
-			glfwGetFramebufferSize(window_context, &temp_width, &temp_height);
-
-			// Create new extent using window size.
-			VkExtent2D new_extents = {};
-			new_extents.width = static_cast<uint32_t>(temp_width);
-			new_extents.height = static_cast<uint32_t>(temp_height);
-
-			// Surface also defines max and min, make sure within boundaries by clamping value.
-			new_extents.width = std::max(a_surface_capabilities.minImageExtent.width, std::min(a_surface_capabilities.maxImageExtent.width, new_extents.width));
-			new_extents.height = std::max(a_surface_capabilities.minImageExtent.height, std::min(a_surface_capabilities.maxImageExtent.height, new_extents.height));
-
-			width = temp_width;
-			height = temp_height;
+			VkExtent2D new_extents;
+			new_extents.width = width;
+			new_extents.height = height;
 
 			return new_extents;
 		}
@@ -498,6 +474,32 @@ namespace Uciniti
 			framebuffer_info.layers = 1;
 
 			VK_CHECK_RESULT(vkCreateFramebuffer(logical_device->get_logical_device(), &framebuffer_info, nullptr, &framebuffers[i]));
+		}
+	}
+
+	void vulkan_swap_chain::destroy_old_swap_chain()
+	{
+		vkDestroySemaphore(logical_device->get_logical_device(), _semaphores.render_complete, nullptr);
+		vkDestroySemaphore(logical_device->get_logical_device(), _semaphores.present_complete, nullptr);
+
+		for (size_t i = 0; i < image_count; i++)
+		{
+			vkDestroyFence(logical_device->get_logical_device(), _wait_fences[i], nullptr);
+		}
+
+		vkFreeCommandBuffers(logical_device->get_logical_device(), command_pool, static_cast<uint32_t>(draw_command_buffer.size()), draw_command_buffer.data());
+		vkDestroyCommandPool(logical_device->get_logical_device(), command_pool, nullptr);
+
+		for (VkFramebuffer& this_framebuffer : framebuffers)
+		{
+			vkDestroyFramebuffer(logical_device->get_logical_device(), this_framebuffer, nullptr);
+		}
+
+		vkDestroyRenderPass(logical_device->get_logical_device(), _render_pass, nullptr);
+
+		for (swap_chain_image_buffer& this_image : swap_chain_buffer)
+		{
+			vkDestroyImageView(logical_device->get_logical_device(), this_image.image_view, nullptr);
 		}
 	}
 }

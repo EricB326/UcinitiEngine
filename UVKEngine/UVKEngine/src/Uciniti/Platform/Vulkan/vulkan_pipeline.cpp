@@ -59,7 +59,7 @@ namespace Uciniti
 		pipeline_create_info.pMultisampleState = &pipeline_data.multisample_info;
 		pipeline_create_info.pDepthStencilState = nullptr;
 		pipeline_create_info.pColorBlendState = &pipeline_data.colour_blend_info;
-		pipeline_create_info.pDynamicState = nullptr;
+		pipeline_create_info.pDynamicState = &pipeline_data.dynamic_state_info;
 		pipeline_create_info.layout = pipeline_layout_handle;			  // Pipeline layout pipeline should use.
 		pipeline_create_info.renderPass = render_pass; // Render pass description the pipeline is compatible with.
 		pipeline_create_info.subpass = 0;								  // Subpass of render pass to use with pipeline.
@@ -86,30 +86,25 @@ namespace Uciniti
 	{
 		ref_ptr<vulkan_context> context = vulkan_context::get();
 
-		// Viewport.
-		viewport.x = 0.0f;
-		viewport.y = 0.0f;
-		viewport.width = (float)context->get_swap_chain().get_width();
-		viewport.height = (float)context->get_swap_chain().get_height();
-		viewport.minDepth = 0.0f;
-		viewport.maxDepth = 1.0f;
-
-		// Scissor.
-		scissor.offset = { 0, 0 };
-		scissor.extent = {context->get_swap_chain().get_width(), context->get_swap_chain().get_height()};
-
 		// Populate viewport info.
 		pipeline_data.viewport_info.viewportCount = 1;
-		pipeline_data.viewport_info.pViewports = &viewport;
 		pipeline_data.viewport_info.scissorCount = 1;
-		pipeline_data.viewport_info.pScissors = &scissor;
+		pipeline_data.viewport_info.pViewports = nullptr; // Set as dynamic states.
+		pipeline_data.viewport_info.pScissors = nullptr;  // Set as dynamic states.
+
+		// Populate dynamic states.
+		dynamic_states.push_back(VK_DYNAMIC_STATE_VIEWPORT);
+		dynamic_states.push_back(VK_DYNAMIC_STATE_SCISSOR);
+
+		pipeline_data.dynamic_state_info.pDynamicStates = dynamic_states.data();
+		pipeline_data.dynamic_state_info.dynamicStateCount = static_cast<uint32_t>(dynamic_states.size());
 
 		// Populate rasterizer.
 		// ---- SET IN THE INTI LIST AS THE BASE CREATE INFO ----
 		// Polygon mode : Fill.
 		// Cull mode    : Back bit.
 		// Front face   : Clockwise.
-		pipeline_data.rasterinzation_info.lineWidth = 1.0f;		   // How thick lines should be when drawn. -- GPU feature for larger.
+		pipeline_data.rasterinzation_info.lineWidth = 1.0f;			  // How thick lines should be when drawn. -- GPU feature for larger.
 		pipeline_data.rasterinzation_info.depthBiasEnable = VK_FALSE; // Whether to add depth bias to fragments (good for stopping "shadow acne" in shadow mapping).
 
 		// Populate multi sampling.
@@ -138,5 +133,4 @@ namespace Uciniti
 		VkPipelineLayoutCreateInfo pipeline_layout_create_info(vk_base_pipeline_layout_info);
 		VK_CHECK_RESULT(vkCreatePipelineLayout(context->get_logical_device()->get_logical_device(), &pipeline_layout_create_info, nullptr, &pipeline_layout_handle));
 	}
-
 }

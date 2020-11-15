@@ -30,10 +30,12 @@ namespace Uciniti
 		//vulkan_swap_chain(GLFWwindow* a_window_context, const ref<vulkan_logical_device>& a_logical_device);
 
 		void create_surface(GLFWwindow* a_window_context, const VkInstance& a_vulkan_instance);
-		void create_swap_chain(const vulkan_logical_device* a_logical_device);
+		void create_swap_chain(const vulkan_logical_device* a_logical_device, const uint32_t& a_width, const uint32_t& a_height);
 
 		void begin_frame();
 		void present();
+
+		void on_resize(const uint32_t& a_width, const uint32_t& a_height);
 
 		const VkSurfaceKHR& get_surface() const { return surface; }
 		const uint32_t get_width() const { return width; }
@@ -67,7 +69,7 @@ namespace Uciniti
 		// Colour format and colour space.
 		VkSurfaceFormatKHR surface_format;
 
-		VkSwapchainKHR swap_chain;
+		VkSwapchainKHR swap_chain = VK_NULL_HANDLE;
 		std::vector<VkImage> swap_chain_images;
 
 		std::vector<swap_chain_image_buffer> swap_chain_buffer;
@@ -111,6 +113,8 @@ namespace Uciniti
 		void create_sync_objects();
 		void create_render_pass();
 		void create_framebuffers();
+
+		void destroy_old_swap_chain();
 	};
 }
 

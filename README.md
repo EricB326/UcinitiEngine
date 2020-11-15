@@ -4,13 +4,13 @@
 Uciniti (Učiniti - meaning render/make/fulfill) is a simple, in development, interactive application and rendering engine. The engine is in early stages of development and plenty more is to come.
 
 ## Building Uciniti
-Uciniti is built using Visual Studio 2019, using x64 architecture. I would recommened building with the same target as the engine is untest in other envionrments. The engine is also currently on built for Windows systems.
+Uciniti is built using Visual Studio 2019, using x64 architecture. I would recommened building with the same target as the engine is untest in other envionrments. The engine is only built for Windows systems.
 
 Using your favourite git tool, simply start bt cloning the repository with `git clone --recursive https://github.com/EricB326/UcinitiVK2.git`
 If you require cloning just the submodules, use the following `git submodule update --init`
 
 ## Short Term Goals
-*Note: Uciniti is constantly evolving, because of this the most up-to-date and reliable location to see what is being worked on is over on the road map location at: *
+*Note: Uciniti is constantly evolving, because of this the most up-to-date and reliable location to see what is being worked on is over on the road map located at: *
 
 As 2020 comes to a close, I am to have Uciniti in a state of being able to render any mesh passed to the engine using Vulkan as the rendering API. This includes rendering with PBR in mind.
 Come late Decemeber the goal is to have this workflow hooked into ImGUI API to allow this mesh submission to occur on the front end of the engine.

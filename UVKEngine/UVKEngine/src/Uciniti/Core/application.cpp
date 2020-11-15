@@ -58,6 +58,7 @@ namespace Uciniti
 	void application::on_event(event& a_e)
 	{
 		event_dispatcher dispatcher(a_e);
+		dispatcher.dispatch<window_resize_event>(BIND_EVENT_FN(application::on_window_resize));
 		dispatcher.dispatch<window_close_event>(BIND_EVENT_FN(application::on_window_close));
 
 		for (auto it = app_layer_stack.end(); it != app_layer_stack.begin();)
@@ -72,22 +73,42 @@ namespace Uciniti
 	{
 		while (is_running)
 		{
+			window_context->on_update();
+
+			if (!_is_minimized)
+			{
+				for (layer* this_layer : app_layer_stack)
+					this_layer->on_update(_time_step);
+
+				window_context->get_render_context()->begin_frame();
+				vulkan_renderer::draw();
+				window_context->swap_buffers();
+
+			}
+
 			// #TODO: Currently tied the class to glfw. Should be platform specific instead (linux::get_time()).
 			float time = (float)glfwGetTime();
-			time_step this_time_step = time - last_frame_time;
+			_time_step = time - last_frame_time;
 			last_frame_time = time;
 
-			for (layer* this_layer : app_layer_stack)
-				this_layer->on_update(this_time_step);
-
-			window_context->get_render_context()->begin_frame();
-			vulkan_renderer::draw();
-			window_context->swap_buffers();
-
-			window_context->on_update();
 		}
 
 		shutdown();
+	}
+
+
+
+	bool application::on_window_resize(window_resize_event& a_e)
+	{
+		int width = a_e.get_width(), height = a_e.get_height();
+		if (!width || !height)
+		{
+			_is_minimized = true;
+			return false;
+		}
+		_is_minimized = false;
+
+		return false;
 	}
 
 	bool application::on_window_close(window_close_event& a_e)

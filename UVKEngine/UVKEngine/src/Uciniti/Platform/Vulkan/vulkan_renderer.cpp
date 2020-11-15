@@ -63,8 +63,22 @@ namespace Uciniti
 
 					vkCmdBeginRenderPass(draw_cmd_buf, &render_pass_begin_info, VK_SUBPASS_CONTENTS_INLINE);
 
-						// #TODO: Dynamic states for the pipeline such as viewport should be modified here.
+						// Update dynamic viewport and scissor states.
+						VkViewport viewport = {};
+						viewport.x = 0.0f;
+						viewport.y = 0.0f;
+						viewport.width = swap_chain.get_width();
+						viewport.height = swap_chain.get_height();
+						viewport.minDepth = 0.0f;
+						viewport.maxDepth = 1.0f;
+						vkCmdSetViewport(draw_cmd_buf, 0, 1, &viewport);
 
+						VkRect2D scissor = {};
+						scissor.extent.width = swap_chain.get_width();
+						scissor.extent.height = swap_chain.get_height();
+						scissor.offset = { 0, 0 };
+						vkCmdSetScissor(draw_cmd_buf, 0, 1, &scissor);
+						
 						// #TODO: In the future this should instead be a for each loop going over each mesh and rendering them.
 
 						vkCmdBindPipeline(draw_cmd_buf, VK_PIPELINE_BIND_POINT_GRAPHICS, draw_pipeline->get_graphics_pipeline());
