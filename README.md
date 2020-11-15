@@ -13,7 +13,7 @@ If you require cloning just the submodules, use the following:
       `git submodule update --init`
 
 ## Short Term Goals
-*Note: Uciniti is constantly evolving, because of this the most up-to-date and reliable location to see what is being worked on is over on the road map location at: *
+*Note: Uciniti is constantly evolving, because of this the most up-to-date and reliable location to see what is being worked on is over on the road map location at: https://trello.com/b/diENqp9v/uciniti-engine*
 
 As 2020 comes to a close, I am to have Uciniti in a state of being able to render any mesh passed to the engine using Vulkan as the rendering API. This includes rendering with PBR in mind.
 Come late Decemeber the goal is to have this workflow hooked into ImGUI API to allow this mesh submission to occur on the front end of the engine.
