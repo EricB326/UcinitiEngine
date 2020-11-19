@@ -3,36 +3,32 @@
 #stage vertex
 #version 450 core
 
-vec2 positions[3] = vec2[]
-(
-	vec2(0.0, -0.5),
-	vec2(0.5, 0.5),
-	vec2(-0.5, 0.5)
-);
+layout(location = 0) in vec2 in_vert_position;
+layout(location = 1) in vec3 in_vert_colour;
 
-vec3 colours[3] = vec3[]
-(
-	vec3(1.0, 0.0, 0.0),
-	vec3(0.0, 1.0, 0.0),
-	vec3(0.0, 0.0, 1.0)
-);
+layout(binding = 0) uniform in_vert_mvp
+{
+	mat4 model;
+	mat4 view;
+	mat4 proj;
+} mvp;
 
-layout(location = 0) out vec3 frag_colour;
+layout(location = 0) out vec3 out_vert_colour;
 
 void main()
 {
-	gl_Position = vec4(positions[gl_VertexIndex], 0.0, 1.0);
-	frag_colour = colours[gl_VertexIndex];
+	gl_Position = mvp.proj * mvp.view * mvp.model * vec4(in_vert_position, 0.0, 1.0);
+	out_vert_colour = in_vert_colour;
 }
 
 #stage fragment
 #version 450 core
 
-layout(location = 0) in vec3 frag_colour;
+layout(location = 0) in vec3 in_frag_colour;
 
-layout(location = 0) out vec4 final_colour;
+layout(location = 0) out vec4 out_frag_colour;
 
 void main() 
 {
-	final_colour = vec4(frag_colour, 1.0);
+	out_frag_colour = vec4(in_frag_colour, 1.0);
 }

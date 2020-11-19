@@ -81,7 +81,7 @@ namespace Uciniti
 					this_layer->on_update(_time_step);
 
 				window_context->get_render_context()->begin_frame();
-				vulkan_renderer::draw();
+				vulkan_renderer::draw(_time_step);
 				window_context->swap_buffers();
 
 			}

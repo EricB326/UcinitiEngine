@@ -41,10 +41,11 @@ namespace Uciniti
 		const uint32_t get_width() const { return width; }
 		const uint32_t get_height() const { return height; }
 		const uint32_t get_image_count() const { return image_count; }
+		const uint32_t get_current_image() const { return _current_buffer_index; }
 
 		const VkRenderPass get_render_pass() const { return _render_pass; }
 
-		const VkCommandBuffer get_current_draw_command_buffer() { UVK_CORE_INFO("Current draw index {0}", _current_buffer_index); return get_draw_command_buffer(_current_buffer_index); }
+		const VkCommandBuffer get_current_draw_command_buffer() { return get_draw_command_buffer(_current_buffer_index); }
 
 		const VkFramebuffer get_framebuffer(uint32_t a_index) const
 		{
@@ -58,6 +59,7 @@ namespace Uciniti
 			return draw_command_buffer[a_index];
 		}
 
+		const VkCommandPool get_command_pool() const { return command_pool; }
 
 		void shutdown();
 

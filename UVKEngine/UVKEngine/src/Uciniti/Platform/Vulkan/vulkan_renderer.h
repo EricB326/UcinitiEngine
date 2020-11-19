@@ -2,6 +2,7 @@
 #define VULKAN_RENDERER_H
 
 #include "Uciniti/Platform/Vulkan/vulkan_base.h"
+#include "Uciniti/Core/time_step.h"
 
 namespace Uciniti
 {
@@ -10,7 +11,7 @@ namespace Uciniti
 	public:
 
 		static void init();
-		static void draw();
+		static void draw(time_step a_time_step);
 		static void shutdown();
 
 	private:

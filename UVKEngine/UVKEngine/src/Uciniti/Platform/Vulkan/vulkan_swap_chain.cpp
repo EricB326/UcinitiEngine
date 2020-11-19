@@ -160,18 +160,16 @@ namespace Uciniti
 
 	void vulkan_swap_chain::begin_frame()
 	{
+		// User a fence to wait until the command buffer has finished execution before it can be used again.
+		VK_CHECK_RESULT(vkWaitForFences(logical_device->get_logical_device(), 1, &_wait_fences[_current_buffer_index], VK_TRUE, UINT64_MAX));
+		VK_CHECK_RESULT(vkResetFences(logical_device->get_logical_device(), 1, &_wait_fences[_current_buffer_index]));
+
 		acquire_next_image(_semaphores.present_complete, &_current_buffer_index);
 	}
 
 	void vulkan_swap_chain::present()
 	{
 		const uint64_t DEFAULT_FENCE_TIMEOUT = 100000000000;
-		// User a fence to wait until the command buffer has finished execution before it can be used again.
-		VK_CHECK_RESULT(vkWaitForFences(logical_device->get_logical_device(), 1, &_wait_fences[_current_buffer_index], VK_TRUE, UINT64_MAX));
-		VK_CHECK_RESULT(vkResetFences(logical_device->get_logical_device(), 1, &_wait_fences[_current_buffer_index]));
-		
-		//if (_wait_fences[_current_buffer_index] != VK_NULL_HANDLE)
-		//	vkWaitForFences(logical_device->get_logical_device(), 1, &_wait_fences[_current_buffer_index], VK_TRUE, UINT64_MAX);
 
 		VkPipelineStageFlags wait_stages = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;
 		VkSubmitInfo submit_info = {};
@@ -184,7 +182,6 @@ namespace Uciniti
 		submit_info.commandBufferCount = 1;
 		submit_info.pCommandBuffers = &draw_command_buffer[_current_buffer_index];
 
-		
 		VK_CHECK_RESULT(vkQueueSubmit(logical_device->get_graphics_queue_handle(), 1, &submit_info, _wait_fences[_current_buffer_index]));
 
 		VkResult result = request_presentation(logical_device->get_graphics_queue_handle(), _current_buffer_index, _semaphores.render_complete);

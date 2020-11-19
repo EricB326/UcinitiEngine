@@ -9,12 +9,12 @@ namespace Uciniti
 	// =================================================================
 	// Vertex Buffer
 	// =================================================================
-	vertex_buffer* vertex_buffer::create(void* a_data, uint32_t a_size)
+	vertex_buffer* vertex_buffer::create(void* a_data, uint32_t a_size, uint32_t a_element_count)
 	{
 		switch (renderer_api::get_current_api())
 		{
-		case renderer_api_type::none: return nullptr;
-		case renderer_api_type::vulkan: return new vulkan_vertex_buffer(a_data, a_size);
+			case renderer_api_type::none: return nullptr;
+			case renderer_api_type::vulkan: return new vulkan_vertex_buffer(a_data, a_size, a_element_count);
 		}
 
 		UVK_CORE_ASSERT(false, "Unknown Rendering API type.");
@@ -28,8 +28,8 @@ namespace Uciniti
 	{
 		switch (renderer_api::get_current_api())
 		{
-		case renderer_api_type::none: return nullptr;
-		case renderer_api_type::vulkan: return new vulkan_index_buffer(a_data, a_size);
+			case renderer_api_type::none: return nullptr;
+			case renderer_api_type::vulkan: return new vulkan_index_buffer(a_data, a_size);
 		}
 
 		UVK_CORE_ASSERT(false, "Unknown Rendering API type.");

@@ -16,6 +16,7 @@ IncludeDir["GLFW"] = "UVKEngine/vendor/GLFW/include"
 IncludeDir["ImGui"] = "UVKEngine/vendor/ImGui"
 IncludeDir["glm"] = "UVKEngine/vendor/glm"
 IncludeDir["shaderc"] = "UVKEngine/vendor/shaderc/include"
+IncludeDir["SPIRV_Cross"] = "UVKEngine/vendor/SPIRV-Cross"
 IncludeDir["Vulkan"] = "UVKEngine/vendor/Vulkan/include"
 IncludeDir["stb_image"] = "UVKEngine/vendor/stb_image"
 
@@ -34,6 +35,7 @@ LibraryDir["Vulkan"] = "vendor/Vulkan/lib/vulkan-1.lib"
 
 include "UVKEngine/vendor/GLFW"
 include "UVKEngine/vendor/ImGui"
+include "UVKEngine/vendor/SPIRV-Cross"
 
 project "UVKEngine"
 	location "UVKEngine"
@@ -41,7 +43,7 @@ project "UVKEngine"
 	language "C++"
 	cppdialect "C++17"
 	staticruntime "on"
-	
+
 
 	targetdir ("bin/" .. output_dir .. "/%{prj.name}")
 	objdir ("bin-int/" .. output_dir .. "/%{prj.name}")
@@ -73,6 +75,7 @@ project "UVKEngine"
 		"%{IncludeDir.ImGui}",
 		"%{IncludeDir.glm}",
 		"%{IncludeDir.shaderc}",
+		"%{IncludeDir.SPIRV_Cross}",
 		"%{IncludeDir.stb_image}"
 	}
 
@@ -80,6 +83,7 @@ project "UVKEngine"
 	{
 		"GLFW",
 		"ImGui",
+		"SPIRV_Cross",
 		"%{LibraryDir.Vulkan}",
 		
 		"%{LibraryDir.shaderc}",

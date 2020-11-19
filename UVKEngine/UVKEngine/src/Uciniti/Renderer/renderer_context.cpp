@@ -12,8 +12,8 @@ namespace Uciniti
 	{
 		switch (renderer_api::get_current_api())
 		{
-		case renderer_api_type::none: return nullptr;
-		case renderer_api_type::vulkan: return create_ref_ptr<vulkan_context>(static_cast<GLFWwindow*>(a_window));
+			case renderer_api_type::none: return nullptr;
+			case renderer_api_type::vulkan: return create_ref_ptr<vulkan_context>(static_cast<GLFWwindow*>(a_window));
 		}
 
 		UVK_CORE_ASSERT(false, "Unknown Rendering API type.");

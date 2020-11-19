@@ -10,3 +10,6 @@
 [submodule "UVKEngine/UVKEngine/vendor/glm"]
 	path = UVKEngine/UVKEngine/vendor/glm
 	url = https://github.com/g-truc/glm
+[submodule "UVKEngine/UVKEngine/vendor/SPIRV-Cross"]
+	path = UVKEngine/UVKEngine/vendor/SPIRV-Cross
+	url = https://github.com/KhronosGroup/SPIRV-Cross.git

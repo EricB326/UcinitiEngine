@@ -55,11 +55,15 @@ namespace Uciniti
 		pipeline_info pipeline_data;
 
 		std::vector<VkDynamicState> dynamic_states;
+		VkVertexInputBindingDescription vertex_input_binding;
+		std::vector<VkVertexInputAttributeDescription> vertex_input_attributes;
 
 		// #TODO: Remove this function. The pipeline should be dynamic and probably receive its data,
 		//		  from the vulkan_renderer.cpp pre-draw command. Should be dynamic for the viewport,
 		//		  and scissor states minimum. For now, temporary for the minimal viable product.
 		void prepare_pipeline();
+
+		void set_vertex_data();
 	};
 }
 

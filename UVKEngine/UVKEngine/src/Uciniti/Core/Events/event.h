@@ -59,7 +59,7 @@ namespace Uciniti
 		*/
 		virtual event_type get_event_type() const = 0;
 
-		// STARTNOTE: Probably should be only debugging visable.
+		// STARTNOTE: Probably should be only debugging visible.
 		/* @brief Pure virtual function for getting the name.
 		*/
 		virtual const char* get_name() const = 0;

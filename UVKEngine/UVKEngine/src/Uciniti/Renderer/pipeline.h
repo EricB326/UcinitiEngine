@@ -3,6 +3,7 @@
 
 #include "Uciniti/Renderer/shader.h"
 #include "Uciniti/Renderer/render_pass.h"
+#include "Uciniti/Renderer/buffer.h"
 
 namespace Uciniti
 {
@@ -10,7 +11,7 @@ namespace Uciniti
 	{
 		ref_ptr<shader> _shader;
 		ref_ptr<render_pass> _render_pass;
-		// Should also hold vertex layout data.
+		buffer_layout _layout;
 	};
 
 	class pipeline

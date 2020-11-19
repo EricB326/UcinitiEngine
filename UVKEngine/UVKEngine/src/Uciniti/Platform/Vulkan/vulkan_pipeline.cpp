@@ -7,6 +7,17 @@
 
 namespace Uciniti
 {
+	static VkFormat shader_data_type_to_vulkan_format(shader_data_type a_type)
+	{
+		switch (a_type)
+		{
+		case Uciniti::shader_data_type::_float: return VK_FORMAT_R32_SFLOAT;
+		case Uciniti::shader_data_type::_float2: return VK_FORMAT_R32G32_SFLOAT;
+		case Uciniti::shader_data_type::_float3: return VK_FORMAT_R32G32B32_SFLOAT;
+		case Uciniti::shader_data_type::_float4: return VK_FORMAT_R32G32B32A32_SFLOAT;
+		}
+	}
+
 	// =================================================================
 	// Vulkan Pipeline Info
 	// =================================================================
@@ -29,7 +40,6 @@ namespace Uciniti
 
 	vulkan_pipeline::~vulkan_pipeline()
 	{
-		// #TODO: Delete pipeline.
 		shutdown();
 	}	
 
@@ -85,7 +95,14 @@ namespace Uciniti
 	void vulkan_pipeline::prepare_pipeline()
 	{
 		ref_ptr<vulkan_context> context = vulkan_context::get();
+		ref_ptr<vulkan_shader> shader_to_use = ref_ptr<vulkan_shader>(std::static_pointer_cast<vulkan_shader>(spec._shader));
+		VkDescriptorSetLayout descriptor_set_layout = shader_to_use->get_descriptor_set_layout();
 
+		VkPipelineLayoutCreateInfo pipeline_layout_create_info(vk_base_pipeline_layout_info);
+		pipeline_layout_create_info.setLayoutCount = 1;
+		pipeline_layout_create_info.pSetLayouts = &descriptor_set_layout;
+		VK_CHECK_RESULT(vkCreatePipelineLayout(context->get_logical_device()->get_logical_device(), &pipeline_layout_create_info, nullptr, &pipeline_layout_handle));
+		
 		// Populate viewport info.
 		pipeline_data.viewport_info.viewportCount = 1;
 		pipeline_data.viewport_info.scissorCount = 1;
@@ -103,9 +120,9 @@ namespace Uciniti
 		// ---- SET IN THE INTI LIST AS THE BASE CREATE INFO ----
 		// Polygon mode : Fill.
 		// Cull mode    : Back bit.
-		// Front face   : Clockwise.
 		pipeline_data.rasterinzation_info.lineWidth = 1.0f;			  // How thick lines should be when drawn. -- GPU feature for larger.
 		pipeline_data.rasterinzation_info.depthBiasEnable = VK_FALSE; // Whether to add depth bias to fragments (good for stopping "shadow acne" in shadow mapping).
+		pipeline_data.rasterinzation_info.frontFace = VK_FRONT_FACE_COUNTER_CLOCKWISE;
 
 		// Populate multi sampling.
 		pipeline_data.multisample_info.rasterizationSamples = VK_SAMPLE_COUNT_1_BIT;
@@ -129,8 +146,33 @@ namespace Uciniti
 		pipeline_data.colour_blend_info.attachmentCount = 1;
 		pipeline_data.colour_blend_info.pAttachments = &pipeline_data.colour_blend_attachment;
 
-		// #TODO: Populate pipeline layout.
-		VkPipelineLayoutCreateInfo pipeline_layout_create_info(vk_base_pipeline_layout_info);
-		VK_CHECK_RESULT(vkCreatePipelineLayout(context->get_logical_device()->get_logical_device(), &pipeline_layout_create_info, nullptr, &pipeline_layout_handle));
+		set_vertex_data();
 	}
+
+	void vulkan_pipeline::set_vertex_data()
+	{
+ 		buffer_layout& layout = spec._layout;
+
+		vertex_input_binding = {};
+		vertex_input_binding.binding = 0;
+		vertex_input_binding.stride = layout.get_stride();
+		vertex_input_binding.inputRate = VK_VERTEX_INPUT_RATE_VERTEX;
+
+		vertex_input_attributes.resize(layout.get_element_count());
+		uint32_t location = 0;
+		for (buffer_element this_element : layout)
+		{
+			vertex_input_attributes[location].binding = 0;
+			vertex_input_attributes[location].location = location;
+			vertex_input_attributes[location].format = shader_data_type_to_vulkan_format(this_element.type);
+			vertex_input_attributes[location].offset = this_element.offset;
+			location++;
+		}
+
+		pipeline_data.vertex_info.vertexBindingDescriptionCount = 1;
+		pipeline_data.vertex_info.pVertexBindingDescriptions = &vertex_input_binding;
+		pipeline_data.vertex_info.vertexAttributeDescriptionCount = vertex_input_attributes.size();
+		pipeline_data.vertex_info.pVertexAttributeDescriptions = vertex_input_attributes.data();
+	}
+
 }
