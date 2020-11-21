@@ -6,7 +6,7 @@ namespace Uciniti
 	class texture
 	{
 	public:
-		virtual ~texture();
+		virtual ~texture() {}
 
 		virtual void bind(uint32_t a_slot = 0) const = 0;
 

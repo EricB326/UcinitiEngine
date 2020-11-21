@@ -29,6 +29,7 @@ namespace Uciniti
 		instance = this;
 
 		window_context = scope_ptr<window>(window::create());
+		window_context->init_renderer();
 		window_context->set_event_callback(BIND_EVENT_FN(application::on_event));
 
 		renderer::init();

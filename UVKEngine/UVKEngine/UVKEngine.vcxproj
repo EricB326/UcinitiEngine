@@ -169,7 +169,7 @@
     <ClInclude Include="src\Uciniti\Platform\Vulkan\vulkan_shader.h" />
     <ClInclude Include="src\Uciniti\Platform\Vulkan\vulkan_swap_chain.h" />
     <ClInclude Include="src\Uciniti\Platform\Vulkan\vulkan_test_layer.h" />
-    <ClInclude Include="src\Uciniti\Platform\Vulkan\vulkan_texture.h" />
+    <ClInclude Include="src\Uciniti\Platform\Vulkan\vulkan_image.h" />
     <ClInclude Include="src\Uciniti\Platform\Vulkan\vulkan_validation.h" />
     <ClInclude Include="src\Uciniti\Platform\Windows\Windows_window.h" />
     <ClInclude Include="src\Uciniti\Renderer\base_camera.h" />
@@ -207,7 +207,7 @@
     <ClCompile Include="src\Uciniti\Platform\Vulkan\vulkan_shader.cpp" />
     <ClCompile Include="src\Uciniti\Platform\Vulkan\vulkan_swap_chain.cpp" />
     <ClCompile Include="src\Uciniti\Platform\Vulkan\vulkan_test_layer.cpp" />
-    <ClCompile Include="src\Uciniti\Platform\Vulkan\vulkan_texture.cpp" />
+    <ClCompile Include="src\Uciniti\Platform\Vulkan\vulkan_image.cpp" />
     <ClCompile Include="src\Uciniti\Platform\Vulkan\vulkan_validation.cpp" />
     <ClCompile Include="src\Uciniti\Platform\Windows\Windows_window.cpp" />
     <ClCompile Include="src\Uciniti\Platform\Windows\windows_input.cpp" />

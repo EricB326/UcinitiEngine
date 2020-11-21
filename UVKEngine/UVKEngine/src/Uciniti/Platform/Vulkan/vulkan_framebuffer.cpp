@@ -28,7 +28,7 @@ namespace Uciniti
 			vulkan_framebuffer* instance = this;
 			renderer::submit([instance, a_width, a_height]() mutable
 			{
-				vulkan_logical_device* logical_device = vulkan_context::get()->get_logical_device();
+				ref_ptr<vulkan_logical_device> logical_device = vulkan_context::get()->get_logical_device();
 
 				VkAttachmentDescription colour_attachment_desc(vk_base_attachment_description);
 

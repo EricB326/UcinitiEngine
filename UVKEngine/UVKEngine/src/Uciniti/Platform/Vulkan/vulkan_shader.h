@@ -5,6 +5,7 @@
 #include "vulkan_base.h"
 #include <glm/glm.hpp>
 #include <spirv_glsl.hpp>
+#include "Uciniti/Platform/Vulkan/vulkan_image.h"
 
 namespace Uciniti
 {
@@ -27,14 +28,32 @@ namespace Uciniti
 
 		struct uniform_buffer
 		{
-			VkDeviceMemory _memory;
 			VkBuffer _buffer;
 			VkDescriptorBufferInfo _descriptor;
+			VkDeviceMemory _memory;
+
+			std::string _name;
 			uint32_t _size = 0;
 			uint32_t _binding_point = 0;
-			std::string _name;
-			VkShaderStageFlagBits _shader_stage = VK_SHADER_STAGE_FLAG_BITS_MAX_ENUM;
+
 			uniform_data _member_data;
+			VkShaderStageFlagBits _shader_stage = VK_SHADER_STAGE_FLAG_BITS_MAX_ENUM;
+		};
+
+		struct image_sampler_data
+		{
+			ref_ptr<vulkan_texture2D> _tex2d;
+		};
+
+		struct image_sampler
+		{
+			VkDescriptorImageInfo _descriptor;
+
+			std::string _name;
+			uint32_t _binding_point = 0;
+
+			image_sampler_data _sampler_data;
+			VkShaderStageFlagBits _shader_stage = VK_SHADER_STAGE_FLAG_BITS_MAX_ENUM;
 		};
 
 		/***************************************************************/
@@ -76,6 +95,8 @@ namespace Uciniti
 		void set_member_matrix3(const uint32_t a_binding, const std::string& a_member_name, const glm::mat3& a_data);
 		void set_member_matrix4(const uint32_t a_binding, const std::string& a_member_name, const glm::mat4& a_data);
 
+		void set_sampler2d(const uint32_t a_binding, ref_ptr<vulkan_texture2D> a_texture);
+
 	private:
 		/***************************************************************/
 		// Private Variables
@@ -89,6 +110,7 @@ namespace Uciniti
 
 		std::unordered_map<uint32_t, uniform_buffer> _uniform_buffers;
 		std::unordered_map<std::string, VkWriteDescriptorSet> _write_descriptor_sets;
+		std::unordered_map<uint32_t, image_sampler> _image_samplers;
 
 		VkDescriptorSetLayout _descriptor_set_layout;
 		VkDescriptorSet _descriptor_set;
@@ -109,6 +131,7 @@ namespace Uciniti
 		void create_descriptors();
 
 		void allocate_uniform_buffer(uniform_buffer &a_dst);
+		void allocate_image_sampler(image_sampler& a_image_dst);
 
 		void retrieve_shader_name();
 

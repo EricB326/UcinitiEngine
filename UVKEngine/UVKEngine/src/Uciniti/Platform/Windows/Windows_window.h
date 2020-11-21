@@ -35,6 +35,7 @@ namespace Uciniti
 		//virtual renderer_context* get_render_context() const override { return render_context; }
 
 		inline void set_event_callback(const event_callback_fn& a_callback) override { data.event_callback = a_callback; }
+		virtual void init_renderer() override;
 		void set_vsync(bool a_enabled) override;
 		bool is_vsync() const override;
 

@@ -9,6 +9,9 @@
 #include "Uciniti/Platform/Vulkan/vulkan_pipeline.h"
 #include "Uciniti/Platform/Vulkan/vulkan_render_pass.h"
 #include "Uciniti/Platform/Vulkan/vulkan_buffer.h"
+#include "Uciniti/Platform/Vulkan/vulkan_image.h"
+
+#include <chrono>
 
 #include <glm/gtc/matrix_transform.hpp>
 
@@ -20,6 +23,7 @@ namespace Uciniti
 	static index_buffer* quad_index_buffer;
 	static VkDescriptorSet quad_descriptor_set;
 	static ref_ptr<vulkan_shader> vk_shader;
+	static ref_ptr<texture2D> quad_texture;
 
 	void vulkan_renderer::init()
 	{
@@ -32,10 +36,17 @@ namespace Uciniti
 
 		pipeline_spec pipeline_specification;
 		pipeline_specification._shader = renderer::get_shader_library()->get("vulkan_triangle");
+
+		vk_shader = std::static_pointer_cast<vulkan_shader>(pipeline_specification._shader);
+		quad_texture = texture2D::create("assets/textures/texture.jpg");
+		vk_shader->set_sampler2d(1, std::static_pointer_cast<vulkan_texture2D>(quad_texture));
+		vk_shader->reload();
+
 		pipeline_specification._layout =
 		{
-			{ shader_data_type::_float2, "in_vert_position" },
+			{ shader_data_type::_float3, "in_vert_position" },
 			{ shader_data_type::_float3, "in_vert_colour" },
+			{ shader_data_type::_float2, "in_vert_tex_coord" },
 		};
 
 		render_pass_spec render_pass_specification;
@@ -46,34 +57,46 @@ namespace Uciniti
 
 		struct quad_vertex
 		{
-			glm::vec2 _pos;
+			glm::vec3 _pos;
 			glm::vec3 _col;
+			glm::vec2 _tex_coord;
 		};
 
 		std::vector<quad_vertex> vertex_data =
 		{
-			{ glm::vec2(-0.5f, -0.5f), glm::vec3(1.0f, 0.0f, 0.0f) },
-			{ glm::vec2(0.5f, -0.5f), glm::vec3(0.0f, 1.0f, 0.0f) },
-			{ glm::vec2(0.5f, 0.5f), glm::vec3(0.0f, 0.0f, 1.0f) },
-			{ glm::vec2(-0.5f, 0.5f), glm::vec3(1.0f, 1.0f, 1.0f) },
+			{ glm::vec3(-0.5f, -0.5f, 0.0f), glm::vec3(1.0f, 0.0f, 0.0f), glm::vec2(0.0f, 0.0f) },
+			{ glm::vec3(0.5f, -0.5f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f), glm::vec2(1.0f, 0.0f) },
+			{ glm::vec3(0.5f, 0.5f, 0.0f), glm::vec3(0.0f, 0.0f, 1.0f), glm::vec2(1.0f, 1.0f) },
+			{ glm::vec3(-0.5f, 0.5f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), glm::vec2(0.0f, 1.0f) },
+
+			{ glm::vec3(-0.5f, -0.5f, -0.5f), glm::vec3(1.0f, 0.0f, 0.0f), glm::vec2(0.0f, 0.0f) },
+			{ glm::vec3(0.5f, -0.5f, -0.5f), glm::vec3(0.0f, 1.0f, 0.0f), glm::vec2(1.0f, 0.0f) },
+			{ glm::vec3(0.5f, 0.5f, -0.5f), glm::vec3(0.0f, 0.0f, 1.0f), glm::vec2(1.0f, 1.0f) },
+			{ glm::vec3(-0.5f, 0.5f, -0.5f), glm::vec3(1.0f, 1.0f, 1.0f), glm::vec2(0.0f, 1.0f) }
 		};
 
-		quad_vertex_buffer = vertex_buffer::create(vertex_data.data(), 4 * sizeof(quad_vertex), vertex_data.size());
+		quad_vertex_buffer = vertex_buffer::create(vertex_data.data(), 8 * sizeof(quad_vertex), vertex_data.size());
 		
 		std::vector<uint32_t> index_data =
 		{
-			0, 1, 2, 2, 3, 0
+			0, 1, 2, 2, 3, 0,
+			4, 5, 6, 6, 7, 4
 		};
 
-		quad_index_buffer = index_buffer::create(index_data.data(), 6 * sizeof(uint32_t));
+		quad_index_buffer = index_buffer::create(index_data.data(), 12 * sizeof(uint32_t));
 
-		vk_shader = std::static_pointer_cast<vulkan_shader>(mesh_pipeline->get_specification()._shader);
 		quad_descriptor_set = vk_shader->create_descriptor_set();
 
-		VkWriteDescriptorSet write_descriptor_set = *vk_shader->get_write_descriptor_set("in_vert_mvp");
-		write_descriptor_set.dstSet = quad_descriptor_set;
-		write_descriptor_set.pBufferInfo = &vk_shader->get_buffer_info(0);
-		vkUpdateDescriptorSets(device, 1, &write_descriptor_set, 0, nullptr);
+		ref_ptr<vulkan_texture2D> texture = std::static_pointer_cast<vulkan_texture2D>(quad_texture);
+
+		std::vector<VkWriteDescriptorSet> descriptor_writes{};
+		descriptor_writes.push_back(*vk_shader->get_write_descriptor_set("in_vert_mvp"));
+		descriptor_writes.push_back(*vk_shader->get_write_descriptor_set("in_frag_tex_sampler"));
+		descriptor_writes[0].dstSet = quad_descriptor_set;
+		descriptor_writes[0].pBufferInfo = &vk_shader->get_buffer_info(0);
+		descriptor_writes[1].dstSet = quad_descriptor_set;
+		descriptor_writes[1].pImageInfo = &texture->get_descriptor();
+		vkUpdateDescriptorSets(device, static_cast<uint32_t>(descriptor_writes.size()), descriptor_writes.data(), 0, nullptr);
 	}
 
 	void vulkan_renderer::draw(time_step a_time_step)
@@ -87,8 +110,9 @@ namespace Uciniti
 
 			VkCommandBufferBeginInfo cmd_buf_info(vk_base_command_buffer_begin_info);
 
-			VkClearValue clear_values;
-			clear_values.color = { {0.1f, 0.1f, 0.1f, 1.0f} };
+			std::array<VkClearValue, 2> clear_values;
+			clear_values[0].color = { 0.1f, 0.1f, 0.1f, 1.0f };
+			clear_values[1].depthStencil = { 1.0f, 0 };
 
 			VkRenderPassBeginInfo render_pass_begin_info(vk_base_render_pass_being_info);
 			render_pass_begin_info.renderPass = swap_chain.get_render_pass();
@@ -96,8 +120,8 @@ namespace Uciniti
 			render_pass_begin_info.renderArea.offset.y = 0;
 			render_pass_begin_info.renderArea.extent.width = swap_chain.get_width();
 			render_pass_begin_info.renderArea.extent.height = swap_chain.get_height();
-			render_pass_begin_info.clearValueCount = 1; // Colour.
-			render_pass_begin_info.pClearValues = &clear_values;
+			render_pass_begin_info.clearValueCount = static_cast<uint32_t>(clear_values.size());
+			render_pass_begin_info.pClearValues = clear_values.data();
 
 			//for (size_t i = 0; i < swap_chain.get_image_count(); i++)
 			{
@@ -144,8 +168,12 @@ namespace Uciniti
 				VK_CHECK_RESULT(vkEndCommandBuffer(draw_cmd_buf));
 			}
 			
+			static auto startTime = std::chrono::high_resolution_clock::now();
+			auto currentTime = std::chrono::high_resolution_clock::now();
+			float time = std::chrono::duration<float, std::chrono::seconds::period>(currentTime - startTime).count();
+
 			// #TODO: In the future this should instead be a for each loop going over each mesh and rendering them.
-			glm::mat4 model = glm::rotate(glm::mat4(1.0f), a_time_step * glm::radians(90.0f), glm::vec3(0.0f, 0.0f, 1.0f));
+			glm::mat4 model = glm::rotate(glm::mat4(1.0f), time * glm::radians(90.0f), glm::vec3(0.0f, 0.0f, 1.0f));
 			glm::mat4 view = glm::lookAt(glm::vec3(2.0f, 2.0f, 2.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 1.0f));
 			glm::mat4 proj = glm::perspective(glm::radians(45.0f), swap_chain.get_width() / (float)swap_chain.get_height(), 0.1f, 10.0f);
 			proj[1][1] *= -1;

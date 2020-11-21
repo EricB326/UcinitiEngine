@@ -67,7 +67,7 @@ namespace Uciniti
 		pipeline_create_info.pViewportState = &pipeline_data.viewport_info;
 		pipeline_create_info.pRasterizationState = &pipeline_data.rasterinzation_info;
 		pipeline_create_info.pMultisampleState = &pipeline_data.multisample_info;
-		pipeline_create_info.pDepthStencilState = nullptr;
+		pipeline_create_info.pDepthStencilState = &pipeline_data.depth_stencil_info;
 		pipeline_create_info.pColorBlendState = &pipeline_data.colour_blend_info;
 		pipeline_create_info.pDynamicState = &pipeline_data.dynamic_state_info;
 		pipeline_create_info.layout = pipeline_layout_handle;			  // Pipeline layout pipeline should use.
@@ -128,11 +128,11 @@ namespace Uciniti
 		pipeline_data.multisample_info.rasterizationSamples = VK_SAMPLE_COUNT_1_BIT;
 
 		// #TODO: Populate depth stencil testing.
-		//pipeline_data.depth_stencil_info.depthTestEnable = VK_TRUE;		   // Enable checking depth to determin fragment write.
-		//pipeline_data.depth_stencil_info.depthWriteEnable = VK_TRUE;		   // Enable writing to depth buffer (to replace old values).
-		//pipeline_data.depth_stencil_info.depthCompareOp = VK_COMPARE_OP_LESS; // Comparison operation that allows an overwrite (is in front).
-		//pipeline_data.depth_stencil_info.depthBoundsTestEnable = VK_FALSE;    // Depth bounds test: does the depth value exist between two bounds.
-		//pipeline_data.depth_stencil_info.stencilTestEnable = VK_FALSE;		   // Should stencil test be enabled.
+		pipeline_data.depth_stencil_info.depthTestEnable = VK_TRUE;		   // Enable checking depth to determin fragment write.
+		pipeline_data.depth_stencil_info.depthWriteEnable = VK_TRUE;		   // Enable writing to depth buffer (to replace old values).
+		pipeline_data.depth_stencil_info.depthCompareOp = VK_COMPARE_OP_LESS; // Comparison operation that allows an overwrite (is in front).
+		pipeline_data.depth_stencil_info.depthBoundsTestEnable = VK_FALSE;    // Depth bounds test: does the depth value exist between two bounds.
+		pipeline_data.depth_stencil_info.stencilTestEnable = VK_FALSE;		   // Should stencil test be enabled.
 
 		// Populate colour blend.
 		// ---- SET IN THE INTI LIST AS THE BASE CREATE INFO ----

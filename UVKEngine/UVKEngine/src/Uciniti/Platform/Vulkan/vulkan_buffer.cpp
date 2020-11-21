@@ -1,6 +1,6 @@
 #include "uvkpch.h"
 #include "vulkan_buffer.h"
-
+#include "Uciniti/Platform/Vulkan/vulkan_context.h"
 namespace Uciniti
 {
 	// =================================================================
@@ -8,7 +8,7 @@ namespace Uciniti
 	// =================================================================
 	void vulkan_buffer_util::create_buffer(vulkan_buffer_type a_buffer_type, VkBuffer& a_buffer, VkDeviceMemory& a_device_mem, VkDeviceSize a_buffer_size)
 	{
-		const vulkan_logical_device* device = vulkan_context::get()->get_logical_device();
+		ref_ptr<vulkan_logical_device> device = vulkan_context::get()->get_logical_device();
 
 		VkBufferCreateInfo buffer_info(vk_base_buffer_create_info);
 		VkMemoryPropertyFlags property_flags;
@@ -54,12 +54,24 @@ namespace Uciniti
 
 	void vulkan_buffer_util::copy_buffer(VkBuffer a_src_buffer, VkBuffer a_dst_buffer, VkDeviceSize a_buffer_size)
 	{
-		const vulkan_logical_device* device = vulkan_context::get()->get_logical_device();
+		ref_ptr<vulkan_logical_device> device = vulkan_context::get()->get_logical_device();
 
-		VkCommandBufferAllocateInfo alloc_info{};
-		alloc_info.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO;
+		VkCommandBuffer command_buffer = begin_one_time_command();
+
+		VkBufferCopy copy_region{};
+		copy_region.size = a_buffer_size;
+		vkCmdCopyBuffer(command_buffer, a_src_buffer, a_dst_buffer, 1, &copy_region);
+
+		end_one_time_command(command_buffer);
+	}
+
+	VkCommandBuffer vulkan_buffer_util::begin_one_time_command()
+	{
+		ref_ptr<vulkan_logical_device> device = vulkan_context::get()->get_logical_device();
+
+		VkCommandBufferAllocateInfo alloc_info(vk_base_command_buffer_alloc_info);
 		alloc_info.level = VK_COMMAND_BUFFER_LEVEL_PRIMARY;
-		alloc_info.commandPool = vulkan_context::get()->get_swap_chain().get_command_pool();
+		alloc_info.commandPool = device->get_command_pool();
 		alloc_info.commandBufferCount = 1;
 
 		VkCommandBuffer command_buffer;
@@ -70,20 +82,24 @@ namespace Uciniti
 
 		vkBeginCommandBuffer(command_buffer, &begin_info);
 
-		VkBufferCopy copy_region{};
-		copy_region.size = a_buffer_size;
-		vkCmdCopyBuffer(command_buffer, a_src_buffer, a_dst_buffer, 1, &copy_region);
+		return command_buffer;
+	}
 
-		vkEndCommandBuffer(command_buffer);
+	void vulkan_buffer_util::end_one_time_command(VkCommandBuffer a_command_buffer)
+	{
+		ref_ptr<vulkan_logical_device> device = vulkan_context::get()->get_logical_device();
 
-		VkSubmitInfo submit_info(vk_base_submit_info);
-		submit_info.commandBufferCount = 1;
-		submit_info.pCommandBuffers = &command_buffer;
+		vkEndCommandBuffer(a_command_buffer);
 
-		vkQueueSubmit(device->get_graphics_queue_handle(), 1, &submit_info, VK_NULL_HANDLE);
+		VkSubmitInfo submitInfo{};
+		submitInfo.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO;
+		submitInfo.commandBufferCount = 1;
+		submitInfo.pCommandBuffers = &a_command_buffer;
+
+		vkQueueSubmit(device->get_graphics_queue_handle(), 1, &submitInfo, VK_NULL_HANDLE);
 		vkQueueWaitIdle(device->get_graphics_queue_handle());
 
-		vkFreeCommandBuffers(device->get_logical_device(), alloc_info.commandPool, 1, &command_buffer);
+		vkFreeCommandBuffers(device->get_logical_device(), device->get_command_pool(), 1, &a_command_buffer);
 	}
 
 	// =================================================================
@@ -92,8 +108,6 @@ namespace Uciniti
 	vulkan_vertex_buffer::vulkan_vertex_buffer(void* a_data, uint32_t a_size, uint32_t a_element_count)
 		: _buffer_size(a_size), _stored_data(a_data), _element_count(a_element_count)
 	{
-		_device = vulkan_context::get()->get_logical_device();
-
 		create_vertex_buffer();
 	}
 
@@ -114,6 +128,8 @@ namespace Uciniti
 
 	void vulkan_vertex_buffer::create_vertex_buffer()
 	{
+		ref_ptr<vulkan_logical_device> _device = vulkan_context::get()->get_logical_device();
+
 		VkBuffer staging_buffer;
 		VkDeviceMemory staging_memory;
 		vulkan_buffer_util::create_buffer(vulkan_buffer_type::STAGING, staging_buffer, staging_memory, _buffer_size);
@@ -132,10 +148,10 @@ namespace Uciniti
 
 	void vulkan_vertex_buffer::shutdown()
 	{
-		VkDevice device = vulkan_context::get()->get_logical_device()->get_logical_device();
+		ref_ptr<vulkan_logical_device> _device = vulkan_context::get()->get_logical_device();
 
-		vkDestroyBuffer(device, _vertex_buffer, nullptr);
-		vkFreeMemory(device, _device_memory, nullptr);
+		vkDestroyBuffer(_device->get_logical_device(), _vertex_buffer, nullptr);
+		vkFreeMemory(_device->get_logical_device(), _device_memory, nullptr);
 	}
 
 	// =================================================================
@@ -150,8 +166,6 @@ namespace Uciniti
 	vulkan_index_buffer::vulkan_index_buffer(void* a_data, uint32_t a_size)
 		: _buffer_size(a_size), _stored_data(a_data)
 	{
-		_device = vulkan_context::get()->get_logical_device();
-
 		create_index_buffer();
 	}
 
@@ -172,12 +186,16 @@ namespace Uciniti
 
 	void vulkan_index_buffer::shutdown()
 	{
+		ref_ptr<vulkan_logical_device> _device = vulkan_context::get()->get_logical_device();
+
 		vkDestroyBuffer(_device->get_logical_device(), _index_buffer, nullptr);
 		vkFreeMemory(_device->get_logical_device(), _device_memory, nullptr);
 	}
 
 	void vulkan_index_buffer::create_index_buffer()
 	{
+		ref_ptr<vulkan_logical_device> _device = vulkan_context::get()->get_logical_device();
+
 		VkBuffer staging_buffer;
 		VkDeviceMemory staging_memory;
 		vulkan_buffer_util::create_buffer(vulkan_buffer_type::STAGING, staging_buffer, staging_memory, _buffer_size);

@@ -2,7 +2,7 @@
 #include "texture.h"
 
 #include "Uciniti/Renderer/renderer_api.h"
-#include "Uciniti/Platform/Vulkan/vulkan_texture.h"
+#include "Uciniti/Platform/Vulkan/vulkan_image.h"
 
 namespace Uciniti
 {

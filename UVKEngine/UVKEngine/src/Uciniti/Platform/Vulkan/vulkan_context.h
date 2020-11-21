@@ -35,7 +35,7 @@ namespace Uciniti
 		virtual void begin_frame() override;
 		virtual void swap_buffers() override;
 
-		vulkan_logical_device* get_logical_device() { return logical_device; }
+		ref_ptr<vulkan_logical_device> get_logical_device() { return logical_device; }
 		vulkan_swap_chain& get_swap_chain() { return swap_chain; }
 
 		static VkInstance get_instance() { return vulkan_instance; }
@@ -50,10 +50,8 @@ namespace Uciniti
 		//vulkan_allocator allocator;
 
 		// Devices.
-		//ref<vulkan_physical_device> physical_device;
-		//ref<vulkan_logical_device> logical_device;
-		vulkan_physical_device* physical_device;
-		vulkan_logical_device* logical_device;
+		ref_ptr<vulkan_physical_device> physical_device;
+		ref_ptr<vulkan_logical_device> logical_device;
 
 		// Swap chain.
 		vulkan_swap_chain swap_chain;

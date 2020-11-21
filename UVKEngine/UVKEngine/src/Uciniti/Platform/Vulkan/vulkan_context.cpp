@@ -115,7 +115,7 @@ namespace Uciniti
 		VkPhysicalDeviceFeatures device_features = {};
 		device_features.samplerAnisotropy = VK_TRUE;
 
-		logical_device = vulkan_logical_device::create(physical_device, device_features);
+		logical_device = ref_ptr<vulkan_logical_device>(new vulkan_logical_device(physical_device, device_features));
 	}
 
 	void vulkan_context::create_allocator()

@@ -57,10 +57,6 @@ namespace Uciniti
 		glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
 
 		window_context = glfwCreateWindow((int)data.width, (int)data.height, data.title.c_str(), nullptr, nullptr);
-		
-		// Create rendering API context.
-		render_context = renderer_context::create(window_context);
-		render_context->init();
 
 		glfwSetWindowUserPointer(window_context, &data);
 		//set_vsync(true);
@@ -146,12 +142,6 @@ namespace Uciniti
 			mouse_moved_event new_event((float)a_x_pos, (float)a_y_pos);
 			data.event_callback(new_event);
 		});
-		
-		// Update window size to current actual size.
-		int width, height;
-		glfwGetWindowSize(window_context, &width, &height);
-		data.width = width;
-		data.height = height;
 	}
 
 	void Windows_window::shutdown()
@@ -171,6 +161,19 @@ namespace Uciniti
 	void Windows_window::swap_buffers()
 	{
 		render_context->swap_buffers();
+	}
+
+	void Windows_window::init_renderer()
+	{
+		// Create rendering API context.
+		render_context = renderer_context::create(window_context);
+		render_context->init();
+
+		// Update window size to current actual size.
+		int width, height;
+		glfwGetWindowSize(window_context, &width, &height);
+		data.width = width;
+		data.height = height;
 	}
 
 	void Windows_window::set_vsync(bool a_enabled)

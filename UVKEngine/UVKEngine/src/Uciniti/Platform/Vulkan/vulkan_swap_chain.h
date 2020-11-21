@@ -3,11 +3,11 @@
 
 #define GLFW_INCLUDE_VULKAN
 #include "GLFW/glfw3.h"
+#include "vulkan_image.h"
 #include "vulkan_devices.h"
 
 namespace Uciniti
 {
-
 	/* @brief Properties needed to ensure the surface and swap chain will work.
 	*/
 	struct swap_chain_details
@@ -30,7 +30,7 @@ namespace Uciniti
 		//vulkan_swap_chain(GLFWwindow* a_window_context, const ref<vulkan_logical_device>& a_logical_device);
 
 		void create_surface(GLFWwindow* a_window_context, const VkInstance& a_vulkan_instance);
-		void create_swap_chain(const vulkan_logical_device* a_logical_device, const uint32_t& a_width, const uint32_t& a_height);
+		void create_swap_chain(ref_ptr<vulkan_logical_device> a_device, const uint32_t& a_width, const uint32_t& a_height);
 
 		void begin_frame();
 		void present();
@@ -65,7 +65,7 @@ namespace Uciniti
 
 	private:
 		VkInstance vulkan_instance;
-		const vulkan_logical_device* logical_device;
+		ref_ptr<vulkan_logical_device> logical_device;
 		GLFWwindow* window_context;
 
 		// Colour format and colour space.
@@ -100,6 +100,8 @@ namespace Uciniti
 		VkSubmitInfo _submit_info;
 		std::vector<VkFence> _wait_fences;
 
+		image_spec _depth_stencil;
+
 		std::vector<VkFramebuffer> framebuffers;
 
 		uint32_t _current_buffer_index = 0;
@@ -113,6 +115,7 @@ namespace Uciniti
 		void create_image_views(uint32_t image_count, VkSurfaceFormatKHR& surface_format);
 		void create_command_buffers();
 		void create_sync_objects();
+		void create_depth_stencil();
 		void create_render_pass();
 		void create_framebuffers();
 

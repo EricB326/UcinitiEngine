@@ -13,20 +13,20 @@ namespace Uciniti
 		switch (a_type)
 		{
 			case spirv_cross::SPIRType::BaseType::Boolean:
-				UVK_CORE_TRACE("\t\tMember Type: Boolean");
+				UVK_CORE_TRACE("\t\tlocated: bool {0}", a_name);
 				_uniform_buffers[a_binding]._member_data._ubo_booleans[a_name];
 				return;
 			case spirv_cross::SPIRType::BaseType::Int:
-				UVK_CORE_TRACE("\t\tMember Type: Int");
+				UVK_CORE_TRACE("\t\tlocated: int {0}", a_name);
 				_uniform_buffers[a_binding]._member_data._ubo_ints[a_name];
 				return;
 			case spirv_cross::SPIRType::BaseType::UInt:
-				UVK_CORE_TRACE("\t\tMember Type: UInt");
+				UVK_CORE_TRACE("\t\tlocated: uint {0}", a_name);
 				_uniform_buffers[a_binding]._member_data._ubo_uints[a_name];
 				return;
 			case spirv_cross::SPIRType::BaseType::Float:
 				if (is_base_type_vec_mat(a_vec_size, a_columns, a_name, a_binding)) return;
-				UVK_CORE_TRACE("\t\tMember Type: Float");
+				UVK_CORE_TRACE("\t\tlocated: float {0}", a_name);
 				_uniform_buffers[a_binding]._member_data._ubo_floats[a_name];
 				return;
 			default:
@@ -43,15 +43,15 @@ namespace Uciniti
 		switch (a_columns)
 		{
 		case 2:
-			UVK_CORE_TRACE("\t\tMember Type: Mat2");
+			UVK_CORE_TRACE("\t\tlocated: mat2 {0}", a_name);
 			_uniform_buffers[a_binding]._member_data._ubo_mat2[a_name];
 			return true;
 		case 3:
-			UVK_CORE_TRACE("\t\tMember Type: Mat3");
+			UVK_CORE_TRACE("\t\tlocated: mat3 {0}", a_name);
 			_uniform_buffers[a_binding]._member_data._ubo_mat3[a_name];
 			return true;
 		case 4:
-			UVK_CORE_TRACE("\t\tMember Type: Mat4");
+			UVK_CORE_TRACE("\t\tlocated: mat4 {0}", a_name);
 			_uniform_buffers[a_binding]._member_data._ubo_mat4[a_name];
 			return true;
 		}
@@ -59,15 +59,15 @@ namespace Uciniti
 		switch (a_vec_size)
 		{
 		case 2:
-			UVK_CORE_TRACE("\t\tMember Type: Vec2");
+			UVK_CORE_TRACE("\t\tlocated: vec2 {0}", a_name);
 			_uniform_buffers[a_binding]._member_data._ubo_vec2[a_name];
 			return true;
 		case 3:
-			UVK_CORE_TRACE("\t\tMember Type: Vec3");
+			UVK_CORE_TRACE("\t\tlocated: vec3 {0}", a_name);
 			_uniform_buffers[a_binding]._member_data._ubo_vec3[a_name];
 			return true;
 		case 4:
-			UVK_CORE_TRACE("\t\tMember Type: Vec4");
+			UVK_CORE_TRACE("\t\tlocated: vec4 {0}", a_name);
 			_uniform_buffers[a_binding]._member_data._ubo_vec4[a_name];
 			return true;
 		}
@@ -76,7 +76,8 @@ namespace Uciniti
 	vulkan_shader::vulkan_shader(const std::string& a_filepath)
 		: filepath(a_filepath)
 	{
-		reload();
+		// Grab the shaders name.
+		retrieve_shader_name();
 	}
 
 	vulkan_shader::~vulkan_shader()
@@ -116,10 +117,11 @@ namespace Uciniti
 		reflect(VK_SHADER_STAGE_VERTEX_BIT, shader_data[0]);
 		reflect(VK_SHADER_STAGE_FRAGMENT_BIT, shader_data[1]);
 
+		// Grab the shaders name.
+		//retrieve_shader_name();
+
 		create_descriptors();
 
-		// Grab the shaders name.
-		retrieve_shader_name();
 	}
 
 	VkShaderStageFlagBits vulkan_shader::shader_type_from_string(const std::string& a_type)
@@ -274,44 +276,85 @@ namespace Uciniti
 	{
 		VkDevice device = vulkan_context::get()->get_logical_device()->get_logical_device();
 
-		UVK_CORE_TRACE("===========================");
-		UVK_CORE_TRACE(" Vulkan Shader Reflection");
-		UVK_CORE_TRACE(" {0}", filepath);
-		UVK_CORE_TRACE("===========================");
+		printf("\n");
+		UVK_CORE_INFO("===========================");
+		UVK_CORE_INFO("Vulkan Shader Reflection");
+		UVK_CORE_INFO("{0}", filepath);
+		UVK_CORE_INFO("Shader stage: {0}", a_shader_stage);
+		UVK_CORE_INFO("===========================");
 
 		// Vertex Shader
 		spirv_cross::Compiler compiler(a_shader_data);
 		spirv_cross::ShaderResources resources = compiler.get_shader_resources();
 
 		UVK_CORE_TRACE("Uniform Buffers:");
-		for (const auto& resource : resources.uniform_buffers)
+		if (resources.uniform_buffers.size() <= 0)
+			UVK_CORE_TRACE("\tNo uniform buffers found.");
+		else
 		{
-			const auto& name = resource.name;
-			auto& buffer_type = compiler.get_type(resource.base_type_id);
-			int member_count = buffer_type.member_types.size();
-			uint32_t binding_point = compiler.get_decoration(resource.id, spv::DecorationBinding);
-			uint32_t size = compiler.get_declared_struct_size(buffer_type);
-
-			UVK_CORE_ASSERT(_uniform_buffers.find(binding_point) == _uniform_buffers.end(), "");
-			uniform_buffer& buffer = _uniform_buffers[binding_point];
-			buffer._binding_point = binding_point;
-			buffer._size = size;
-			buffer._name = name;
-			buffer._shader_stage = a_shader_stage;
-
-			// _uniform_buffer[0]._data[in_vert_mvp]
-
-			UVK_CORE_TRACE("\tName: {0}", name);
-			UVK_CORE_TRACE("\tMember Count: {0}", member_count);
-			for (size_t i = 0; i < member_count; i++)
+			for (const auto& resource : resources.uniform_buffers)
 			{
-				std::string member_name = compiler.get_member_name(resource.base_type_id, i);
-				auto& member_type = compiler.get_type(compiler.get_type(resource.type_id).member_types[i]);
-				reflected_member_to_cpp(member_type.basetype, member_type.vecsize, member_type.columns, member_name, binding_point);
+				const auto& name = resource.name;
+				auto& buffer_type = compiler.get_type(resource.base_type_id);
+				int member_count = buffer_type.member_types.size();
+				uint32_t binding_point = compiler.get_decoration(resource.id, spv::DecorationBinding);
+				uint32_t size = compiler.get_declared_struct_size(buffer_type);
+
+				UVK_CORE_ASSERT(_uniform_buffers.find(binding_point) == _uniform_buffers.end(), "");
+				uniform_buffer& buffer = _uniform_buffers[binding_point];
+				buffer._binding_point = binding_point;
+				buffer._size = size;
+				buffer._name = name;
+				buffer._shader_stage = a_shader_stage;
+
+				// _uniform_buffer[0]._data[in_vert_mvp]
+
+				UVK_CORE_TRACE("\tName: {0}", name);
+				UVK_CORE_TRACE("\tMember Count: {0}", member_count);
+				for (size_t i = 0; i < member_count; i++)
+				{
+					std::string member_name = compiler.get_member_name(resource.base_type_id, i);
+					auto& member_type = compiler.get_type(compiler.get_type(resource.type_id).member_types[i]);
+					reflected_member_to_cpp(member_type.basetype, member_type.vecsize, member_type.columns, member_name, binding_point);
+				}
+				UVK_CORE_TRACE("\tBinding Point: {0}", binding_point);
+				UVK_CORE_TRACE("\tSize: {0}", size);
+				UVK_CORE_TRACE("-------------------");
 			}
-			UVK_CORE_TRACE("\tBinding Point: {0}", binding_point);
-			UVK_CORE_TRACE("\tSize: {0}", size);
-			UVK_CORE_TRACE("-------------------");
+		}
+
+		UVK_CORE_TRACE("Sampled images:");
+		if (resources.sampled_images.size() <= 0)
+			UVK_CORE_TRACE("\tNo sampled images found.");
+		else
+		{
+			for (const auto& resource : resources.sampled_images)
+			{
+				const auto& name = resource.name;
+				auto& buffer_type = compiler.get_type(resource.base_type_id);
+				//int member_count = buffer_type.member_types.size();
+				uint32_t binding_point = compiler.get_decoration(resource.id, spv::DecorationBinding);
+				uint32_t dimension = buffer_type.image.dim;
+
+				image_sampler& sampler = _image_samplers[binding_point];
+				sampler._binding_point = binding_point;
+				sampler._name = name;
+				sampler._shader_stage = a_shader_stage;
+
+				// _uniform_buffer[0]._data[in_vert_mvp]
+
+				UVK_CORE_TRACE("\tName: {0}", name);
+				//UVK_CORE_TRACE("\tMember Count: {0}", member_count);
+				//for (size_t i = 0; i < member_count; i++)
+				//{
+				//	std::string member_name = compiler.get_member_name(resource.base_type_id, i);
+				//	auto& member_type = compiler.get_type(compiler.get_type(resource.type_id).member_types[i]);
+				//	reflected_member_to_cpp(member_type.basetype, member_type.vecsize, member_type.columns, member_name, binding_point);
+				//}
+				UVK_CORE_TRACE("\tBinding Point: {0}", binding_point);
+				//UVK_CORE_TRACE("\tSize: {0}", size);
+				UVK_CORE_TRACE("-------------------");
+			}
 		}
 	}
 
@@ -327,6 +370,13 @@ namespace Uciniti
 			type_count.descriptorCount = _uniform_buffers.size();
 		}
 
+		if (_image_samplers.size())
+		{
+			VkDescriptorPoolSize& typeCount = type_counts.emplace_back();
+			typeCount.type = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
+			typeCount.descriptorCount = _image_samplers.size();
+		}
+
 		VkDescriptorPoolCreateInfo descriptor_pool(vk_base_descriptor_pool_create_info);
 		descriptor_pool.poolSizeCount = type_counts.size();
 		descriptor_pool.pPoolSizes = type_counts.data();
@@ -337,12 +387,11 @@ namespace Uciniti
 		std::vector<VkDescriptorSetLayoutBinding> layout_bindings;
 		for (auto& [_binding, _uniform_buffer] : _uniform_buffers)
 		{
-			VkDescriptorSetLayoutBinding layout_binding;
+			VkDescriptorSetLayoutBinding& layout_binding = layout_bindings.emplace_back();
 			layout_binding.descriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
 			layout_binding.descriptorCount = 1;
 			layout_binding.stageFlags = _uniform_buffer._shader_stage;
 			layout_binding.binding = _binding;
-			layout_bindings.push_back(layout_binding);
 
 			VkWriteDescriptorSet& set = _write_descriptor_sets[_uniform_buffer._name];
 			set = {};
@@ -354,8 +403,24 @@ namespace Uciniti
 			allocate_uniform_buffer(_uniform_buffer);
 		}
 
+		for (auto& [_binding, _image_sampler] : _image_samplers)
+		{
+			VkDescriptorSetLayoutBinding& layout_binding = layout_bindings.emplace_back();
+			layout_binding.descriptorType = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
+			layout_binding.descriptorCount = 1;
+			layout_binding.stageFlags = _image_sampler._shader_stage;
+			layout_binding.binding = _binding;
+
+			VkWriteDescriptorSet& set = _write_descriptor_sets[_image_sampler._name];
+			set = {};
+			set.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
+			set.descriptorType = layout_binding.descriptorType;
+			set.descriptorCount = 1;
+			set.dstBinding = layout_binding.binding;
+		}
+
 		VkDescriptorSetLayoutCreateInfo descriptor_layout(vk_base_descriptor_set_layout_create_info);
-		descriptor_layout.bindingCount = layout_bindings.size();
+		descriptor_layout.bindingCount = static_cast<uint32_t>(layout_bindings.size());
 		descriptor_layout.pBindings = layout_bindings.data();
 
 		VK_CHECK_RESULT(vkCreateDescriptorSetLayout(device, &descriptor_layout, nullptr, &_descriptor_set_layout));
@@ -425,6 +490,11 @@ namespace Uciniti
 			_uniform_buffers[a_binding]._member_data._ubo_mat4.at(a_member_name) = a_data;
 	}
 
+	void vulkan_shader::set_sampler2d(const uint32_t a_binding, ref_ptr<vulkan_texture2D> a_texture)
+	{
+		_image_samplers[a_binding]._sampler_data._tex2d = a_texture;
+	}
+
 	void vulkan_shader::allocate_uniform_buffer(uniform_buffer& a_dst)
 	{
 		VkDevice device = vulkan_context::get()->get_logical_device()->get_logical_device();
@@ -436,6 +506,11 @@ namespace Uciniti
 		passed_uniform_buffer._descriptor.buffer = passed_uniform_buffer._buffer;
 		passed_uniform_buffer._descriptor.offset = 0;
 		passed_uniform_buffer._descriptor.range = passed_uniform_buffer._size;
+	}
+
+	void vulkan_shader::allocate_image_sampler(image_sampler& a_image_dst)
+	{
+
 	}
 
 	void vulkan_shader::retrieve_shader_name()

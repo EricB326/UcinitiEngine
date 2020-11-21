@@ -37,6 +37,8 @@ namespace Uciniti
 		// Store the supported physical device extensions.
 		find_supported_extensions();
 
+		find_depth_format();
+
 		UVK_CORE_INFO("Vulkan physical device found successfully!");
 	}
 
@@ -45,9 +47,9 @@ namespace Uciniti
 
 	}
 
-	vulkan_physical_device* vulkan_physical_device::select(const VkSurfaceKHR& a_surface)
+	ref_ptr<vulkan_physical_device> vulkan_physical_device::select(const VkSurfaceKHR& a_surface)
 	{
-		return new vulkan_physical_device(a_surface);
+		return ref_ptr<vulkan_physical_device>(new vulkan_physical_device(a_surface));
 	}
 
 	bool vulkan_physical_device::is_extension_supported(const std::string& a_extension_name)
@@ -233,11 +235,38 @@ namespace Uciniti
 		}
 	}
 
+	void vulkan_physical_device::find_depth_format()
+	{
+		// Since all depth formats may be optional, we need to find a suitable depth format to use,
+		// start with the highest precision packed format.
+		std::array<VkFormat, 5> depth_formats = {
+			VK_FORMAT_D32_SFLOAT_S8_UINT,
+			VK_FORMAT_D32_SFLOAT,
+			VK_FORMAT_D24_UNORM_S8_UINT,
+			VK_FORMAT_D16_UNORM_S8_UINT,
+			VK_FORMAT_D16_UNORM
+		};
+
+		for (VkFormat this_format : depth_formats)
+		{
+			VkFormatProperties format_props;
+			vkGetPhysicalDeviceFormatProperties(physical_device, this_format, &format_props);
+			// Format must support depth stencil attachment for optimal tiling
+			if (format_props.optimalTilingFeatures & VK_FORMAT_FEATURE_DEPTH_STENCIL_ATTACHMENT_BIT)
+			{
+				_depth_format = this_format;
+				return;
+			}
+		}
+
+		_depth_format = VK_FORMAT_UNDEFINED;
+	}
+
 	// =================================================================
 	// Vulkan Logical Device
 	// =================================================================
 
-	vulkan_logical_device::vulkan_logical_device(vulkan_physical_device* a_physical_device, const VkPhysicalDeviceFeatures& a_physical_device_features)
+	vulkan_logical_device::vulkan_logical_device(const ref_ptr<vulkan_physical_device> a_physical_device, const VkPhysicalDeviceFeatures& a_physical_device_features)
 		: logical_device(VK_NULL_HANDLE), physical_device(a_physical_device), enable_debug_markers(false), enabled_features(a_physical_device_features)
 	{
 		printf("\n");
@@ -282,11 +311,6 @@ namespace Uciniti
 		create_command_pool();
 
 		UVK_CORE_INFO("Vulkan logical device created successfully!");
-	}
-
-	vulkan_logical_device* vulkan_logical_device::create(vulkan_physical_device* a_physical_device, const VkPhysicalDeviceFeatures& a_physical_device_features)
-	{
-		return new vulkan_logical_device(a_physical_device, a_physical_device_features);
 	}
 
 	std::vector<VkDeviceQueueCreateInfo> vulkan_logical_device::create_queue_infos()
@@ -372,8 +396,8 @@ namespace Uciniti
 	void vulkan_logical_device::create_command_pool()
 	{
 		VkCommandPoolCreateInfo command_pool_info(vk_base_command_pool_create_info);
-		command_pool_info.queueFamilyIndex = physical_device->get_queue_family_indices().graphics_family.has_value();
-		command_pool_info.flags = VK_COMMAND_POOL_CREATE_RESET_COMMAND_BUFFER_BIT;
+		command_pool_info.queueFamilyIndex = physical_device->get_queue_family_indices().graphics_family.value();
+		command_pool_info.flags = VK_COMMAND_POOL_CREATE_TRANSIENT_BIT | VK_COMMAND_POOL_CREATE_RESET_COMMAND_BUFFER_BIT;
 		VK_CHECK_RESULT(vkCreateCommandPool(logical_device, &command_pool_info, nullptr, &command_pool));
 		UVK_CORE_TRACE("Command pool created.");
 	}

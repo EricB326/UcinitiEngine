@@ -40,7 +40,7 @@ namespace Uciniti
 		void push_layer(layer* a_layer);
 		void push_overlay(layer* a_overlay);
 
-		inline static application& get() { return *instance; }
+		static inline application& get() { return *instance; }
 		inline window& get_window() { return *window_context; }
 
 	private:

@@ -3,8 +3,6 @@
 
 #include "Uciniti/Platform/Vulkan/vulkan_base.h"
 #include "Uciniti/Renderer/buffer.h"
-#include "Uciniti/Platform/Vulkan/vulkan_context.h"
-
 
 namespace Uciniti
 {
@@ -18,6 +16,8 @@ namespace Uciniti
 	public:
 		static void create_buffer(vulkan_buffer_type a_buffer_type, VkBuffer& a_buffer, VkDeviceMemory& a_device_mem, VkDeviceSize a_buffer_size);
 		static void copy_buffer(VkBuffer a_src_buffer, VkBuffer a_dst_buffer, VkDeviceSize a_buffer_size);
+		static VkCommandBuffer begin_one_time_command();
+		static void end_one_time_command(VkCommandBuffer a_command_buffer);
 	};
 
 	class vulkan_vertex_buffer : public vertex_buffer
@@ -40,8 +40,6 @@ namespace Uciniti
 		void shutdown();
 
 	private:
-		const vulkan_logical_device* _device;
-
 		uint32_t _buffer_size = 0;
 		uint32_t _element_count = 0;
 		void* _stored_data;
@@ -69,8 +67,6 @@ namespace Uciniti
 		void shutdown();
 
 	private:
-		const vulkan_logical_device* _device;
-
 		uint32_t _buffer_size = 0;
 		void* _stored_data;
 

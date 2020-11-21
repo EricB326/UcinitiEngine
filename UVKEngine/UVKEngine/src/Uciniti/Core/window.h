@@ -45,6 +45,7 @@ namespace Uciniti
 
 		// Window attributes
 		virtual void set_event_callback(const event_callback_fn& a_callback) = 0;
+		virtual void init_renderer() = 0;
 		virtual void set_vsync(bool a_enabled) = 0;
 		virtual bool is_vsync() const = 0;
 

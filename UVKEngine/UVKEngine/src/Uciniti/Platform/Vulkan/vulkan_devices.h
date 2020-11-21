@@ -33,13 +33,14 @@ namespace Uciniti
 		vulkan_physical_device(const VkSurfaceKHR& a_surface);
 		~vulkan_physical_device();
 
-		static vulkan_physical_device* select(const VkSurfaceKHR& a_surface);
+		static ref_ptr<vulkan_physical_device> select(const VkSurfaceKHR& a_surface);
 
 		bool is_extension_supported(const std::string& a_extension_name);
 
 		const VkPhysicalDevice& get_physical_device() const { return physical_device; }
 		const queue_family_indices& get_queue_family_indices() const { return queue_families; }
 		const uint32_t get_memory_type_index(uint32_t a_type_bits, VkMemoryPropertyFlags a_properties) const;
+		const VkFormat get_depth_format() const { return _depth_format; }
 
 	private:
 		VkSurfaceKHR surface;
@@ -51,30 +52,32 @@ namespace Uciniti
 
 		queue_family_indices queue_families;
 
+		VkFormat _depth_format;
+
 		std::unordered_set<std::string> supported_extensions;
 
 		VkPhysicalDevice select_physical_device(const std::vector<VkPhysicalDevice>& a_physical_devices);
 		queue_family_indices find_queue_families(const int& a_queue_flags);
 		void find_supported_extensions();
+		void find_depth_format();
 	};
 
 	class vulkan_logical_device
 	{
 	public:
-		vulkan_logical_device(vulkan_physical_device* a_physical_device, const VkPhysicalDeviceFeatures& a_physical_device_features);
-
-		static vulkan_logical_device* create(vulkan_physical_device* a_physical_device, const VkPhysicalDeviceFeatures& a_physical_device_features);
+		vulkan_logical_device(const ref_ptr<vulkan_physical_device> a_physical_device, const VkPhysicalDeviceFeatures& a_physical_device_features);
 
 		const VkDevice& get_logical_device() const { return logical_device; }
-		const vulkan_physical_device* get_physical_device_ref() const { return physical_device; }
+		const ref_ptr<vulkan_physical_device> get_physical_device_ref() const { return physical_device; }
 
 		const VkQueue& get_graphics_queue_handle() const { return graphics_queue; }
+		const VkCommandPool& get_command_pool() const { return command_pool; }
 
 		void shutdown();
 
 	private:
 		VkDevice logical_device;
-		vulkan_physical_device* physical_device;
+		ref_ptr<vulkan_physical_device> physical_device;
 		VkCommandPool command_pool;
 
 		VkPhysicalDeviceFeatures enabled_features;

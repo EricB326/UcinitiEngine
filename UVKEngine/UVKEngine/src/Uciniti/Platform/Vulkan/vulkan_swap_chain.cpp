@@ -5,6 +5,8 @@
 #undef max 
 #include <cstdint>
 
+
+
 namespace Uciniti
 {
 	void vulkan_swap_chain::create_surface(GLFWwindow* a_window_context, const VkInstance& a_vulkan_instance)
@@ -27,11 +29,11 @@ namespace Uciniti
 		UVK_CORE_INFO("Vulkan surface created successfully!");
 	}
 
-	void vulkan_swap_chain::create_swap_chain(const vulkan_logical_device* a_logical_device, const uint32_t& a_width, const uint32_t& a_height)
+	void vulkan_swap_chain::create_swap_chain(ref_ptr<vulkan_logical_device> a_device, const uint32_t& a_width, const uint32_t& a_height)
 	{
 		printf("\n");
 		UVK_CORE_INFO("Vulkan swap chain initialisation...");
-		logical_device = a_logical_device;
+		logical_device = a_device;
 
 		VkSwapchainKHR old_swap_chain = swap_chain;
 
@@ -153,6 +155,8 @@ namespace Uciniti
 
 		create_sync_objects();
 
+		create_depth_stencil();
+
 		create_render_pass();
 
 		create_framebuffers();
@@ -160,16 +164,16 @@ namespace Uciniti
 
 	void vulkan_swap_chain::begin_frame()
 	{
-		// User a fence to wait until the command buffer has finished execution before it can be used again.
-		VK_CHECK_RESULT(vkWaitForFences(logical_device->get_logical_device(), 1, &_wait_fences[_current_buffer_index], VK_TRUE, UINT64_MAX));
-		VK_CHECK_RESULT(vkResetFences(logical_device->get_logical_device(), 1, &_wait_fences[_current_buffer_index]));
-
 		acquire_next_image(_semaphores.present_complete, &_current_buffer_index);
 	}
 
 	void vulkan_swap_chain::present()
 	{
 		const uint64_t DEFAULT_FENCE_TIMEOUT = 100000000000;
+
+		// User a fence to wait until the command buffer has finished execution before it can be used again.
+		VK_CHECK_RESULT(vkWaitForFences(logical_device->get_logical_device(), 1, &_wait_fences[_current_buffer_index], VK_TRUE, UINT64_MAX));
+		VK_CHECK_RESULT(vkResetFences(logical_device->get_logical_device(), 1, &_wait_fences[_current_buffer_index]));
 
 		VkPipelineStageFlags wait_stages = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;
 		VkSubmitInfo submit_info = {};
@@ -378,14 +382,9 @@ namespace Uciniti
 
 	void vulkan_swap_chain::create_command_buffers()
 	{
-		VkCommandPoolCreateInfo cmd_pool_info(vk_base_command_pool_create_info);
-		cmd_pool_info.queueFamilyIndex = logical_device->get_physical_device_ref()->get_queue_family_indices().graphics_family.value();
-		cmd_pool_info.flags = VK_COMMAND_POOL_CREATE_RESET_COMMAND_BUFFER_BIT;
-		VK_CHECK_RESULT(vkCreateCommandPool(logical_device->get_logical_device(), &cmd_pool_info, nullptr, &command_pool));
-
 		draw_command_buffer.resize(image_count);
 		VkCommandBufferAllocateInfo alloc_info(vk_base_command_buffer_alloc_info);
-		alloc_info.commandPool = command_pool;
+		alloc_info.commandPool = logical_device->get_command_pool();
 		alloc_info.level = VK_COMMAND_BUFFER_LEVEL_PRIMARY;
 		alloc_info.commandBufferCount = static_cast<uint32_t>(draw_command_buffer.size());
 		VK_CHECK_RESULT(vkAllocateCommandBuffers(logical_device->get_logical_device(), &alloc_info, draw_command_buffer.data()));
@@ -419,32 +418,65 @@ namespace Uciniti
 		}
 	}
 
+	void vulkan_swap_chain::create_depth_stencil()
+	{
+		_depth_stencil._format = logical_device->get_physical_device_ref()->get_depth_format();
+		_depth_stencil._tiling = VK_IMAGE_TILING_OPTIMAL;
+		_depth_stencil._aspect_flags = VK_IMAGE_ASPECT_DEPTH_BIT;
+		_depth_stencil._width = width;
+		_depth_stencil._height = height;
+	
+		vulkan_image_util::create_image(_depth_stencil, VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT);
+		vulkan_image_util::create_image_view(_depth_stencil);
+	}
+
 	void vulkan_swap_chain::create_render_pass()
 	{
-		VkAttachmentDescription colour_attachment(vk_base_attachment_description);
-		colour_attachment.format = surface_format.format;
-		colour_attachment.finalLayout = VK_IMAGE_LAYOUT_PRESENT_SRC_KHR;
+		std::array<VkAttachmentDescription, 2> attachments{};
+		// Colour attachment.
+		attachments[0].format = surface_format.format;
+		attachments[0].samples = VK_SAMPLE_COUNT_1_BIT;
+		attachments[0].loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
+		attachments[0].storeOp = VK_ATTACHMENT_STORE_OP_STORE;
+		attachments[0].stencilLoadOp = VK_ATTACHMENT_LOAD_OP_DONT_CARE;
+		attachments[0].stencilStoreOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
+		attachments[0].initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
+		attachments[0].finalLayout = VK_IMAGE_LAYOUT_PRESENT_SRC_KHR;
+		// Depth attachment.
+		attachments[1].format = _depth_stencil._format;
+		attachments[1].samples = VK_SAMPLE_COUNT_1_BIT;
+		attachments[1].loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
+		attachments[1].storeOp = VK_ATTACHMENT_STORE_OP_STORE;
+		attachments[1].stencilLoadOp = VK_ATTACHMENT_LOAD_OP_DONT_CARE;
+		attachments[1].stencilStoreOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
+		attachments[1].initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
+		attachments[1].finalLayout = VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL;
 
-		VkAttachmentReference colour_reference = {};
-		colour_reference.attachment = 0;
-		colour_reference.layout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
+		VkAttachmentReference colour_ref{};
+		colour_ref.attachment = 0;
+		colour_ref.layout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
+
+		VkAttachmentReference depth_ref{};
+		depth_ref.attachment = 1;
+		depth_ref.layout = VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL;
 
 		VkSubpassDescription subpass_description(vk_base_subpass_description);
 		subpass_description.pipelineBindPoint = VK_PIPELINE_BIND_POINT_GRAPHICS;
 		subpass_description.colorAttachmentCount = 1;
-		subpass_description.pColorAttachments = &colour_reference;
+		subpass_description.pColorAttachments = &colour_ref;
+		subpass_description.pDepthStencilAttachment = &depth_ref;
 
 		VkSubpassDependency dependency = {};
 		dependency.srcSubpass = VK_SUBPASS_EXTERNAL;
-		dependency.srcStageMask = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;
+		dependency.srcStageMask = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT | VK_PIPELINE_STAGE_EARLY_FRAGMENT_TESTS_BIT;
 		dependency.srcAccessMask = 0;
 		dependency.dstSubpass = 0;
-		dependency.dstStageMask = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;
-		dependency.dstAccessMask = VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT;
+		dependency.dstStageMask = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT | VK_PIPELINE_STAGE_EARLY_FRAGMENT_TESTS_BIT;
+		dependency.dstAccessMask = VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT | VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_WRITE_BIT;
 
 		VkRenderPassCreateInfo render_pass_info(vk_base_render_pass_create_info);
-		render_pass_info.attachmentCount = 1;
-		render_pass_info.pAttachments = &colour_attachment;
+		render_pass_info.attachmentCount = static_cast<uint32_t>(attachments.size());
+		render_pass_info.pAttachments = attachments.data();
 		render_pass_info.subpassCount = 1;
 		render_pass_info.pSubpasses = &subpass_description;
 		render_pass_info.dependencyCount = 1;
@@ -455,20 +487,25 @@ namespace Uciniti
 
 	void vulkan_swap_chain::create_framebuffers()
 	{
-		framebuffers.resize(swap_chain_buffer.size());
+		std::array<VkImageView, 2> attachments;
 
+		// Depth stencil remains the same across all frame buffers.
+		attachments[1] = _depth_stencil._image_view;
+
+		VkFramebufferCreateInfo framebuffer_info(vk_base_framebuffer_create_info);
+		framebuffer_info.renderPass = _render_pass;
+		framebuffer_info.width = width;
+		framebuffer_info.height = height;
+		framebuffer_info.layers = 1;
+
+		framebuffers.resize(swap_chain_buffer.size());
 		// Create framebuffers for every swap chain image.
 		for (size_t i = 0; i < framebuffers.size(); i++)
 		{
-			VkImageView attachments[] = { swap_chain_buffer[i].image_view };
+			attachments[0] = swap_chain_buffer[i].image_view;
 
-			VkFramebufferCreateInfo framebuffer_info(vk_base_framebuffer_create_info);
-			framebuffer_info.renderPass = _render_pass;
-			framebuffer_info.attachmentCount = 1;
-			framebuffer_info.pAttachments = attachments;
-			framebuffer_info.width = width;
-			framebuffer_info.height = height;
-			framebuffer_info.layers = 1;
+			framebuffer_info.attachmentCount = static_cast<uint32_t>(attachments.size());
+			framebuffer_info.pAttachments = attachments.data();
 
 			VK_CHECK_RESULT(vkCreateFramebuffer(logical_device->get_logical_device(), &framebuffer_info, nullptr, &framebuffers[i]));
 		}
@@ -476,6 +513,10 @@ namespace Uciniti
 
 	void vulkan_swap_chain::destroy_old_swap_chain()
 	{
+		vkDestroyImageView(logical_device->get_logical_device(), _depth_stencil._image_view, nullptr);
+		vkDestroyImage(logical_device->get_logical_device(), _depth_stencil._image, nullptr);
+		vkFreeMemory(logical_device->get_logical_device(), _depth_stencil._memory, nullptr);
+
 		vkDestroySemaphore(logical_device->get_logical_device(), _semaphores.render_complete, nullptr);
 		vkDestroySemaphore(logical_device->get_logical_device(), _semaphores.present_complete, nullptr);
 
@@ -484,8 +525,8 @@ namespace Uciniti
 			vkDestroyFence(logical_device->get_logical_device(), _wait_fences[i], nullptr);
 		}
 
-		vkFreeCommandBuffers(logical_device->get_logical_device(), command_pool, static_cast<uint32_t>(draw_command_buffer.size()), draw_command_buffer.data());
-		vkDestroyCommandPool(logical_device->get_logical_device(), command_pool, nullptr);
+		vkFreeCommandBuffers(logical_device->get_logical_device(), logical_device->get_command_pool(), static_cast<uint32_t>(draw_command_buffer.size()), draw_command_buffer.data());
+		//vkDestroyCommandPool(logical_device->get_logical_device(), logical_device->get_command_pool(), nullptr);
 
 		for (VkFramebuffer& this_framebuffer : framebuffers)
 		{
