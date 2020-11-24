@@ -27,7 +27,7 @@ The big picture for Uciniti is to create a powerful 3D engine that I am proud to
 - Bloom
 - And much more!
 
-Along with these graphical theories I am to make the engine platform agnostic, meaning the implementation of multiple rendering APIs on top of the already implemented Vulkan. This includes:
+Along with these graphical theories I aim to make the engine platform agnostic, meaning the implementation of multiple rendering APIs on top of the already implemented Vulkan. This includes:
 
 - Metal
 - OpenGL/DirectX 11 for the older GPUs
@@ -35,8 +35,8 @@ Along with these graphical theories I am to make the engine platform agnostic, m
 
 Although the engines primary rendering API is Vulkan, I will work to adapt and implement the always-evolving technologies.
 
-## Features
-Rendering a triangle in Vulkan :)
+## Current Features
+- Loading and rendering meshes.
 
 ## Libraries
 These libraries are currently implemented.
