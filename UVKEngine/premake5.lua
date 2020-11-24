@@ -19,6 +19,7 @@ IncludeDir["shaderc"] = "UVKEngine/vendor/shaderc/include"
 IncludeDir["SPIRV_Cross"] = "UVKEngine/vendor/SPIRV-Cross"
 IncludeDir["Vulkan"] = "UVKEngine/vendor/Vulkan/include"
 IncludeDir["stb_image"] = "UVKEngine/vendor/stb_image"
+IncludeDir["assimp"] = "UVKEngine/vendor/assimp/include"
 
 LibraryDir = {}
 LibraryDir["shaderc"] = "vendor/shaderc/lib/shaderc.lib"
@@ -76,7 +77,8 @@ project "UVKEngine"
 		"%{IncludeDir.glm}",
 		"%{IncludeDir.shaderc}",
 		"%{IncludeDir.SPIRV_Cross}",
-		"%{IncludeDir.stb_image}"
+		"%{IncludeDir.stb_image}",
+		"%{IncludeDir.assimp}"
 	}
 
 	links
@@ -165,12 +167,42 @@ project "Sandbox"
 		runtime "Debug"
 		symbols "on"
 
+		links
+		{
+			"UVKEngine/vendor/assimp/bin/Debug/assimp-vc141-mtd.lib"
+		}
+
+		postbuildcommands 
+		{
+			'{COPY} "../UVKEngine/vendor/assimp/bin/Debug/assimp-vc141-mtd.dll" "%{cfg.targetdir}"'
+		}
+
 	filter "configurations:Release"
 		defines "UVK_RELEASE"
 		runtime "Release"
 		optimize "on"
 
+		links
+		{
+			"UVKEngine/vendor/assimp/bin/Release/assimp-vc141-mt.lib"
+		}
+
+		postbuildcommands 
+		{
+			'{COPY} "../UVKEngine/vendor/assimp/bin/Release/assimp-vc141-mt.dll" "%{cfg.targetdir}"'
+		}
+
 	filter "configurations:Dist"
 		defines "UVK_DIST"
 		runtime "Release"
 		optimize "on"
+
+		links
+		{
+			"UVKEngine/vendor/assimp/bin/Release/assimp-vc141-mt.lib"
+		}
+
+		postbuildcommands 
+		{
+			'{COPY} "../UVKEngine/vendor/assimp/bin/Release/assimp-vc141-mt.dll" "%{cfg.targetdir}"'
+		}

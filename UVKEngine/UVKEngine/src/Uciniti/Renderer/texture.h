@@ -22,6 +22,8 @@ namespace Uciniti
 	{
 	public:
 		static ref_ptr<texture2D> create(const std::string& a_path);
+
+		virtual bool has_loaded() const = 0;
 	};
 }
 

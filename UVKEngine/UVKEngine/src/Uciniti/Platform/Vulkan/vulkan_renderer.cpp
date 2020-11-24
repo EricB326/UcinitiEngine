@@ -10,6 +10,8 @@
 #include "Uciniti/Platform/Vulkan/vulkan_render_pass.h"
 #include "Uciniti/Platform/Vulkan/vulkan_buffer.h"
 #include "Uciniti/Platform/Vulkan/vulkan_image.h"
+#include "Uciniti/Platform/Vulkan/vulkan_mesh.h"
+
 
 #include <chrono>
 
@@ -22,8 +24,34 @@ namespace Uciniti
 	static vertex_buffer* quad_vertex_buffer;
 	static index_buffer* quad_index_buffer;
 	static VkDescriptorSet quad_descriptor_set;
+	static std::vector<ref_ptr<mesh>> meshes;
 	static ref_ptr<vulkan_shader> vk_shader;
-	static ref_ptr<texture2D> quad_texture;
+
+	static void render_mesh(ref_ptr<mesh> a_mesh, VkCommandBuffer a_cmd_buffer)
+	{
+		vulkan_pipeline* draw_pipeline = (vulkan_pipeline*)mesh_pipeline;
+
+		ref_ptr<vulkan_vertex_buffer> vk_vert_buffer = std::static_pointer_cast<vulkan_vertex_buffer>(a_mesh->get_vertex_buffer());
+		VkBuffer vert_buffer = vk_vert_buffer->get_vertex_buffer();
+		VkDeviceSize offsets[1] = { 0 };
+		vkCmdBindVertexBuffers(a_cmd_buffer, 0, 1, &vert_buffer, offsets);
+
+		ref_ptr<vulkan_index_buffer> vk_index_buffer = std::static_pointer_cast<vulkan_index_buffer>(a_mesh->get_index_buffer());
+		VkBuffer index_buffer = vk_index_buffer->get_index_buffer();
+		vkCmdBindIndexBuffer(a_cmd_buffer, index_buffer, 0, VK_INDEX_TYPE_UINT32);
+
+		std::vector<submesh> submeshes = a_mesh->get_submeshes();
+		for (submesh& this_submesh : submeshes)
+		{
+			vkCmdBindPipeline(a_cmd_buffer, VK_PIPELINE_BIND_POINT_GRAPHICS, draw_pipeline->get_graphics_pipeline());
+
+			// Bind descriptor sets 
+			VkDescriptorSet* descriptor_set = std::static_pointer_cast<vulkan_mesh>(a_mesh)->get_descriptor_set();
+			vkCmdBindDescriptorSets(a_cmd_buffer, VK_PIPELINE_BIND_POINT_GRAPHICS, draw_pipeline->get_pipeline_layout(), 0, 1, descriptor_set, 0, nullptr);
+
+			vkCmdDrawIndexed(a_cmd_buffer, this_submesh._index_count, 1, this_submesh._base_index, this_submesh._base_vertex, 0);
+		}
+	}
 
 	void vulkan_renderer::init()
 	{
@@ -31,72 +59,89 @@ namespace Uciniti
 
 		// #TODO: Framebuffer and render passes aren't setup here properly yet. Currently just in the swap chain.
 		// Mesh pipeline setup.	
-		framebuffer_spec spec;
+		//framebuffer_spec spec;
 		//s_framebuffer = framebuffer::create(spec);
 
-		pipeline_spec pipeline_specification;
-		pipeline_specification._shader = renderer::get_shader_library()->get("vulkan_triangle");
-
-		vk_shader = std::static_pointer_cast<vulkan_shader>(pipeline_specification._shader);
-		quad_texture = texture2D::create("assets/textures/texture.jpg");
-		vk_shader->set_sampler2d(1, std::static_pointer_cast<vulkan_texture2D>(quad_texture));
-		vk_shader->reload();
-
-		pipeline_specification._layout =
+		pipeline_spec spec;
+		spec._shader = renderer::get_shader_library()->get("static_shader");
+		spec._shader->reload();
+		spec._layout =
 		{
 			{ shader_data_type::_float3, "in_vert_position" },
-			{ shader_data_type::_float3, "in_vert_colour" },
+			{ shader_data_type::_float3, "in_vert_normal" },
+			{ shader_data_type::_float3, "in_vert_tangent" },
+			{ shader_data_type::_float3, "in_vert_binormal" },
 			{ shader_data_type::_float2, "in_vert_tex_coord" },
 		};
+		mesh_pipeline = pipeline::create(spec);
 
-		render_pass_spec render_pass_specification;
-		//render_pass_specification.target_framebuffer = s_framebuffer;
-		pipeline_specification._render_pass = render_pass::create(render_pass_specification);
+		vk_shader = std::static_pointer_cast<vulkan_shader>(spec._shader);
 
-		mesh_pipeline = pipeline::create(pipeline_specification);
+		meshes.push_back(mesh::create("assets/models/cerberus/Cerberus_LP.FBX"));
 
-		struct quad_vertex
-		{
-			glm::vec3 _pos;
-			glm::vec3 _col;
-			glm::vec2 _tex_coord;
-		};
+		//pipeline_spec pipeline_specification;
+		//pipeline_specification._shader = renderer::get_shader_library()->get("vulkan_triangle");
+		//
+		//vk_shader = std::static_pointer_cast<vulkan_shader>(pipeline_specification._shader);
+		//quad_texture = texture2D::create("assets/textures/texture.jpg");
+		//vk_shader->set_sampler2d(1, std::static_pointer_cast<vulkan_texture2D>(quad_texture));
+		//vk_shader->reload();
+		//
+		//pipeline_specification._layout =
+		//{
+		//	{ shader_data_type::_float3, "in_vert_position" },
+		//	{ shader_data_type::_float3, "in_vert_colour" },
+		//	{ shader_data_type::_float2, "in_vert_tex_coord" },
+		//};
+		//
+		//render_pass_spec render_pass_specification;
+		////render_pass_specification.target_framebuffer = s_framebuffer;
+		//pipeline_specification._render_pass = render_pass::create(render_pass_specification);
+		//
+		//mesh_pipeline = pipeline::create(pipeline_specification);
 
-		std::vector<quad_vertex> vertex_data =
-		{
-			{ glm::vec3(-0.5f, -0.5f, 0.0f), glm::vec3(1.0f, 0.0f, 0.0f), glm::vec2(0.0f, 0.0f) },
-			{ glm::vec3(0.5f, -0.5f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f), glm::vec2(1.0f, 0.0f) },
-			{ glm::vec3(0.5f, 0.5f, 0.0f), glm::vec3(0.0f, 0.0f, 1.0f), glm::vec2(1.0f, 1.0f) },
-			{ glm::vec3(-0.5f, 0.5f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), glm::vec2(0.0f, 1.0f) },
-
-			{ glm::vec3(-0.5f, -0.5f, -0.5f), glm::vec3(1.0f, 0.0f, 0.0f), glm::vec2(0.0f, 0.0f) },
-			{ glm::vec3(0.5f, -0.5f, -0.5f), glm::vec3(0.0f, 1.0f, 0.0f), glm::vec2(1.0f, 0.0f) },
-			{ glm::vec3(0.5f, 0.5f, -0.5f), glm::vec3(0.0f, 0.0f, 1.0f), glm::vec2(1.0f, 1.0f) },
-			{ glm::vec3(-0.5f, 0.5f, -0.5f), glm::vec3(1.0f, 1.0f, 1.0f), glm::vec2(0.0f, 1.0f) }
-		};
-
-		quad_vertex_buffer = vertex_buffer::create(vertex_data.data(), 8 * sizeof(quad_vertex), vertex_data.size());
-		
-		std::vector<uint32_t> index_data =
-		{
-			0, 1, 2, 2, 3, 0,
-			4, 5, 6, 6, 7, 4
-		};
-
-		quad_index_buffer = index_buffer::create(index_data.data(), 12 * sizeof(uint32_t));
-
-		quad_descriptor_set = vk_shader->create_descriptor_set();
-
-		ref_ptr<vulkan_texture2D> texture = std::static_pointer_cast<vulkan_texture2D>(quad_texture);
-
-		std::vector<VkWriteDescriptorSet> descriptor_writes{};
-		descriptor_writes.push_back(*vk_shader->get_write_descriptor_set("in_vert_mvp"));
-		descriptor_writes.push_back(*vk_shader->get_write_descriptor_set("in_frag_tex_sampler"));
-		descriptor_writes[0].dstSet = quad_descriptor_set;
-		descriptor_writes[0].pBufferInfo = &vk_shader->get_buffer_info(0);
-		descriptor_writes[1].dstSet = quad_descriptor_set;
-		descriptor_writes[1].pImageInfo = &texture->get_descriptor();
-		vkUpdateDescriptorSets(device, static_cast<uint32_t>(descriptor_writes.size()), descriptor_writes.data(), 0, nullptr);
+		//struct quad_vertex
+		//{
+		//	glm::vec3 _pos;
+		//	glm::vec3 _col;
+		//	glm::vec2 _tex_coord;
+		//};
+		//
+		//std::vector<quad_vertex> vertex_data =
+		//{
+		//	{ glm::vec3(-0.5f, -0.5f, 0.0f), glm::vec3(1.0f, 0.0f, 0.0f), glm::vec2(0.0f, 0.0f) },
+		//	{ glm::vec3(0.5f, -0.5f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f), glm::vec2(1.0f, 0.0f) },
+		//	{ glm::vec3(0.5f, 0.5f, 0.0f), glm::vec3(0.0f, 0.0f, 1.0f), glm::vec2(1.0f, 1.0f) },
+		//	{ glm::vec3(-0.5f, 0.5f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), glm::vec2(0.0f, 1.0f) },
+		//
+		//	{ glm::vec3(-0.5f, -0.5f, -0.5f), glm::vec3(1.0f, 0.0f, 0.0f), glm::vec2(0.0f, 0.0f) },
+		//	{ glm::vec3(0.5f, -0.5f, -0.5f), glm::vec3(0.0f, 1.0f, 0.0f), glm::vec2(1.0f, 0.0f) },
+		//	{ glm::vec3(0.5f, 0.5f, -0.5f), glm::vec3(0.0f, 0.0f, 1.0f), glm::vec2(1.0f, 1.0f) },
+		//	{ glm::vec3(-0.5f, 0.5f, -0.5f), glm::vec3(1.0f, 1.0f, 1.0f), glm::vec2(0.0f, 1.0f) }
+		//};
+		//
+		////quad_vertex_buffer = vertex_buffer::create(vertex_data.data(), 8 * sizeof(quad_vertex), vertex_data.size());
+		//
+		//std::vector<uint32_t> index_data =
+		//{
+		//	0, 1, 2, 2, 3, 0,
+		//	4, 5, 6, 6, 7, 4
+		//};
+		//
+		////quad_index_buffer = index_buffer::create(index_data.data(), 12 * sizeof(uint32_t));
+		//
+		//quad_descriptor_set = vk_shader->create_descriptor_set();
+		//
+		//ref_ptr<vulkan_texture2D> texture = std::static_pointer_cast<vulkan_texture2D>(quad_texture);
+		//
+		//std::vector<VkWriteDescriptorSet> descriptor_writes{};
+		//descriptor_writes.push_back(*vk_shader->get_write_descriptor_set("in_vert_mvp"));
+		//descriptor_writes.push_back(*vk_shader->get_write_descriptor_set("in_frag_tex_sampler"));
+		//descriptor_writes[0].dstSet = quad_descriptor_set;
+		//descriptor_writes[0].pBufferInfo = &vk_shader->get_buffer_info(0);
+		//descriptor_writes[1].dstSet = quad_descriptor_set;
+		//descriptor_writes[1].pImageInfo = &texture->get_descriptor();
+		//vkUpdateDescriptorSets(device, static_cast<uint32_t>(descriptor_writes.size()), descriptor_writes.data(), 0, nullptr);
 	}
 
 	void vulkan_renderer::draw(time_step a_time_step)
@@ -104,7 +149,6 @@ namespace Uciniti
 		//renderer::submit([=]()
 		{
 			ref_ptr<vulkan_context> context = vulkan_context::get();
-			vulkan_pipeline* draw_pipeline = (vulkan_pipeline*)mesh_pipeline;
 
 			vulkan_swap_chain& swap_chain = context->get_swap_chain();
 
@@ -123,73 +167,60 @@ namespace Uciniti
 			render_pass_begin_info.clearValueCount = static_cast<uint32_t>(clear_values.size());
 			render_pass_begin_info.pClearValues = clear_values.data();
 
-			//for (size_t i = 0; i < swap_chain.get_image_count(); i++)
-			{
-				render_pass_begin_info.framebuffer = swap_chain.get_framebuffer(swap_chain.get_current_image());
-				VkCommandBuffer draw_cmd_buf = swap_chain.get_current_draw_command_buffer();
+			render_pass_begin_info.framebuffer = swap_chain.get_framebuffer(swap_chain.get_current_image());
+			VkCommandBuffer draw_cmd_buf = swap_chain.get_current_draw_command_buffer();
 
-				VK_CHECK_RESULT(vkBeginCommandBuffer(draw_cmd_buf, &cmd_buf_info));
+			VK_CHECK_RESULT(vkBeginCommandBuffer(draw_cmd_buf, &cmd_buf_info));
 
-					vkCmdBeginRenderPass(draw_cmd_buf, &render_pass_begin_info, VK_SUBPASS_CONTENTS_INLINE);
+				vkCmdBeginRenderPass(draw_cmd_buf, &render_pass_begin_info, VK_SUBPASS_CONTENTS_INLINE);
 
-						// Update dynamic viewport and scissor states.
-						VkViewport viewport = {};
-						viewport.x = 0.0f;
-						viewport.y = 0.0f;
-						viewport.width = swap_chain.get_width();
-						viewport.height = swap_chain.get_height();
-						viewport.minDepth = 0.0f;
-						viewport.maxDepth = 1.0f;
-						vkCmdSetViewport(draw_cmd_buf, 0, 1, &viewport);
+					// Update dynamic viewport and scissor states.
+					VkViewport viewport = {};
+					viewport.x = 0.0f;
+					viewport.y = 0.0f;
+					viewport.width = swap_chain.get_width();
+					viewport.height = swap_chain.get_height();
+					viewport.minDepth = 0.0f;
+					viewport.maxDepth = 1.0f;
+					vkCmdSetViewport(draw_cmd_buf, 0, 1, &viewport);
 
-						VkRect2D scissor = {};
-						scissor.extent.width = swap_chain.get_width();
-						scissor.extent.height = swap_chain.get_height();
-						scissor.offset = { 0, 0 };
-						vkCmdSetScissor(draw_cmd_buf, 0, 1, &scissor);
+					VkRect2D scissor = {};
+					scissor.extent.width = swap_chain.get_width();
+					scissor.extent.height = swap_chain.get_height();
+					scissor.offset = { 0, 0 };
+					vkCmdSetScissor(draw_cmd_buf, 0, 1, &scissor);
 						
-						vkCmdBindPipeline(draw_cmd_buf, VK_PIPELINE_BIND_POINT_GRAPHICS, draw_pipeline->get_graphics_pipeline());
-						
-						vulkan_vertex_buffer* vk_vert_buffer = (vulkan_vertex_buffer*)quad_vertex_buffer;
-						VkBuffer vert_buffer = vk_vert_buffer->get_vertex_buffer();
-						VkDeviceSize offsets[1] = { 0 };
-						vkCmdBindVertexBuffers(draw_cmd_buf, 0, 1, &vert_buffer, offsets);
+					for (ref_ptr<mesh>& this_mesh : meshes)
+						render_mesh(this_mesh, draw_cmd_buf);
 
-						vulkan_index_buffer* vk_index_buffer = (vulkan_index_buffer*)quad_index_buffer;
-						VkBuffer index_buffer = vk_index_buffer->get_index_buffer();
-						vkCmdBindIndexBuffer(draw_cmd_buf, index_buffer, 0, VK_INDEX_TYPE_UINT32);
+				vkCmdEndRenderPass(draw_cmd_buf);
 
-						vkCmdBindDescriptorSets(draw_cmd_buf, VK_PIPELINE_BIND_POINT_GRAPHICS, draw_pipeline->get_pipeline_layout(), 0, 1, &quad_descriptor_set, 0, nullptr);
-						
-						vkCmdDrawIndexed(draw_cmd_buf, vk_index_buffer->get_count(), 1, 0, 0, 0);
-
-					vkCmdEndRenderPass(draw_cmd_buf);
-
-				VK_CHECK_RESULT(vkEndCommandBuffer(draw_cmd_buf));
-			}
+			VK_CHECK_RESULT(vkEndCommandBuffer(draw_cmd_buf));
 			
 			static auto startTime = std::chrono::high_resolution_clock::now();
 			auto currentTime = std::chrono::high_resolution_clock::now();
 			float time = std::chrono::duration<float, std::chrono::seconds::period>(currentTime - startTime).count();
-
+			
 			// #TODO: In the future this should instead be a for each loop going over each mesh and rendering them.
-			glm::mat4 model = glm::rotate(glm::mat4(1.0f), time * glm::radians(90.0f), glm::vec3(0.0f, 0.0f, 1.0f));
-			glm::mat4 view = glm::lookAt(glm::vec3(2.0f, 2.0f, 2.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 1.0f));
-			glm::mat4 proj = glm::perspective(glm::radians(45.0f), swap_chain.get_width() / (float)swap_chain.get_height(), 0.1f, 10.0f);
+			glm::mat4 model = glm::mat4(1.0f);
+			model = glm::rotate(model, time * glm::radians(90.0f), glm::vec3(0.0f, 0.0f, 1.0f));
+			model = glm::scale(model, glm::vec3(0.01f, 0.01f, 0.01f));
+			glm::mat4 view = glm::lookAt(glm::vec3(2.0f, 0.3f, 0.5f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 1.0f));
+			glm::mat4 proj = glm::perspective(glm::radians(45.0f), swap_chain.get_width() / (float)swap_chain.get_height(), 0.1f, 1000.0f);
 			proj[1][1] *= -1;
 			vk_shader->set_member_matrix4(0, "model", model);
 			vk_shader->set_member_matrix4(0, "view", view);
 			vk_shader->set_member_matrix4(0, "proj", proj);
-
+			
 			void* data;
 			vkMapMemory(context->get_logical_device()->get_logical_device(), vk_shader->get_uniform_buffer(0)._memory, 0, vk_shader->get_uniform_buffer(0)._size, 0, &data);
-
+			
 			std::vector<glm::mat4> data_to_copy;
 			data_to_copy.push_back(vk_shader->get_uniform_buffer(0)._member_data._ubo_mat4["model"]);
 			data_to_copy.push_back(vk_shader->get_uniform_buffer(0)._member_data._ubo_mat4["view"]);
 			data_to_copy.push_back(vk_shader->get_uniform_buffer(0)._member_data._ubo_mat4["proj"]);
 			memcpy(data, data_to_copy.data(), vk_shader->get_uniform_buffer(0)._size);
-
+			
 			vkUnmapMemory(context->get_logical_device()->get_logical_device(), vk_shader->get_uniform_buffer(0)._memory);
 		}//);
 	}

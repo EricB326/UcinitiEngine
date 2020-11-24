@@ -149,7 +149,7 @@ namespace Uciniti
 	vulkan_texture2D::vulkan_texture2D(const std::string& a_path)
 	{
 		int tex_width, tex_height, tex_channel;
-		//stbi_set_flip_vertically_on_load(1);
+		stbi_set_flip_vertically_on_load(1);
 
 		texture2d_image._image_data = stbi_load(a_path.c_str(), &tex_width, &tex_height, &tex_channel, STBI_rgb_alpha);
 		UVK_CORE_ASSERT(texture2d_image._image_data, "Failed to load image!");
@@ -200,12 +200,19 @@ namespace Uciniti
 		descriptor_image_info.sampler = texture2d_image._sampler;
 		descriptor_image_info.imageView = texture2d_image._image_view;
 		descriptor_image_info.imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
+
+		_image_loaded = true;
 	}
 
 	void vulkan_texture2D::bind(uint32_t a_slot /*= 0*/) const
 	{
 	}
 
+
+	bool vulkan_texture2D::has_loaded() const
+	{
+		return _image_loaded;
+	}
 
 	void vulkan_texture2D::create_sampler()
 	{

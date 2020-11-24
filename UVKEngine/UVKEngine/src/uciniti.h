@@ -23,6 +23,7 @@
 //Uciniti engine renderer includes
 /***************************************************************/
 // -- Base --
+#include "Uciniti/Renderer/renderer.h"
 
 // -- Resources --
 

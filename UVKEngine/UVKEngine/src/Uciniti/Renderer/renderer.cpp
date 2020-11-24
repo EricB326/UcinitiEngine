@@ -7,7 +7,12 @@
 
 namespace Uciniti
 {
+	// #TODO: Move and make a valid call (perhaps depending on OS).
 	renderer_api_type renderer_api::current_renderer_api = renderer_api_type::vulkan;
+	void renderer_api::set_api(renderer_api_type a_api)
+	{
+		current_renderer_api = a_api;
+	}
 
 	struct renderer_data
 	{
@@ -23,6 +28,7 @@ namespace Uciniti
 		s_data._shader_library = ref_ptr<shader_library>(new shader_library());
 		
 		renderer::get_shader_library()->load("assets/shaders/vulkan_triangle.glsl");
+		renderer::get_shader_library()->load("assets/shaders/static_shader.glsl");
 		//renderer::get_shader_library()->load("assets/shaders/texture.glsl");
 	}
 

@@ -47,6 +47,7 @@ namespace Uciniti
 		void shutdown();
 
 		virtual void bind(uint32_t a_slot = 0) const override;
+		virtual bool has_loaded() const override;
 
 		image_spec get_spec() const { return texture2d_image; }
 		virtual uint32_t get_width() const override { return texture2d_image._width; }
@@ -55,8 +56,11 @@ namespace Uciniti
 		VkSampler get_sampler() const { return texture2d_image._sampler; }
 		VkDescriptorImageInfo get_descriptor() const { return descriptor_image_info; }
 	
+
 	private:
 		std::string filepath;
+
+		bool _image_loaded = false;
 
 		image_spec texture2d_image;
 

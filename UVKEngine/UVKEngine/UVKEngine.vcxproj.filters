@@ -105,6 +105,12 @@
     <ClInclude Include="src\Uciniti\Platform\Vulkan\vulkan_framebuffer.h">
       <Filter>src\Uciniti\Platform\Vulkan</Filter>
     </ClInclude>
+    <ClInclude Include="src\Uciniti\Platform\Vulkan\vulkan_image.h">
+      <Filter>src\Uciniti\Platform\Vulkan</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Uciniti\Platform\Vulkan\vulkan_mesh.h">
+      <Filter>src\Uciniti\Platform\Vulkan</Filter>
+    </ClInclude>
     <ClInclude Include="src\Uciniti\Platform\Vulkan\vulkan_pipeline.h">
       <Filter>src\Uciniti\Platform\Vulkan</Filter>
     </ClInclude>
@@ -141,6 +147,9 @@
     <ClInclude Include="src\Uciniti\Renderer\framebuffer.h">
       <Filter>src\Uciniti\Renderer</Filter>
     </ClInclude>
+    <ClInclude Include="src\Uciniti\Renderer\mesh.h">
+      <Filter>src\Uciniti\Renderer</Filter>
+    </ClInclude>
     <ClInclude Include="src\Uciniti\Renderer\pipeline.h">
       <Filter>src\Uciniti\Renderer</Filter>
     </ClInclude>
@@ -173,9 +182,6 @@
     </ClInclude>
     <ClInclude Include="vendor\stb_image\stb_image.h">
       <Filter>vendor\stb_image</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Uciniti\Platform\Vulkan\vulkan_image.h">
-      <Filter>src\Uciniti\Platform\Vulkan</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -213,6 +219,12 @@
       <Filter>src\Uciniti\Platform\Vulkan</Filter>
     </ClCompile>
     <ClCompile Include="src\Uciniti\Platform\Vulkan\vulkan_framebuffer.cpp">
+      <Filter>src\Uciniti\Platform\Vulkan</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Uciniti\Platform\Vulkan\vulkan_image.cpp">
+      <Filter>src\Uciniti\Platform\Vulkan</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Uciniti\Platform\Vulkan\vulkan_mesh.cpp">
       <Filter>src\Uciniti\Platform\Vulkan</Filter>
     </ClCompile>
     <ClCompile Include="src\Uciniti\Platform\Vulkan\vulkan_pipeline.cpp">
@@ -254,6 +266,9 @@
     <ClCompile Include="src\Uciniti\Renderer\framebuffer.cpp">
       <Filter>src\Uciniti\Renderer</Filter>
     </ClCompile>
+    <ClCompile Include="src\Uciniti\Renderer\mesh.cpp">
+      <Filter>src\Uciniti\Renderer</Filter>
+    </ClCompile>
     <ClCompile Include="src\Uciniti\Renderer\pipeline.cpp">
       <Filter>src\Uciniti\Renderer</Filter>
     </ClCompile>
@@ -280,9 +295,6 @@
     </ClCompile>
     <ClCompile Include="vendor\stb_image\stb_image.cpp">
       <Filter>vendor\stb_image</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Uciniti\Platform\Vulkan\vulkan_image.cpp">
-      <Filter>src\Uciniti\Platform\Vulkan</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

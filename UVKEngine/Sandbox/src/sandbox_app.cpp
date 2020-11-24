@@ -62,5 +62,6 @@ public:
 */
 Uciniti::application* Uciniti::create_application()
 {
+	renderer_api::set_api(renderer_api_type::vulkan);
 	return new sandbox_app();
 }

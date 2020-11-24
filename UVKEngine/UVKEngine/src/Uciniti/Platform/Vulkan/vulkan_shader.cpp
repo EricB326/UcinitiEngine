@@ -437,6 +437,16 @@ namespace Uciniti
 		return &_write_descriptor_sets.at(a_key);
 	}
 
+	std::vector<VkWriteDescriptorSet> vulkan_shader::get_write_descriptor_sets()
+	{
+		std::vector<VkWriteDescriptorSet> write_descriptors;
+
+		for (auto& [_name, _write_descriptor] : _write_descriptor_sets)
+			write_descriptors.push_back(_write_descriptor);
+
+		return write_descriptors;
+	}
+
 	VkDescriptorSet vulkan_shader::create_descriptor_set()
 	{
 		VkDevice device = vulkan_context::get()->get_logical_device()->get_logical_device();

@@ -22,6 +22,7 @@ namespace Uciniti
 
 		static void clear(float a_red, float a_green, float a_blue, float a_alpha);
 		static void clear(const glm::vec4& a_clear_colour);
+		static void set_api(renderer_api_type a_api);
 		static void set_clear_colour(float a_red, float a_green, float a_blue, float a_alpha);
 		static void set_clear_colour(const glm::vec4& a_clear_colour);
 
@@ -32,6 +33,7 @@ namespace Uciniti
 	private:
 		static renderer_api_type current_renderer_api;
 	};
+
 }
 
 #endif // !RENDERER_API_H

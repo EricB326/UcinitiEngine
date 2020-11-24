@@ -113,7 +113,9 @@ namespace Uciniti
 		virtual const buffer_layout& get_layout() const = 0;
 		virtual void set_layout(const buffer_layout& a_layout) = 0;
 
-		static vertex_buffer* create(void* a_data, uint32_t a_size, uint32_t a_element_count);
+		//static vertex_buffer* create(void* a_data, uint32_t a_size, uint32_t a_element_count);
+		static ref_ptr<vertex_buffer> create(void* a_data, uint32_t a_buffer_size, uint32_t a_element_count);
+
 
 		virtual unsigned int get_data_size() const = 0;
 		virtual unsigned int get_element_count() const = 0;
@@ -133,8 +135,9 @@ namespace Uciniti
 		virtual uint32_t get_count() const = 0;
 		virtual uint32_t get_size() const = 0;
 
-		static index_buffer* create(uint32_t a_size = 0);
-		static index_buffer* create(void* a_data, uint32_t a_size = 0);
+		//static index_buffer* create(uint32_t a_size = 0);
+		//static index_buffer* create(void* a_data, uint32_t a_size = 0);
+		static ref_ptr<index_buffer> create(void* a_data, uint32_t a_size = 0);
 
 	private:
 

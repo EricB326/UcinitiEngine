@@ -79,6 +79,7 @@ namespace Uciniti
 
 		const std::vector<VkPipelineShaderStageCreateInfo> get_shader_stages() const { return shader_stages; }
 		VkWriteDescriptorSet* get_write_descriptor_set(const std::string& a_key);
+		std::vector<VkWriteDescriptorSet> get_write_descriptor_sets();
 		VkDescriptorSet create_descriptor_set();
 
 		bool get_member_bool(const uint32_t a_binding, const std::string& a_member_name);

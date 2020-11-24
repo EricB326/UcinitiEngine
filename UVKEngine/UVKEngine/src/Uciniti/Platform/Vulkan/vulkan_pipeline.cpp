@@ -49,7 +49,7 @@ namespace Uciniti
 		VkRenderPass render_pass = vulkan_context::get()->get_swap_chain().get_render_pass();
 
 		ref_ptr<vulkan_shader> shader_to_use = ref_ptr<vulkan_shader>(std::static_pointer_cast<vulkan_shader>(spec._shader));
-		ref_ptr<vulkan_framebuffer> framebuffer = std::static_pointer_cast<vulkan_framebuffer>(spec._render_pass->get_specification().target_framebuffer);
+		//ref_ptr<vulkan_framebuffer> framebuffer = std::static_pointer_cast<vulkan_framebuffer>(spec._render_pass->get_specification().target_framebuffer);
 
 		// Populate the pipeline data.
 		prepare_pipeline();

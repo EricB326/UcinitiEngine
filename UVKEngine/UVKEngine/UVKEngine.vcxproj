@@ -77,7 +77,7 @@
       <PrecompiledHeaderFile>uvkpch.h</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;UVK_PLATFORM_WINDOWS;UVK_BUILD_DLL;GLFW_INCLUDE_NONE;UVK_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>src;vendor\spdlog\include;vendor\GLFW\include;vendor\Vulkan\include;vendor\ImGui;vendor\glm;vendor\shaderc\include;vendor\SPIRV-Cross;vendor\stb_image;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>src;vendor\spdlog\include;vendor\GLFW\include;vendor\Vulkan\include;vendor\ImGui;vendor\glm;vendor\shaderc\include;vendor\SPIRV-Cross;vendor\stb_image;vendor\assimp\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <Optimization>Disabled</Optimization>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
@@ -97,7 +97,7 @@
       <PrecompiledHeaderFile>uvkpch.h</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;UVK_PLATFORM_WINDOWS;UVK_BUILD_DLL;GLFW_INCLUDE_NONE;UVK_RELEASE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>src;vendor\spdlog\include;vendor\GLFW\include;vendor\Vulkan\include;vendor\ImGui;vendor\glm;vendor\shaderc\include;vendor\SPIRV-Cross;vendor\stb_image;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>src;vendor\spdlog\include;vendor\GLFW\include;vendor\Vulkan\include;vendor\ImGui;vendor\glm;vendor\shaderc\include;vendor\SPIRV-Cross;vendor\stb_image;vendor\assimp\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Full</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
@@ -121,7 +121,7 @@
       <PrecompiledHeaderFile>uvkpch.h</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;UVK_PLATFORM_WINDOWS;UVK_BUILD_DLL;GLFW_INCLUDE_NONE;UVK_DIST;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>src;vendor\spdlog\include;vendor\GLFW\include;vendor\Vulkan\include;vendor\ImGui;vendor\glm;vendor\shaderc\include;vendor\SPIRV-Cross;vendor\stb_image;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>src;vendor\spdlog\include;vendor\GLFW\include;vendor\Vulkan\include;vendor\ImGui;vendor\glm;vendor\shaderc\include;vendor\SPIRV-Cross;vendor\stb_image;vendor\assimp\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Full</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
@@ -163,19 +163,21 @@
     <ClInclude Include="src\Uciniti\Platform\Vulkan\vulkan_create_info_base.h" />
     <ClInclude Include="src\Uciniti\Platform\Vulkan\vulkan_devices.h" />
     <ClInclude Include="src\Uciniti\Platform\Vulkan\vulkan_framebuffer.h" />
+    <ClInclude Include="src\Uciniti\Platform\Vulkan\vulkan_image.h" />
+    <ClInclude Include="src\Uciniti\Platform\Vulkan\vulkan_mesh.h" />
     <ClInclude Include="src\Uciniti\Platform\Vulkan\vulkan_pipeline.h" />
     <ClInclude Include="src\Uciniti\Platform\Vulkan\vulkan_render_pass.h" />
     <ClInclude Include="src\Uciniti\Platform\Vulkan\vulkan_renderer.h" />
     <ClInclude Include="src\Uciniti\Platform\Vulkan\vulkan_shader.h" />
     <ClInclude Include="src\Uciniti\Platform\Vulkan\vulkan_swap_chain.h" />
     <ClInclude Include="src\Uciniti\Platform\Vulkan\vulkan_test_layer.h" />
-    <ClInclude Include="src\Uciniti\Platform\Vulkan\vulkan_image.h" />
     <ClInclude Include="src\Uciniti\Platform\Vulkan\vulkan_validation.h" />
     <ClInclude Include="src\Uciniti\Platform\Windows\Windows_window.h" />
     <ClInclude Include="src\Uciniti\Renderer\base_camera.h" />
     <ClInclude Include="src\Uciniti\Renderer\buffer.h" />
     <ClInclude Include="src\Uciniti\Renderer\camera.h" />
     <ClInclude Include="src\Uciniti\Renderer\framebuffer.h" />
+    <ClInclude Include="src\Uciniti\Renderer\mesh.h" />
     <ClInclude Include="src\Uciniti\Renderer\pipeline.h" />
     <ClInclude Include="src\Uciniti\Renderer\render_command.h" />
     <ClInclude Include="src\Uciniti\Renderer\render_pass.h" />
@@ -201,13 +203,14 @@
     <ClCompile Include="src\Uciniti\Platform\Vulkan\vulkan_context.cpp" />
     <ClCompile Include="src\Uciniti\Platform\Vulkan\vulkan_devices.cpp" />
     <ClCompile Include="src\Uciniti\Platform\Vulkan\vulkan_framebuffer.cpp" />
+    <ClCompile Include="src\Uciniti\Platform\Vulkan\vulkan_image.cpp" />
+    <ClCompile Include="src\Uciniti\Platform\Vulkan\vulkan_mesh.cpp" />
     <ClCompile Include="src\Uciniti\Platform\Vulkan\vulkan_pipeline.cpp" />
     <ClCompile Include="src\Uciniti\Platform\Vulkan\vulkan_render_pass.cpp" />
     <ClCompile Include="src\Uciniti\Platform\Vulkan\vulkan_renderer.cpp" />
     <ClCompile Include="src\Uciniti\Platform\Vulkan\vulkan_shader.cpp" />
     <ClCompile Include="src\Uciniti\Platform\Vulkan\vulkan_swap_chain.cpp" />
     <ClCompile Include="src\Uciniti\Platform\Vulkan\vulkan_test_layer.cpp" />
-    <ClCompile Include="src\Uciniti\Platform\Vulkan\vulkan_image.cpp" />
     <ClCompile Include="src\Uciniti\Platform\Vulkan\vulkan_validation.cpp" />
     <ClCompile Include="src\Uciniti\Platform\Windows\Windows_window.cpp" />
     <ClCompile Include="src\Uciniti\Platform\Windows\windows_input.cpp" />
@@ -215,6 +218,7 @@
     <ClCompile Include="src\Uciniti\Renderer\buffer.cpp" />
     <ClCompile Include="src\Uciniti\Renderer\camera.cpp" />
     <ClCompile Include="src\Uciniti\Renderer\framebuffer.cpp" />
+    <ClCompile Include="src\Uciniti\Renderer\mesh.cpp" />
     <ClCompile Include="src\Uciniti\Renderer\pipeline.cpp" />
     <ClCompile Include="src\Uciniti\Renderer\render_command.cpp" />
     <ClCompile Include="src\Uciniti\Renderer\render_pass.cpp" />
