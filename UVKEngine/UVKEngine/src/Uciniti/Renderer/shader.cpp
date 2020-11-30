@@ -86,4 +86,12 @@ namespace Uciniti
 		return _shaders.at(a_name);
 	}
 
+	void shader_library::shutdown()
+	{
+		for (auto& this_shader : _shaders)
+			this_shader.second = nullptr;
+
+		_shaders.clear();
+	}
+
 }

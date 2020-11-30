@@ -3,7 +3,7 @@
 
 #include "vulkan_context.h"
 #include "Uciniti/Platform/Vulkan/vulkan_buffer.h"
-
+#include "vulkan_create_info_base.h"
 #include <shaderc/shaderc.hpp>
 
 namespace Uciniti
@@ -80,11 +80,12 @@ namespace Uciniti
 		retrieve_shader_name();
 	}
 
+	static bool has_destroy;
 	vulkan_shader::~vulkan_shader()
 	{
 		VkDevice device = vulkan_context::get()->get_logical_device()->get_logical_device();
 
-		vkDestroyDescriptorPool(device, _descriptor_pool, nullptr);
+		vkDestroyDescriptorSetLayout(device, _descriptor_set_layout, nullptr);
 
 		for (auto& this_ubo : _uniform_buffers)
 		{
@@ -92,7 +93,8 @@ namespace Uciniti
 			vkFreeMemory(device, this_ubo.second._memory, nullptr);
 		}
 
-		vkDestroyDescriptorSetLayout(device, _descriptor_set_layout, nullptr);
+		vkDestroyDescriptorPool(device, _descriptor_pool, nullptr);
+		has_destroy = true;
 	}
 
 	void vulkan_shader::reload()

@@ -153,6 +153,11 @@ project "Sandbox"
 	{
 		"UVKEngine"
 	}
+	
+	postbuildcommands
+	{
+		'{COPY} "../Sandbox/assets" "%{cfg.targetdir}/assets"'
+	}
 
 	filter "system:windows"
 		systemversion "latest"

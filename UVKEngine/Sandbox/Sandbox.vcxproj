@@ -91,7 +91,8 @@
       <AdditionalDependencies>..\UVKEngine\vendor\assimp\bin\Debug\assimp-vc141-mtd.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
-      <Command>IF EXIST "..\UVKEngine\vendor\assimp\bin\Debug\assimp-vc141-mtd.dll"\ (xcopy /Q /E /Y /I "..\UVKEngine\vendor\assimp\bin\Debug\assimp-vc141-mtd.dll" "..\bin\Debug-windows-x86_64\Sandbox" &gt; nul) ELSE (xcopy /Q /Y /I "..\UVKEngine\vendor\assimp\bin\Debug\assimp-vc141-mtd.dll" "..\bin\Debug-windows-x86_64\Sandbox" &gt; nul)</Command>
+      <Command>IF EXIST "..\Sandbox\assets"\ (xcopy /Q /E /Y /I "..\Sandbox\assets" "..\bin\Debug-windows-x86_64\Sandbox\assets" &gt; nul) ELSE (xcopy /Q /Y /I "..\Sandbox\assets" "..\bin\Debug-windows-x86_64\Sandbox\assets" &gt; nul)
+IF EXIST "..\UVKEngine\vendor\assimp\bin\Debug\assimp-vc141-mtd.dll"\ (xcopy /Q /E /Y /I "..\UVKEngine\vendor\assimp\bin\Debug\assimp-vc141-mtd.dll" "..\bin\Debug-windows-x86_64\Sandbox" &gt; nul) ELSE (xcopy /Q /Y /I "..\UVKEngine\vendor\assimp\bin\Debug\assimp-vc141-mtd.dll" "..\bin\Debug-windows-x86_64\Sandbox" &gt; nul)</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -115,7 +116,8 @@
       <AdditionalDependencies>..\UVKEngine\vendor\assimp\bin\Release\assimp-vc141-mt.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
-      <Command>IF EXIST "..\UVKEngine\vendor\assimp\bin\Release\assimp-vc141-mt.dll"\ (xcopy /Q /E /Y /I "..\UVKEngine\vendor\assimp\bin\Release\assimp-vc141-mt.dll" "..\bin\Release-windows-x86_64\Sandbox" &gt; nul) ELSE (xcopy /Q /Y /I "..\UVKEngine\vendor\assimp\bin\Release\assimp-vc141-mt.dll" "..\bin\Release-windows-x86_64\Sandbox" &gt; nul)</Command>
+      <Command>IF EXIST "..\Sandbox\assets"\ (xcopy /Q /E /Y /I "..\Sandbox\assets" "..\bin\Release-windows-x86_64\Sandbox\assets" &gt; nul) ELSE (xcopy /Q /Y /I "..\Sandbox\assets" "..\bin\Release-windows-x86_64\Sandbox\assets" &gt; nul)
+IF EXIST "..\UVKEngine\vendor\assimp\bin\Release\assimp-vc141-mt.dll"\ (xcopy /Q /E /Y /I "..\UVKEngine\vendor\assimp\bin\Release\assimp-vc141-mt.dll" "..\bin\Release-windows-x86_64\Sandbox" &gt; nul) ELSE (xcopy /Q /Y /I "..\UVKEngine\vendor\assimp\bin\Release\assimp-vc141-mt.dll" "..\bin\Release-windows-x86_64\Sandbox" &gt; nul)</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Dist|x64'">
@@ -139,7 +141,8 @@
       <AdditionalDependencies>..\UVKEngine\vendor\assimp\bin\Release\assimp-vc141-mt.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
-      <Command>IF EXIST "..\UVKEngine\vendor\assimp\bin\Release\assimp-vc141-mt.dll"\ (xcopy /Q /E /Y /I "..\UVKEngine\vendor\assimp\bin\Release\assimp-vc141-mt.dll" "..\bin\Dist-windows-x86_64\Sandbox" &gt; nul) ELSE (xcopy /Q /Y /I "..\UVKEngine\vendor\assimp\bin\Release\assimp-vc141-mt.dll" "..\bin\Dist-windows-x86_64\Sandbox" &gt; nul)</Command>
+      <Command>IF EXIST "..\Sandbox\assets"\ (xcopy /Q /E /Y /I "..\Sandbox\assets" "..\bin\Dist-windows-x86_64\Sandbox\assets" &gt; nul) ELSE (xcopy /Q /Y /I "..\Sandbox\assets" "..\bin\Dist-windows-x86_64\Sandbox\assets" &gt; nul)
+IF EXIST "..\UVKEngine\vendor\assimp\bin\Release\assimp-vc141-mt.dll"\ (xcopy /Q /E /Y /I "..\UVKEngine\vendor\assimp\bin\Release\assimp-vc141-mt.dll" "..\bin\Dist-windows-x86_64\Sandbox" &gt; nul) ELSE (xcopy /Q /Y /I "..\UVKEngine\vendor\assimp\bin\Release\assimp-vc141-mt.dll" "..\bin\Dist-windows-x86_64\Sandbox" &gt; nul)</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>

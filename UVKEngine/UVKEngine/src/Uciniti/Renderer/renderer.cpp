@@ -4,6 +4,7 @@
 #include "renderer_api.h"
 
 #include "Uciniti/Renderer/shader.h"
+#include "Uciniti/Platform/Vulkan/vulkan_renderer.h"
 
 namespace Uciniti
 {
@@ -26,10 +27,39 @@ namespace Uciniti
 	void renderer::init()
 	{
 		s_data._shader_library = ref_ptr<shader_library>(new shader_library());
-		
-		renderer::get_shader_library()->load("assets/shaders/vulkan_triangle.glsl");
-		renderer::get_shader_library()->load("assets/shaders/static_shader.glsl");
-		//renderer::get_shader_library()->load("assets/shaders/texture.glsl");
+	}
+
+	void renderer::shutdown()
+	{
+		s_data._shader_library->shutdown();
+	}
+
+	void renderer::submit_pipeline(const ref_ptr<pipeline>& a_pipeline)
+	{
+		switch (renderer_api::get_current_api())
+		{
+		case renderer_api_type::none: return;
+		case renderer_api_type::vulkan:
+			vulkan_renderer::submit_pipeline(a_pipeline);
+			return;
+		}
+
+		UVK_CORE_ASSERT(false, "Unknown Rendering API type.");
+		return;
+	}
+
+	void renderer::submit_mesh(const ref_ptr<mesh>& a_mesh)
+	{
+		switch (renderer_api::get_current_api())
+		{
+			case renderer_api_type::none: return;
+			case renderer_api_type::vulkan: 
+				vulkan_renderer::submit_mesh(a_mesh);
+				return;
+		}
+
+		UVK_CORE_ASSERT(false, "Unknown Rendering API type.");
+		return;
 	}
 
 	ref_ptr<shader_library> renderer::get_shader_library()

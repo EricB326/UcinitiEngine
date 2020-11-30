@@ -34,7 +34,7 @@ namespace Uciniti
 
 		renderer::init();
 		vulkan_renderer::init();
-		renderer::wait_and_render();
+		//renderer::wait_and_render();
 
 		//push_layer(new vulkan_test_layer());
 	}
@@ -120,6 +120,7 @@ namespace Uciniti
 
 	void application::shutdown()
 	{
+		renderer::shutdown();
 		vulkan_renderer::shutdown();
 		//window_context->~window();
 	}

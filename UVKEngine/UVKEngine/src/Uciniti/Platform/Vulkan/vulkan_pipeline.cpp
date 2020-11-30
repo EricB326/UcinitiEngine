@@ -4,7 +4,7 @@
 #include "vulkan_shader.h"
 #include "Uciniti/Platform/Vulkan/vulkan_context.h"
 #include "Uciniti/Platform/Vulkan/vulkan_framebuffer.h"
-
+#include "vulkan_create_info_base.h"
 namespace Uciniti
 {
 	static VkFormat shader_data_type_to_vulkan_format(shader_data_type a_type)

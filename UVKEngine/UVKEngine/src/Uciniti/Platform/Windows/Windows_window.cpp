@@ -87,19 +87,19 @@ namespace Uciniti
 			{
 				case GLFW_PRESS:
 				{
-					key_pressed_event new_event(a_key, 0);
+					key_pressed_event new_event((key_code)a_key, 0);
 					data.event_callback(new_event);
 					break;
 				}
 				case GLFW_RELEASE:
 				{
-					key_released_event new_event(a_key);
+					key_released_event new_event((key_code)a_key);
 					data.event_callback(new_event);
 					break;
 				}
 				case GLFW_REPEAT:
 				{
-					key_pressed_event new_event(a_key, 1);
+					key_pressed_event new_event((key_code)a_key, 1);
 					data.event_callback(new_event);
 					break;
 				}

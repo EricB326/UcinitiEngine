@@ -18,15 +18,18 @@
 #include "Uciniti/Core/Events/mouse_event.h"
 
 // -- Math --
+#include <glm/gtc/matrix_transform.hpp>
 
 /***************************************************************/
 //Uciniti engine renderer includes
 /***************************************************************/
 // -- Base --
 #include "Uciniti/Renderer/renderer.h"
-
-// -- Resources --
+#include "Uciniti/Renderer/shader.h"
+#include "Uciniti/Renderer/pipeline.h"
+#include "Uciniti/Renderer/mesh.h"
 
 // -- Vulkan --
+//#include "Uciniti/Platform/Vulkan/vulkan_renderer.h"
 
 #endif // !UCINITI_H

@@ -37,6 +37,8 @@ namespace Uciniti
 
 		const ref_ptr<shader>& get(const std::string& a_name) const;
 
+		void shutdown();
+
 	private:
 		std::unordered_map<std::string, ref_ptr<shader>> _shaders;
 

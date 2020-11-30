@@ -6,6 +6,7 @@
 #include "Uciniti/Renderer/render_pass.h"
 
 #include "Uciniti/Core/application.h"
+#include "Uciniti/Renderer/mesh.h"
 
 namespace Uciniti
 {
@@ -15,6 +16,7 @@ namespace Uciniti
 	{
 	public:
 		static void init();
+		static void shutdown();
 
 		static ref_ptr<renderer_context> get_context() 
 		{
@@ -37,7 +39,9 @@ namespace Uciniti
 			new (storage_buffer) FuncT(std::forward<FuncT>(func));
 		}
 
+		static void submit_pipeline(const ref_ptr<pipeline>& a_pipeline);
 
+		static void submit_mesh(const ref_ptr<mesh>& a_mesh);
 
 		static ref_ptr<shader_library> get_shader_library();
 

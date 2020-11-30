@@ -57,6 +57,9 @@ namespace Uciniti
 		virtual ref_ptr<vertex_buffer> get_vertex_buffer() = 0;
 		virtual ref_ptr<index_buffer> get_index_buffer() = 0;
 
+		virtual const glm::mat4& get_transform() const = 0;
+		virtual void set_transform(const glm::mat4& a_transform) = 0;
+
 	protected:
 		std::vector<submesh> _submeshes;
 		
@@ -71,6 +74,9 @@ namespace Uciniti
 
 		ref_ptr<shader> _mesh_shader;
 		std::vector<ref_ptr<texture2D>> _textures;
+
+		// #TODO: Transform should be a component with an entity system rather than here.
+		glm::mat4 _transform = glm::mat4(1.0f);
 
 		std::string _file_path;
 

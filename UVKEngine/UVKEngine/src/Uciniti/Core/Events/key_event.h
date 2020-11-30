@@ -4,10 +4,11 @@
 /* Uciniti engine includes
 */
 #include "event.h"
+#include "Uciniti/Core/key_codes.h"
 
 namespace Uciniti
 {
-	/* @brief Contains common functionalty across key events (pressed/released/etc) such as
+	/* @brief Contains common functionality across key events (pressed/released/etc) such as
 			  the key code.
 	*/
 	class UCINITI_API key_event : public event
@@ -19,7 +20,7 @@ namespace Uciniti
 		/* @brief Getter for retrieving the key code.
 		   @return Int value of the key code.
 		*/
-		inline int get_key_code() const { return key_code; }
+		inline key_code get_key_code() const { return _key_code; }
 
 		/* @brief Ease of implementation for the functions specified in this macro.
 		*		  See the event.h file.
@@ -31,10 +32,10 @@ namespace Uciniti
 		// Protected Functions
 		/***************************************************************/
 		/* @brief Protected constructor as nothing else can construct a key_event.
-		*		  Handles setting the key code when constucted.
+		*		  Handles setting the key code when constructed.
 		*/
-		key_event(int a_key_code)
-			: key_code(a_key_code) 
+		key_event(key_code a_key_code)
+			: _key_code(a_key_code)
 		{}
 		
 		/***************************************************************/
@@ -42,7 +43,7 @@ namespace Uciniti
 		/***************************************************************/
 		/* @brief Key code of the key being used.
 		*/
-		int key_code;
+		key_code _key_code;
 	};
 
 	/* @brief Handles any key presses and if they have been repeated (held).
@@ -58,7 +59,7 @@ namespace Uciniti
 		*  @param Repeat count, ie is this the first time the key was pressed,
 		*		  or has it been held for n number of repeats.
 		*/
-		key_pressed_event(int a_key_code, int a_repeat_count)
+		key_pressed_event(key_code a_key_code, int a_repeat_count)
 			: key_event(a_key_code), repeat_count(a_repeat_count)
 		{}
 
@@ -72,7 +73,7 @@ namespace Uciniti
 		std::string to_string() const override
 		{
 			std::stringstream ss;
-			ss << "key_pressed_event: " << key_code << " (" << repeat_count << " repeats)";
+			ss << "key_pressed_event: " << _key_code << " (" << repeat_count << " repeats)";
 			return ss.str();
 		}
 
@@ -99,7 +100,7 @@ namespace Uciniti
 		/* @brief Handles constructing the key event with the given key code that is being
 				  released.
 		*/
-		key_released_event(int a_key_code)
+		key_released_event(key_code a_key_code)
 			: key_event(a_key_code)
 		{}
 
@@ -109,7 +110,7 @@ namespace Uciniti
 		std::string to_string() const override
 		{
 			std::stringstream ss;
-			ss << "key_released_event: " << key_code;
+			ss << "key_released_event: " << _key_code;
 			return ss.str();
 		}
 

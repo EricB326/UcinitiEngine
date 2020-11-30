@@ -1,6 +1,7 @@
 #include "uvkpch.h"
 #include "vulkan_buffer.h"
 #include "Uciniti/Platform/Vulkan/vulkan_context.h"
+#include "vulkan_create_info_base.h"
 namespace Uciniti
 {
 	// =================================================================

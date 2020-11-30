@@ -22,6 +22,9 @@ namespace Uciniti
 
 		VkDescriptorSet* get_descriptor_set() { return &_descriptor_set; }
 
+		virtual const glm::mat4& get_transform() const override { return _transform; }
+		virtual void set_transform(const glm::mat4& a_transform) override { _transform = a_transform; }
+
 	private:
 		VkDescriptorSet _descriptor_set;
 		std::vector<VkWriteDescriptorSet> _write_descriptor_sets;

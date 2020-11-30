@@ -2,7 +2,7 @@
 #include "vulkan_framebuffer.h"
 
 #include "Uciniti/Platform/Vulkan/vulkan_context.h"
-
+#include "vulkan_create_info_base.h"
 namespace Uciniti
 {
 	vulkan_framebuffer::vulkan_framebuffer(const framebuffer_spec& a_spec)
